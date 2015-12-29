@@ -58,6 +58,8 @@ var PiecePurchaseOrder = orm.define('PiecePurchaseOrder', {
   price: Sequelize.DECIMAL(10,2)
 });
 
+/* ASSOCIATIONS */
+
 Piece.belongsToMany(Material, { through: 'PieceMaterial' });
 Material.belongsToMany(Piece, { through: 'PieceMaterial' });
 
@@ -66,6 +68,7 @@ MaterialPurchaseOrder.belongsToMany(Material, { through: 'POMaterial'});
 
 Piece.belongsToMany(PiecePurchaseOrder, { as: 'PurchaseOrders', through: 'POPiece', foreignKey: 'purchaseOrderId' });
 PiecePurchaseOrder.belongsToMany(Piece, { through: 'POPiece'});
+
 
 Material.sync();
 Piece.sync();
