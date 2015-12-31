@@ -18,24 +18,23 @@ if (dbURL) {
 
 var Material = orm.define('Material', {
   item: { type: Sequelize.STRING, allowNull: false, unique: true },
-  description: Sequelize.STRING,
+  description: { type: Sequelize.STRING, allowNull: false, unique: true },
   vendor: Sequelize.STRING,
-  costPerInch: Sequelize.DECIMAL(10,2),
-  costPerUnit: Sequelize.DECIMAL(10,2),
-  qtyOnHand: Sequelize.INTEGER,
-  qtyOnOrder: Sequelize.INTEGER
+  costPerInch: { type: Sequelize.DECIMAL(10,2), defaultValue: 0.0 },
+  unit: { type: Sequelize.STRING, defaultValue: 'unit' },
+  qtyOnHand: { type: Sequelize.INTEGER, defaultValue: 0 },
+  qtyOnOrder: { type: Sequelize.INTEGER, defaultValue: 0 }
 });
 
 var Piece = orm.define('Piece', {
   item: { type: Sequelize.STRING, allowNull: false, unique: true },
-  description: Sequelize.STRING,
-  laborTime: Sequelize.INTEGER,
-  laborCost: Sequelize.DECIMAL(10,2),
+  description: { type: Sequelize.STRING, allowNull: false, unique: true },
+  laborTime: { type: Sequelize.INTEGER, defaultValue: 0 },
   totalCost: Sequelize.DECIMAL(10,2),
   wholesalePrice: Sequelize.DECIMAL(10,2),
   msrp: Sequelize.DECIMAL(10,2),
-  qtyOnHand: Sequelize.INTEGER,
-  qtyOnOrder: Sequelize.INTEGER
+  qtyOnHand: { type: Sequelize.INTEGER, defaultValue: 0 },
+  qtyOnOrder: { type: Sequelize.INTEGER, defaultValue: 0 }
 });
 
 var MaterialType = orm.define('MaterialType', {
