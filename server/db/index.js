@@ -90,14 +90,20 @@ PiecePurchaseOrder.belongsToMany(Piece, { through: 'POPiece'});
 
 Material.sync();
 Piece.sync();
-Product.sync();
+MaterialType.sync();
+PieceType.sync();
 MaterialPurchaseOrder.sync();
 PiecePurchaseOrder.sync();
+Settings.sync();
+Product.sync();
 
 module.exports = {
   Material: Material,
   Piece: Piece,
+  MaterialType: MaterialType,
+  PieceType: PieceType,
   MaterialPurchaseOrder: MaterialPurchaseOrder,
   PiecePurchaseOrder: PiecePurchaseOrder,
+  Settings: Settings,
   Product: Product
 };
