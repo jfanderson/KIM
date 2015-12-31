@@ -13,6 +13,7 @@ if (dbURL) {
   });
 }
 
+
 /* SCHEMA */
 
 var Material = orm.define('Material', {
@@ -37,13 +38,14 @@ var Piece = orm.define('Piece', {
   qtyOnOrder: Sequelize.INTEGER
 });
 
-var Product = orm.define('Product', {
-  item: { type: Sequelize.STRING, allowNull: false, unique: true },
-  description: Sequelize.STRING,
-  cost: Sequelize.DECIMAL(10,2),
-  msrp: Sequelize.DECIMAL(10,2),
-  qtyOnHand: Sequelize.INTEGER,
-  qtyOnOrder: Sequelize.INTEGER
+var MaterialType = orm.define('MaterialType', {
+  name: { type: Sequelize.STRING, allowNull: false, unique: true },
+  lowStock: Sequelize.INTEGER
+});
+
+var PieceType = orm.define('PieceType', {
+  name: { type: Sequelize.STRING, allowNull: false, unique: true },
+  lowStock: Sequelize.INTEGER
 });
 
 var MaterialPurchaseOrder = orm.define('MaterialPurchaseOrder', {
@@ -58,15 +60,32 @@ var PiecePurchaseOrder = orm.define('PiecePurchaseOrder', {
   price: Sequelize.DECIMAL(10,2)
 });
 
+var Settings = orm.define('Settings', {
+  laborCost: Sequelize.DECIMAL(10,2)
+});
+
+var Product = orm.define('Product', {
+  item: { type: Sequelize.STRING, allowNull: false, unique: true },
+  description: Sequelize.STRING,
+  cost: Sequelize.DECIMAL(10,2),
+  msrp: Sequelize.DECIMAL(10,2),
+  qtyOnHand: Sequelize.INTEGER,
+  qtyOnOrder: Sequelize.INTEGER
+});
+
+
 /* ASSOCIATIONS */
 
 Piece.belongsToMany(Material, { through: 'PieceMaterial' });
 Material.belongsToMany(Piece, { through: 'PieceMaterial' });
 
-Material.belongsToMany(MaterialPurchaseOrder, { as: 'PurchaseOrders', through: 'POMaterial', foreignKey: 'purchaseOrderId' });
+Material.belongsTo(MaterialType, { as: 'type'});
+Piece.belongsTo(PieceType, { as: 'type' });
+
+Material.belongsToMany(MaterialPurchaseOrder, { as: 'PurchaseOrders', through: 'POMaterial', foreignKey: 'PurchaseOrderId' });
 MaterialPurchaseOrder.belongsToMany(Material, { through: 'POMaterial'});
 
-Piece.belongsToMany(PiecePurchaseOrder, { as: 'PurchaseOrders', through: 'POPiece', foreignKey: 'purchaseOrderId' });
+Piece.belongsToMany(PiecePurchaseOrder, { as: 'PurchaseOrders', through: 'POPiece', foreignKey: 'PurchaseOrderId' });
 PiecePurchaseOrder.belongsToMany(Piece, { through: 'POPiece'});
 
 
@@ -79,7 +98,7 @@ PiecePurchaseOrder.sync();
 module.exports = {
   Material: Material,
   Piece: Piece,
-  Product: Product,
   MaterialPurchaseOrder: MaterialPurchaseOrder,
-  PiecePurchaseOrder: PiecePurchaseOrder
+  PiecePurchaseOrder: PiecePurchaseOrder,
+  Product: Product
 };
