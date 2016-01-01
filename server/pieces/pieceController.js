@@ -4,11 +4,7 @@ module.exports = {
 
   getAllPieces: function(req, res) {
     Piece.findAll().then(function(pieces) {
-      if (!pieces) {
-        res.sendStatus(204); // no pieces found
-      } else {
-        res.status(200).send(pieces);
-      }
+      res.status(200).send({ pieces: pieces });
     }).catch(function(error) {
       console.log(error);
       res.sendStatus(500);
@@ -16,8 +12,8 @@ module.exports = {
   },
 
   addPiece: function(req, res) {
-    Piece.create(req.body).then(function(piece) {
-      res.status(201).send(piece);
+    Piece.create(req.body.piece).then(function(piece) {
+      res.status(201).send({ piece: piece });
     }).catch(function(error) {
       console.log(error);
       res.sendStatus(500);
@@ -25,12 +21,12 @@ module.exports = {
   },
 
   modifyPiece: function(req, res) {
-    Piece.findOne({ where: {item: req.params.item } }).then(function(piece) {
+    Piece.findOne({ where: { item: req.params.item } }).then(function(piece) {
       if (piece === null) {
         res.sendStatus(404);
       } else {
         piece.update(req.body).then(function(updatedPiece) {
-          res.status(200).send(updatedPiece);
+          res.status(200).send({ piece: updatedPiece });
         });
       }
     }).catch(function(error) {

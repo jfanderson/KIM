@@ -36,7 +36,57 @@ describe('Server Tests', function() {
         .get('/pieces')
         .expect(200)
         .expect(function(res) {
-          expect(res.body).to.have.length.above(0);
+          expect(res.body.pieces).to.have.length.above(0);
+          expect(Array.isArray(res.body.pieces)).to.be.true;
+          expect(res.body.pieces[0]).to.have.property('item');
+        })
+        .end(done);
+    });
+
+    it('should add a piece', function(done) {
+      request(app)
+        .post('/pieces')
+        .send({ piece: {
+            item: 'Z001',
+            description: 'another fake'
+          }
+        })
+        .expect(201)
+        .expect(function(res) {
+          expect(res.body.piece).to.have.property('item', 'Z001');
+
+          Piece.findOne({ where: { item: 'Z001' }}).then(function(piece) {
+            expect(piece).to.be.ok;
+          });
+        })
+        .end(done);
+    });
+
+    it('should modify a piece', function(done) {
+      request(app)
+        .put('/pieces/Z001')
+        .send({
+          description: 'new description'
+        })
+        .expect(200)
+        .expect(function(res) {
+          expect(res.body.piece).to.have.property('description', 'new description');
+
+          Piece.findOne({ where: { item: 'Z001' }}).then(function(piece) {
+            expect(piece.description).to.equal('new description');
+          });
+        })
+        .end(done);
+    });
+
+    it('should remove a piece', function(done) {
+      request(app)
+        .delete('/pieces/Z001')
+        .expect(204)
+        .expect(function(res) {
+          Piece.findOne({ where: { item: 'Z001' }}).then(function(piece) {
+            expect(piece).to.not.be.ok;
+          });
         })
         .end(done);
     });

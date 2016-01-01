@@ -9,7 +9,8 @@ if (dbURL) {
 } else {
   var orm = new Sequelize('kim', 'root', '', {
     host: 'localhost',
-    dialect: 'mysql'
+    dialect: 'mysql',
+    logging: false
   });
 }
 
