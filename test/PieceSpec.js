@@ -5,31 +5,49 @@ var express = require('express');
 var app = require('../server/app.js');
 var models = require('../server/db/index.js');
 var Piece = models.Piece;
+var PieceType = models.PieceType;
 
 describe('Piece Tests', function() {
 
   beforeEach(function(done) {
-    var newPiece = {
-      item: 'Z000',
-      description: 'not a real piece',
-      laborTime: 10,
-      qtyOnHand: 5
+    var newType = {
+      name: 'fake',
+      lowStock: 5
     };
 
-    Piece.create(newPiece).then(function(piece) {
+    PieceType.create(newType).then(function() {
       done();
     });
   });
 
   afterEach(function(done) {
-    Piece.findOne({ where: { item: 'Z000' }}).then(function(piece) {
-      return piece.destroy();
+    PieceType.findOne({ where: { name: 'fake' }}).then(function(type) {
+      return type.destroy();
     }).then(function() {
       done();
     });
   });
 
   describe('Jewelry piece pathways: ', function() {
+
+    it('should add a piece', function(done) {
+      request(app)
+        .post('/pieces')
+        .send({ piece: {
+            item: 'Z000',
+            description: 'fake piece'
+          }
+        })
+        .expect(201)
+        .expect(function(res) {
+          expect(res.body.piece).to.have.property('item', 'Z000');
+
+          Piece.findOne({ where: { item: 'Z000' }}).then(function(piece) {
+            expect(piece).to.be.ok;
+          });
+        })
+        .end(done);
+    });
 
     it('should retrieve all pieces', function(done) {
       request(app)
@@ -43,28 +61,9 @@ describe('Piece Tests', function() {
         .end(done);
     });
 
-    it('should add a piece', function(done) {
-      request(app)
-        .post('/pieces')
-        .send({ piece: {
-            item: 'Z001',
-            description: 'another fake'
-          }
-        })
-        .expect(201)
-        .expect(function(res) {
-          expect(res.body.piece).to.have.property('item', 'Z001');
-
-          Piece.findOne({ where: { item: 'Z001' }}).then(function(piece) {
-            expect(piece).to.be.ok;
-          });
-        })
-        .end(done);
-    });
-
     it('should modify a piece', function(done) {
       request(app)
-        .put('/pieces/Z001')
+        .put('/pieces/Z000')
         .send({
           description: 'new description'
         })
@@ -72,7 +71,7 @@ describe('Piece Tests', function() {
         .expect(function(res) {
           expect(res.body.piece).to.have.property('description', 'new description');
 
-          Piece.findOne({ where: { item: 'Z001' }}).then(function(piece) {
+          Piece.findOne({ where: { item: 'Z000' }}).then(function(piece) {
             expect(piece.description).to.equal('new description');
           });
         })
@@ -81,11 +80,36 @@ describe('Piece Tests', function() {
 
     it('should remove a piece', function(done) {
       request(app)
-        .delete('/pieces/Z001')
+        .delete('/pieces/Z000')
         .expect(204)
         .expect(function(res) {
-          Piece.findOne({ where: { item: 'Z001' }}).then(function(piece) {
+          Piece.findOne({ where: { item: 'Z000' }}).then(function(piece) {
             expect(piece).to.not.be.ok;
+          });
+        })
+        .end(done);
+    });
+
+    after(function(done) {
+      Piece.findOne({ where: { item: 'Z001' }}).then(function(piece) {
+        return piece.destroy();
+      }).then(function() {
+        done();
+      });
+    });
+
+    it('should associate a piece with a type', function(done) {
+      request(app)
+        .post('/pieces')
+        .send({ piece: {
+            item: 'Z001',
+            description: 'another fake piece',
+            type: 'fake'
+          }
+        })
+        .expect(function(res) {
+          PieceType.findById(res.body.piece.typeId).then(function(type) {
+            expect(type.name).to.equal('fake');
           });
         })
         .end(done);

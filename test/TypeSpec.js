@@ -7,7 +7,7 @@ var models = require('../server/db/index.js');
 var PieceType = models.PieceType;
 var MaterialType = models.MaterialType;
 
-describe('Piece Tests', function() {
+describe('Type Tests', function() {
 
   beforeEach(function(done) {
     var newType = {
