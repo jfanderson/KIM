@@ -4,6 +4,19 @@ var PieceType = models.PieceType;
 
 module.exports = {
 
+  getPiece: function(req, res) {
+    Piece.findOne({ where: { item: req.params.item }}).then(function(piece) {
+      if (piece === null) {
+        res.sendStatus(404);
+      } else {
+        res.status(200).send({ piece: piece });
+      }
+    }).catch(function(error) {
+      console.log(error);
+      res.sendStatus(500);
+    });
+  },
+
   getAllPieces: function(req, res) {
     Piece.findAll().then(function(pieces) {
       res.status(200).send({ pieces: pieces });
