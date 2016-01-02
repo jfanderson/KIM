@@ -1,4 +1,6 @@
-var Piece = require('../db/index.js').Piece;
+var models = require('../db/index.js');
+var Piece = models.Piece;
+var PieceType = models.PieceType;
 
 module.exports = {
 
@@ -12,8 +14,24 @@ module.exports = {
   },
 
   addPiece: function(req, res) {
+    // save type to associate later
+    if (req.body.piece.hasOwnProperty('type')) {
+      var type = req.body.piece.type;
+      delete req.body.piece.type;
+    }
+
     Piece.create(req.body.piece).then(function(piece) {
-      res.status(201).send({ piece: piece });
+      // associate type if given
+      if (type) {
+        PieceType.findOne({ where: { name: type }}).then(function(matchedType) {
+          if (matchedType !== null) {
+            piece.typeId = matchedType.id;
+          }
+          res.status(201).send({ piece: piece });
+        });
+      } else {
+        res.status(201).send({ piece: piece });
+      }
     }).catch(function(error) {
       console.log(error);
       if (error.errors[0].message === 'item must be unique') {
