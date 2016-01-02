@@ -16,7 +16,11 @@ module.exports = {
       res.status(201).send({ piece: piece });
     }).catch(function(error) {
       console.log(error);
-      res.sendStatus(500);
+      if (error.errors[0].message === 'item must be unique') {
+        res.sendStatus(409);
+      } else {
+        res.sendStatus(500);
+      }
     });
   },
 

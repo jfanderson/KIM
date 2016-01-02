@@ -14,7 +14,7 @@ module.exports = {
   },
 
   addPieceType: function(req, res) {
-    PieceType.create(res.body.type).then(function(newType) {
+    PieceType.create(req.body.type).then(function(newType) {
       res.status(201).send({ type: newType });
     }).catch(function(error) {
       console.log(error);
@@ -62,7 +62,7 @@ module.exports = {
   },
 
   addMaterialType: function(req, res) {
-    MaterialType.create(res.body.type).then(function(newType) {
+    MaterialType.create(req.body.type).then(function(newType) {
       res.status(201).send({ type: newType });
     }).catch(function(error) {
       console.log(error);

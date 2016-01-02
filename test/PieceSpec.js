@@ -6,7 +6,7 @@ var app = require('../server/app.js');
 var models = require('../server/db/index.js');
 var Piece = models.Piece;
 
-describe('Server Tests', function() {
+describe('Piece Tests', function() {
 
   beforeEach(function(done) {
     var newPiece = {
