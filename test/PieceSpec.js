@@ -49,6 +49,16 @@ describe('Piece Tests', function() {
         .end(done);
     });
 
+    it('should retrieve a single piece', function(done) {
+      request(app)
+        .get('/pieces/Z000')
+        .expect(200)
+        .expect(function(res) {
+          expect(res.body.piece.description).to.equal('fake piece');
+        })
+        .end(done);
+    });
+
     it('should retrieve all pieces', function(done) {
       request(app)
         .get('/pieces')
