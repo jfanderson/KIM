@@ -11,10 +11,13 @@ module.exports = function(app, express) {
 
   // instantiate destinations
   var pieceRouter = express.Router();
+  var typeRouter = express.Router();
 
   // route requests to proper destination
   app.use('/pieces', pieceRouter);
+  app.use('/types', typeRouter);
 
   // define destination pathways
   require('../pieces/pieceRoutes.js')(pieceRouter);
+  require('../types/typeRoutes/js')(typeRouter);
 };
