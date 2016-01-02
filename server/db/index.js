@@ -40,12 +40,12 @@ var Piece = orm.define('Piece', {
 
 var MaterialType = orm.define('MaterialType', {
   name: { type: Sequelize.STRING, allowNull: false, unique: true },
-  lowStock: Sequelize.INTEGER
+  lowStock: { type: Sequelize.INTEGER, defaultValue: 0 }
 });
 
 var PieceType = orm.define('PieceType', {
   name: { type: Sequelize.STRING, allowNull: false, unique: true },
-  lowStock: Sequelize.INTEGER
+  lowStock: { type: Sequelize.INTEGER, defaultValue: 0 }
 });
 
 var MaterialPurchaseOrder = orm.define('MaterialPurchaseOrder', {
@@ -89,14 +89,8 @@ Piece.belongsToMany(PiecePurchaseOrder, { as: 'PurchaseOrders', through: 'POPiec
 PiecePurchaseOrder.belongsToMany(Piece, { through: 'POPiece'});
 
 
-Material.sync();
-Piece.sync();
-MaterialType.sync();
-PieceType.sync();
-MaterialPurchaseOrder.sync();
-PiecePurchaseOrder.sync();
-Settings.sync();
-Product.sync();
+// create tables if they do not already exist
+orm.sync();
 
 module.exports = {
   Material: Material,
