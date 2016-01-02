@@ -19,5 +19,5 @@ module.exports = function(app, express) {
 
   // define destination pathways
   require('../pieces/pieceRoutes.js')(pieceRouter);
-  require('../types/typeRoutes/js')(typeRouter);
+  require('../types/typeRoutes.js')(typeRouter);
 };
