@@ -10,14 +10,17 @@ module.exports = function(app, express) {
   app.use(bodyParser.json());
 
   // instantiate destinations
+  var materialRouter = express.Router();
   var pieceRouter = express.Router();
   var typeRouter = express.Router();
 
   // route requests to proper destination
+  app.use('/materials', materialRouter);
   app.use('/pieces', pieceRouter);
   app.use('/types', typeRouter);
 
   // define destination pathways
+  require('../materials/materialRoutes')(materialRouter);
   require('../pieces/pieceRoutes.js')(pieceRouter);
   require('../types/typeRoutes.js')(typeRouter);
 };
