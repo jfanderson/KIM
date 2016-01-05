@@ -10,12 +10,12 @@ var PieceType = models.PieceType;
 describe('Piece Tests', function() {
 
   beforeEach(function(done) {
-    var newType = {
-      name: 'fake',
-      lowStock: 5
-    };
+    var newTypes = [
+      { name: 'fake', lowStock: 5 },
+      { name: 'fake2' }
+    ];
 
-    PieceType.create(newType).then(function() {
+    PieceType.bulkCreate(newTypes).then(function() {
       done();
     });
   });
@@ -24,7 +24,11 @@ describe('Piece Tests', function() {
     PieceType.findOne({ where: { name: 'fake' }}).then(function(type) {
       return type.destroy();
     }).then(function() {
-      done();
+      PieceType.findOne({ where: { name: 'fake2' }}).then(function(type) {
+        return type.destroy();
+      }).then(function() {
+        done();
+      });
     });
   });
 
@@ -100,15 +104,7 @@ describe('Piece Tests', function() {
         .end(done);
     });
 
-    after(function(done) {
-      Piece.findOne({ where: { item: 'Z001' }}).then(function(piece) {
-        return piece.destroy();
-      }).then(function() {
-        done();
-      });
-    });
-
-    it('should associate a piece with a type', function(done) {
+    it('should associate a new piece with a type', function(done) {
       request(app)
         .post('/pieces')
         .send({ piece: {
@@ -120,6 +116,32 @@ describe('Piece Tests', function() {
         .expect(function(res) {
           PieceType.findById(res.body.piece.typeId).then(function(type) {
             expect(type.name).to.equal('fake');
+          });
+        })
+        .end(done);
+    });
+
+    after(function(done) {
+      Piece.findOne({ where: { item: 'Z001' }}).then(function(piece) {
+        return piece.destroy();
+      }).then(function() {
+        done();
+      });
+    });
+
+    it('should modify a pieces type', function(done) {
+      request(app)
+        .put('/pieces/Z001')
+        .send({
+          type: 'fake2',
+          description: 'new description'
+        })
+        .expect(200)
+        .expect(function(res) {
+          expect(res.body.piece.description).to.equal('new description');
+
+          PieceType.findById(res.body.piece.typeId).then(function(type) {
+            expect(type.name).to.equal('fake2');
           });
         })
         .end(done);

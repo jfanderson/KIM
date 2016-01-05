@@ -59,6 +59,18 @@ module.exports = {
     Piece.findOne({ where: { item: req.params.item } }).then(function(piece) {
       if (piece === null) {
         res.sendStatus(404);
+      } else if (req.body.hasOwnProperty('type')) {
+        // modify type if necessary
+        PieceType.findOne({ where: { name: req.body.type }}).then(function(matchedType) {
+          if (matchedType !== null) {
+            piece.typeId = matchedType.id;
+          }
+          delete req.body.type;
+
+          piece.update(req.body).then(function(updatedPiece) {
+            res.status(200).send({ piece: updatedPiece });
+          });
+        });
       } else {
         piece.update(req.body).then(function(updatedPiece) {
           res.status(200).send({ piece: updatedPiece });
