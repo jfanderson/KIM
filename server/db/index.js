@@ -20,10 +20,8 @@ if (dbURL) {
 var Material = orm.define('Material', {
   item: { type: Sequelize.STRING, allowNull: false, unique: true },
   description: { type: Sequelize.STRING, allowNull: false, unique: true },
-  vendor: Sequelize.STRING,
-  costPerInch: { type: Sequelize.DECIMAL(10,2), defaultValue: 0.0 },
-  unit: { type: Sequelize.STRING, defaultValue: 'unit' },
-  qtyOnHand: { type: Sequelize.INTEGER, defaultValue: 0 },
+  costPerUnit: { type: Sequelize.DECIMAL(10,2), defaultValue: 0 },
+  qtyInStock: { type: Sequelize.INTEGER, defaultValue: 0 },
   qtyOnOrder: { type: Sequelize.INTEGER, defaultValue: 0 }
 });
 
@@ -34,8 +32,12 @@ var Piece = orm.define('Piece', {
   totalCost: Sequelize.DECIMAL(10,2),
   wholesalePrice: Sequelize.DECIMAL(10,2),
   msrp: Sequelize.DECIMAL(10,2),
-  qtyOnHand: { type: Sequelize.INTEGER, defaultValue: 0 },
+  qtyInStock: { type: Sequelize.INTEGER, defaultValue: 0 },
   qtyOnOrder: { type: Sequelize.INTEGER, defaultValue: 0 }
+});
+
+var PieceMaterial = orm.define('PieceMaterial', {
+  qty: { type: Sequelize.INTEGER, defaultValue: 0 }
 });
 
 var MaterialType = orm.define('MaterialType', {
@@ -48,6 +50,10 @@ var PieceType = orm.define('PieceType', {
   lowStock: { type: Sequelize.INTEGER, defaultValue: 0 }
 });
 
+var MaterialUnit = orm.define('MaterialUnit', {
+  unit: { type: Sequelize.STRING, allowNull: false, unique: true }
+});
+
 var MaterialPurchaseOrder = orm.define('MaterialPurchaseOrder', {
   metal: Sequelize.STRING,
   instructions: Sequelize.TEXT,
@@ -58,6 +64,13 @@ var PiecePurchaseOrder = orm.define('PiecePurchaseOrder', {
   notes: Sequelize.TEXT,
   qty: Sequelize.INTEGER,
   price: Sequelize.DECIMAL(10,2)
+});
+
+var Vendor = orm.define('Vendor', {
+  company: { type: Sequelize.STRING, allowNull: false, unique: true },
+  address: { type: Sequelize.STRING, allowNull: false, unique: true },
+  phone: { type: Sequelize.STRING, allowNull: false, unique: true },
+  email: { type: Sequelize.STRING, allowNull: false, unique: true }
 });
 
 var Settings = orm.define('Settings', {
@@ -76,17 +89,31 @@ var Product = orm.define('Product', {
 
 /* ASSOCIATIONS */
 
-Piece.belongsToMany(Material, { through: 'PieceMaterial' });
-Material.belongsToMany(Piece, { through: 'PieceMaterial' });
+Piece.belongsToMany(Material, { through: 'PieceMaterial', foreignKey: 'materialId' });
+Material.belongsToMany(Piece, { through: 'PieceMaterial', foreignKey: 'pieceId' });
 
 Material.belongsTo(MaterialType, { as: 'type'});
 Piece.belongsTo(PieceType, { as: 'type' });
 
-Material.belongsToMany(MaterialPurchaseOrder, { as: 'PurchaseOrders', through: 'POMaterial', foreignKey: 'PurchaseOrderId' });
-MaterialPurchaseOrder.belongsToMany(Material, { through: 'POMaterial'});
+Material.belongsTo(MaterialUnit, { as: 'unit' });
 
-Piece.belongsToMany(PiecePurchaseOrder, { as: 'PurchaseOrders', through: 'POPiece', foreignKey: 'PurchaseOrderId' });
-PiecePurchaseOrder.belongsToMany(Piece, { through: 'POPiece'});
+Material.belongsTo(Vendor, { as: 'vendor' }); // may end up being belongsToMany
+
+Material.belongsToMany(MaterialPurchaseOrder, {
+  as: 'PurchaseOrders',
+  through: 'POMaterial',
+  foreignKey: 'purchaseOrderId'
+});
+
+MaterialPurchaseOrder.belongsToMany(Material, { through: 'POMaterial', foreignKey: 'materialId' });
+
+Piece.belongsToMany(PiecePurchaseOrder, {
+  as: 'PurchaseOrders',
+  through: 'POPiece',
+  foreignKey: 'purchaseOrderId'
+});
+
+PiecePurchaseOrder.belongsToMany(Piece, { through: 'POPiece', foreignKey: 'pieceId' });
 
 
 // create tables if they do not already exist
@@ -95,10 +122,13 @@ orm.sync();
 module.exports = {
   Material: Material,
   Piece: Piece,
+  PieceMaterial: PieceMaterial,
   MaterialType: MaterialType,
   PieceType: PieceType,
+  MaterialUnit: MaterialUnit,
   MaterialPurchaseOrder: MaterialPurchaseOrder,
   PiecePurchaseOrder: PiecePurchaseOrder,
+  Vendor: Vendor,
   Settings: Settings,
   Product: Product
 };
