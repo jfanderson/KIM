@@ -5,7 +5,7 @@ var PieceType = models.PieceType;
 module.exports = {
 
   getPiece: function(req, res) {
-    Piece.findOne({ where: { item: req.params.item }}).then(function(piece) {
+    Piece.findById(req.params.pieceId).then(function(piece) {
       if (piece === null) {
         res.sendStatus(404);
       } else {
@@ -56,7 +56,7 @@ module.exports = {
   },
 
   modifyPiece: function(req, res) {
-    Piece.findOne({ where: { item: req.params.item } }).then(function(piece) {
+    Piece.findById(req.params.pieceId).then(function(piece) {
       if (piece === null) {
         res.sendStatus(404);
       } else if (req.body.hasOwnProperty('type')) {
@@ -83,7 +83,7 @@ module.exports = {
   },
 
   removePiece: function(req, res) {
-    Piece.findOne({ where: {item: req.params.item } }).then(function(piece) {
+    Piece.findById(req.params.pieceId).then(function(piece) {
       if (piece === null) {
         res.sendStatus(404);
       } else {

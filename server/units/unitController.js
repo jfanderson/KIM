@@ -22,7 +22,7 @@ module.exports = {
   },
 
   removeMaterialUnit: function(req, res) {
-    MaterialUnit.findOne({ where: { unit: req.params.unit }}).then(function(unit) {
+    MaterialUnit.findById(req.params.unitId).then(function(unit) {
       if (unit === null) {
         res.sendStatus(404);
       } else {

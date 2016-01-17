@@ -7,6 +7,7 @@ var models = require('../server/db/index.js');
 var MaterialUnit = models.MaterialUnit;
 
 describe('Material Unit Tests', function() {
+  var unitId;
 
   describe('Material unit pathways: ', function() {
 
@@ -20,6 +21,8 @@ describe('Material Unit Tests', function() {
         })
         .expect(201)
         .expect(function(res) {
+          unitId = res.body.unit.id;
+
           expect(res.body.unit).to.have.property('unit', 'test');
 
           MaterialUnit.findOne({ where: { unit: 'test' }}).then(function(unit) {
@@ -43,7 +46,7 @@ describe('Material Unit Tests', function() {
 
     it('should remove a unit', function(done) {
       request(app)
-        .delete('/units/material/test')
+        .delete('/units/material/' + unitId)
         .expect(204)
         .expect(function(res) {
           MaterialUnit.findOne({ where: { unit: 'test' }}).then(function(unit) {

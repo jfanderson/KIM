@@ -23,7 +23,7 @@ module.exports = {
   },
 
   modifyPieceType: function(req, res) {
-    PieceType.findOne({ where: { name: req.params.name }}).then(function(type) {
+    PieceType.findById(req.params.typeId).then(function(type) {
       if (type === null) {
         res.sendStatus(404);
       } else {
@@ -38,7 +38,7 @@ module.exports = {
   },
 
   removePieceType: function(req, res) {
-    PieceType.findOne({ where: { name: req.params.name }}).then(function(type) {
+    PieceType.findById(req.params.typeId).then(function(type) {
       if (type === null) {
         res.sendStatus(404);
       } else {
@@ -71,7 +71,7 @@ module.exports = {
   },
 
   modifyMaterialType: function(req, res) {
-    MaterialType.findOne({ where: { name: req.params.name }}).then(function(type) {
+    MaterialType.findById(req.params.typeId).then(function(type) {
       if (type === null) {
         res.sendStatus(404);
       } else {
@@ -86,7 +86,7 @@ module.exports = {
   },
 
   removeMaterialType: function(req, res) {
-    MaterialType.findOne({ where: { name: req.params.name }}).then(function(type) {
+    MaterialType.findById(req.params.typeId).then(function(type) {
       if (type === null) {
         res.sendStatus(404);
       } else {

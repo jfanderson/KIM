@@ -5,7 +5,7 @@ module.exports = function (app) {
     .get(typeController.getPieceTypes)
     .post(typeController.addPieceType);
 
-  app.route('/pieces/:name')
+  app.route('/pieces/:typeId')
     .put(typeController.modifyPieceType)
     .delete(typeController.removePieceType);
 
@@ -13,7 +13,7 @@ module.exports = function (app) {
     .get(typeController.getMaterialTypes)
     .post(typeController.addMaterialType);
 
-  app.route('/materials/:name')
+  app.route('/materials/:typeId')
     .put(typeController.modifyMaterialType)
     .delete(typeController.removeMaterialType);
 

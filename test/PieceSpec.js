@@ -10,6 +10,9 @@ var PieceType = models.PieceType;
 describe('Piece Tests', function() {
 
   beforeEach(function(done) {
+    var pieceId;
+    var pieceId2;
+
     var newTypes = [
       { name: 'fake', lowStock: 5 },
       { name: 'fake2' }
@@ -47,6 +50,8 @@ describe('Piece Tests', function() {
           expect(res.body.piece).to.have.property('item', 'Z000');
 
           Piece.findOne({ where: { item: 'Z000' }}).then(function(piece) {
+            pieceId = piece.id;
+
             expect(piece).to.be.ok;
           });
         })
@@ -55,7 +60,7 @@ describe('Piece Tests', function() {
 
     it('should retrieve a single piece', function(done) {
       request(app)
-        .get('/pieces/Z000')
+        .get('/pieces/' + pieceId)
         .expect(200)
         .expect(function(res) {
           expect(res.body.piece.description).to.equal('fake piece');
@@ -77,7 +82,7 @@ describe('Piece Tests', function() {
 
     it('should modify a piece', function(done) {
       request(app)
-        .put('/pieces/Z000')
+        .put('/pieces/' + pieceId)
         .send({
           description: 'new description'
         })
@@ -94,7 +99,7 @@ describe('Piece Tests', function() {
 
     it('should remove a piece', function(done) {
       request(app)
-        .delete('/pieces/Z000')
+        .delete('/pieces/' + pieceId)
         .expect(204)
         .expect(function(res) {
           Piece.findOne({ where: { item: 'Z000' }}).then(function(piece) {
@@ -114,6 +119,8 @@ describe('Piece Tests', function() {
           }
         })
         .expect(function(res) {
+          pieceId2 = res.body.piece.id;
+
           PieceType.findById(res.body.piece.typeId).then(function(type) {
             expect(type.name).to.equal('fake');
           });
@@ -131,7 +138,7 @@ describe('Piece Tests', function() {
 
     it('should modify a pieces type', function(done) {
       request(app)
-        .put('/pieces/Z001')
+        .put('/pieces/' + pieceId2)
         .send({
           type: 'fake2',
           description: 'new description'
