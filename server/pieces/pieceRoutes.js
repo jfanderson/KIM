@@ -5,7 +5,7 @@ module.exports = function (app) {
     .get(pieceController.getAllPieces)
     .post(pieceController.addPiece);
 
-  app.route('/:item')
+  app.route('/:pieceId')
     .get(pieceController.getPiece)
     .put(pieceController.modifyPiece)
     .delete(pieceController.removePiece);

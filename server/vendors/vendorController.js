@@ -22,7 +22,7 @@ module.exports = {
   },
 
   modifyVendor: function(req, res) {
-    Vendor.findOne({ where: { company: req.params.company }}).then(function(vendor) {
+    Vendor.findById(req.params.vendorId).then(function(vendor) {
       if (vendor === null) {
         res.sendStatus(404);
       } else {
@@ -37,7 +37,7 @@ module.exports = {
   },
 
   removeVendor: function(req, res) {
-    Vendor.findOne({ where: { company: req.params.company }}).then(function(vendor) {
+    Vendor.findById(req.params.vendorId).then(function(vendor) {
       if (vendor === null) {
         res.sendStatus(404);
       } else {

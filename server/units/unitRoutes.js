@@ -5,7 +5,7 @@ module.exports = function (app) {
     .get(unitController.getMaterialUnits)
     .post(unitController.addMaterialUnit);
 
-  app.route('/material/:unit')
+  app.route('/material/:unitId')
     .delete(unitController.removeMaterialUnit);
 
 };

@@ -7,6 +7,7 @@ var models = require('../server/db/index.js');
 var Vendor = models.Vendor;
 
 describe('Vendor Tests', function() {
+  var vendorId;
 
   describe('Vendor pathways: ', function() {
 
@@ -22,6 +23,8 @@ describe('Vendor Tests', function() {
         })
         .expect(201)
         .expect(function(res) {
+          vendorId = res.body.vendor.id;
+
           expect(res.body.vendor).to.have.property('address', 'fake lane');
 
           Vendor.findOne({ where: { company: 'test' }}).then(function(vendor) {
@@ -45,7 +48,7 @@ describe('Vendor Tests', function() {
 
     it('should modify a vendor', function(done) {
       request(app)
-        .put('/vendors/test')
+        .put('/vendors/' + vendorId)
         .send({
           email: 'new@new.com'
         })
@@ -62,7 +65,7 @@ describe('Vendor Tests', function() {
 
     it('should remove a vendor', function(done) {
       request(app)
-        .delete('/vendors/test')
+        .delete('/vendors/' + vendorId)
         .expect(204)
         .expect(function(res) {
           Vendor.findOne({ where: { company: 'test' }}).then(function(vendor) {

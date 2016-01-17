@@ -5,7 +5,7 @@ module.exports = function (app) {
     .get(vendorController.getVendors)
     .post(vendorController.addVendor);
 
-  app.route('/:company')
+  app.route('/:vendorId')
     .put(vendorController.modifyVendor)
     .delete(vendorController.removeVendor);
 

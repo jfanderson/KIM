@@ -10,6 +10,9 @@ var MaterialType = models.MaterialType;
 describe('Material Tests', function() {
 
   beforeEach(function(done) {
+    var materialId;
+    var materialId2;
+
     var newTypes = [
       { name: 'fake', lowStock: 5 },
       { name: 'fake2' }
@@ -47,6 +50,7 @@ describe('Material Tests', function() {
           expect(res.body.material).to.have.property('item', 'Z000');
 
           Material.findOne({ where: { item: 'Z000' }}).then(function(material) {
+            materialId = material.id;
             expect(material).to.be.ok;
           });
         })
@@ -55,7 +59,7 @@ describe('Material Tests', function() {
 
     it('should retrieve a single material', function(done) {
       request(app)
-        .get('/materials/Z000')
+        .get('/materials/' + materialId)
         .expect(200)
         .expect(function(res) {
           expect(res.body.material.description).to.equal('fake material');
@@ -77,7 +81,7 @@ describe('Material Tests', function() {
 
     it('should modify a material', function(done) {
       request(app)
-        .put('/materials/Z000')
+        .put('/materials/' + materialId)
         .send({
           description: 'new description'
         })
@@ -94,7 +98,7 @@ describe('Material Tests', function() {
 
     it('should remove a material', function(done) {
       request(app)
-        .delete('/materials/Z000')
+        .delete('/materials/' + materialId)
         .expect(204)
         .expect(function(res) {
           Material.findOne({ where: { item: 'Z000' }}).then(function(material) {
@@ -114,6 +118,8 @@ describe('Material Tests', function() {
           }
         })
         .expect(function(res) {
+          materialId2 = res.body.material.id;
+
           MaterialType.findById(res.body.material.typeId).then(function(type) {
             expect(type.name).to.equal('fake');
           });
@@ -131,7 +137,7 @@ describe('Material Tests', function() {
 
     it('should modify a materials type', function(done) {
       request(app)
-        .put('/materials/Z001')
+        .put('/materials/' + materialId2)
         .send({
           type: 'fake2',
           description: 'new description'

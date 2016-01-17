@@ -5,7 +5,7 @@ var MaterialType = models.MaterialType;
 module.exports = {
 
   getMaterial: function(req, res) {
-    Material.findOne({ where: { item: req.params.item }}).then(function(material) {
+    Material.findById(req.params.materialId).then(function(material) {
       if (material === null) {
         res.sendStatus(404);
       } else {
@@ -56,7 +56,7 @@ module.exports = {
   },
 
   modifyMaterial: function(req, res) {
-    Material.findOne({ where: { item: req.params.item } }).then(function(material) {
+    Material.findById(req.params.materialId).then(function(material) {
       if (material === null) {
         res.sendStatus(404);
       } else if (req.body.hasOwnProperty('type')) {
@@ -83,7 +83,7 @@ module.exports = {
   },
 
   removeMaterial: function(req, res) {
-    Material.findOne({ where: {item: req.params.item } }).then(function(material) {
+    Material.findById(req.params.materialId).then(function(material) {
       if (material === null) {
         res.sendStatus(404);
       } else {

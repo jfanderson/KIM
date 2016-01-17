@@ -5,7 +5,7 @@ module.exports = function (app) {
     .get(materialController.getAllMaterials)
     .post(materialController.addMaterial);
 
-  app.route('/:item')
+  app.route('/:materialId')
     .get(materialController.getMaterial)
     .put(materialController.modifyMaterial)
     .delete(materialController.removeMaterial);
