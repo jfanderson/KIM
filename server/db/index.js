@@ -68,9 +68,9 @@ var PiecePurchaseOrder = orm.define('PiecePurchaseOrder', {
 
 var Vendor = orm.define('Vendor', {
   company: { type: Sequelize.STRING, allowNull: false, unique: true },
-  address: { type: Sequelize.STRING, allowNull: false, unique: true },
-  phone: { type: Sequelize.STRING, allowNull: false, unique: true },
-  email: { type: Sequelize.STRING, allowNull: false, unique: true }
+  address: { type: Sequelize.STRING, unique: true },
+  phone: { type: Sequelize.STRING, unique: true },
+  email: { type: Sequelize.STRING, unique: true }
 });
 
 var Settings = orm.define('Settings', {
