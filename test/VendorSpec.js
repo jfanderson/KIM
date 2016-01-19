@@ -24,14 +24,14 @@ describe('Vendor Tests', function() {
         .expect(201)
         .expect(function(res) {
           vendorId = res.body.vendor.id;
-
           expect(res.body.vendor).to.have.property('address', 'fake lane');
-
+        })
+        .end(function() {
           Vendor.findOne({ where: { company: 'test' }}).then(function(vendor) {
             expect(vendor).to.be.ok;
+            done();
           });
-        })
-        .end(done);
+        });
     });
 
     it('should retrieve all vendors', function(done) {
@@ -55,24 +55,25 @@ describe('Vendor Tests', function() {
         .expect(200)
         .expect(function(res) {
           expect(res.body.vendor).to.have.property('email', 'new@new.com');
-
+        })
+        .end(function() {
           Vendor.findOne({ where: { company: 'test' }}).then(function(vendor) {
             expect(vendor.email).to.equal('new@new.com');
+            done();
           });
-        })
-        .end(done);
+        });
     });
 
     it('should remove a vendor', function(done) {
       request(app)
         .delete('/vendors/' + vendorId)
         .expect(204)
-        .expect(function(res) {
+        .end(function() {
           Vendor.findOne({ where: { company: 'test' }}).then(function(vendor) {
             expect(vendor).to.not.be.ok;
+            done();
           });
-        })
-        .end(done);
+        });
     });
   });
 });

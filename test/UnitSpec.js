@@ -22,14 +22,14 @@ describe('Material Unit Tests', function() {
         .expect(201)
         .expect(function(res) {
           unitId = res.body.unit.id;
-
           expect(res.body.unit).to.have.property('unit', 'test');
-
+        })
+        .end(function() {
           MaterialUnit.findOne({ where: { unit: 'test' }}).then(function(unit) {
             expect(unit).to.be.ok;
+            done();
           });
-        })
-        .end(done);
+        });
     });
 
     it('should retrieve all units', function(done) {
@@ -48,12 +48,12 @@ describe('Material Unit Tests', function() {
       request(app)
         .delete('/units/material/' + unitId)
         .expect(204)
-        .expect(function(res) {
+        .end(function() {
           MaterialUnit.findOne({ where: { unit: 'test' }}).then(function(unit) {
             expect(unit).to.not.be.ok;
+            done();
           });
-        })
-        .end(done);
+        });
     });
   });
 });

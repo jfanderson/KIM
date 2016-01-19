@@ -24,14 +24,14 @@ describe('Type Tests', function() {
         .expect(201)
         .expect(function(res) {
           pieceTypeId = res.body.type.id;
-
           expect(res.body.type).to.have.property('lowStock', 10);
-
+        })
+        .end(function() {
           PieceType.findOne({ where: { name: 'fakeType' }}).then(function(type) {
             expect(type).to.be.ok;
+            done();
           });
-        })
-        .end(done);
+        });
     });
 
     it('should add a material type', function(done) {
@@ -45,14 +45,14 @@ describe('Type Tests', function() {
         .expect(201)
         .expect(function(res) {
           materialTypeId = res.body.type.id;
-
           expect(res.body.type).to.have.property('lowStock', 10);
-
+        })
+        .end(function() {
           MaterialType.findOne({ where: { name: 'fakeType' }}).then(function(type) {
             expect(type).to.be.ok;
+            done();
           });
-        })
-        .end(done);
+        });
     });
 
     it('should retrieve all piece types', function(done) {
@@ -88,12 +88,13 @@ describe('Type Tests', function() {
         .expect(200)
         .expect(function(res) {
           expect(res.body.type).to.have.property('lowStock', 2);
-
+        })
+        .end(function() {
           PieceType.findOne({ where: { name: 'fakeType' }}).then(function(type) {
             expect(type.lowStock).to.equal(2);
+            done();
           });
-        })
-        .end(done);
+        });
     });
 
     it('should modify a material type', function(done) {
@@ -105,36 +106,37 @@ describe('Type Tests', function() {
         .expect(200)
         .expect(function(res) {
           expect(res.body.type).to.have.property('lowStock', 2);
-
+        })
+        .end(function() {
           MaterialType.findOne({ where: { name: 'fakeType' }}).then(function(type) {
             expect(type.lowStock).to.equal(2);
+            done();
           });
-        })
-        .end(done);
+        });
     });
 
     it('should remove a piece type', function(done) {
       request(app)
         .delete('/types/pieces/' + pieceTypeId)
         .expect(204)
-        .expect(function(res) {
+        .end(function() {
           PieceType.findOne({ where: { name: 'fakeType' }}).then(function(type) {
             expect(type).to.not.be.ok;
+            done();
           });
-        })
-        .end(done);
+        });
     });
 
     it('should remove a material type', function(done) {
       request(app)
         .delete('/types/materials/' + materialTypeId)
         .expect(204)
-        .expect(function(res) {
+        .end(function() {
           MaterialType.findOne({ where: { name: 'fakeType' }}).then(function(type) {
             expect(type).to.not.be.ok;
+            done();
           });
-        })
-        .end(done);
+        });
     });
 
   });

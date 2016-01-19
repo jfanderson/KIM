@@ -40,28 +40,28 @@ describe('Material Tests', function() {
   });
 
   afterEach(function(done) {
-    MaterialType.findOne({ where: { name: 'fakeType' }}).then(function(type) {
-      return type.destroy();
+    MaterialType.destroy({
+      where: {
+        name: {
+          $in: ['fakeType', 'fakeType2']
+        }
+      }
     }).then(function() {
-      return MaterialType.findOne({ where: { name: 'fakeType2' }});
-    }).then(function(type) {
-      return type.destroy();
+      return MaterialUnit.destroy({
+        where: {
+          unit: {
+            $in: ['fakeUnit', 'fakeUnit2']
+          }
+        }
+      });
     }).then(function() {
-      return MaterialUnit.findOne({ where: { unit: 'fakeUnit' }});
-    }).then(function(unit) {
-      return unit.destroy();
-    }).then(function() {
-      return MaterialUnit.findOne({ where: { unit: 'fakeUnit2' }});
-    }).then(function(unit) {
-      return unit.destroy();
-    }).then(function() {
-      return Vendor.findOne({ where: { company: 'fakeVendor' }});
-    }).then(function(vendor) {
-      return vendor.destroy();
-    }).then(function() {
-      return Vendor.findOne({ where: { company: 'fakeVendor2' }});
-    }).then(function(vendor) {
-      return vendor.destroy();
+      return Vendor.destroy({
+        where: {
+          company: {
+            $in: ['fakeVendor', 'fakeVendor2']
+          }
+        }
+      });
     }).then(function() {
       done();
     });
@@ -80,13 +80,14 @@ describe('Material Tests', function() {
         .expect(201)
         .expect(function(res) {
           expect(res.body.material).to.have.property('item', 'Z000');
-
-          Material.findOne({ where: { item: 'Z000' }}).then(function(material) {
-            materialId = material.id;
-            expect(material).to.be.ok;
-          });
+          materialId = res.body.material.id;
         })
-        .end(done);
+        .end(function() {
+          Material.findOne({ where: { item: 'Z000' }}).then(function(material) {
+            expect(material).to.be.ok;
+            done();
+          });
+        });
     });
 
     it('should retrieve a single material', function(done) {
@@ -120,24 +121,25 @@ describe('Material Tests', function() {
         .expect(200)
         .expect(function(res) {
           expect(res.body.material).to.have.property('description', 'new description');
-
+        })
+        .end(function() {
           Material.findOne({ where: { item: 'Z000' }}).then(function(material) {
             expect(material.description).to.equal('new description');
+            done();
           });
-        })
-        .end(done);
+        });
     });
 
     it('should remove a material', function(done) {
       request(app)
         .delete('/materials/' + materialId)
         .expect(204)
-        .expect(function(res) {
+        .end(function(err, res) {
           Material.findOne({ where: { item: 'Z000' }}).then(function(material) {
             expect(material).to.not.be.ok;
+            done();
           });
-        })
-        .end(done);
+        });
     });
 
     it('should associate a new material with a type, unit, and vendor', function(done) {
@@ -151,7 +153,7 @@ describe('Material Tests', function() {
             vendor: 'fakeVendor'
           }
         })
-        .expect(function(res) {
+        .end(function(err, res) {
           materialId2 = res.body.material.id;
 
           MaterialType.findById(res.body.material.typeId).then(function(type) {
@@ -164,9 +166,9 @@ describe('Material Tests', function() {
             return Vendor.findById(res.body.material.vendorId);
           }).then(function(vendor) {
             expect(vendor.company).to.equal('fakeVendor');
+            done();
           });
-        })
-        .end(done);
+        });
     });
 
     after(function(done) {
@@ -187,7 +189,7 @@ describe('Material Tests', function() {
           description: 'new description'
         })
         .expect(200)
-        .expect(function(res) {
+        .end(function(err, res) {
           expect(res.body.material.description).to.equal('new description');
 
           MaterialType.findById(res.body.material.typeId).then(function(type) {
@@ -200,9 +202,9 @@ describe('Material Tests', function() {
             return Vendor.findById(res.body.material.vendorId);
           }).then(function(vendor) {
             expect(vendor.company).to.equal('fakeVendor2');
+            done();
           });
-        })
-        .end(done);
+        });
     });
 
   });
