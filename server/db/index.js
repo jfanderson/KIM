@@ -89,8 +89,8 @@ var Product = orm.define('Product', {
 
 /* ASSOCIATIONS */
 
-Piece.belongsToMany(Material, { through: 'PieceMaterial', foreignKey: 'materialId' });
-Material.belongsToMany(Piece, { through: 'PieceMaterial', foreignKey: 'pieceId' });
+Piece.belongsToMany(Material, { through: 'PieceMaterial', foreignKey: 'pieceId' });
+Material.belongsToMany(Piece, { through: 'PieceMaterial', foreignKey: 'materialId' });
 
 Material.belongsTo(MaterialType, { as: 'type'});
 Piece.belongsTo(PieceType, { as: 'type' });

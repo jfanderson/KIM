@@ -6,12 +6,15 @@ var app = require('../server/app.js');
 var models = require('../server/db/index.js');
 var Piece = models.Piece;
 var PieceType = models.PieceType;
+var Material = models.Material;
+var PieceMaterial = models.PieceMaterial;
 
 describe('Piece Tests', function() {
+  var pieceId;
+  var pieceId2;
+  var materialId;
 
-  beforeEach(function(done) {
-    var pieceId;
-    var pieceId2;
+  before(function(done) {
 
     var newTypes = [
       { name: 'fake', lowStock: 5 },
@@ -23,15 +26,17 @@ describe('Piece Tests', function() {
     });
   });
 
-  afterEach(function(done) {
-    PieceType.findOne({ where: { name: 'fake' }}).then(function(type) {
-      return type.destroy();
+  after(function(done) {
+    PieceType.destroy({
+      where: {
+        name: {
+          $in: ['fake', 'fake2']
+        }
+      }
     }).then(function() {
-      PieceType.findOne({ where: { name: 'fake2' }}).then(function(type) {
-        return type.destroy();
-      }).then(function() {
-        done();
-      });
+      return Piece.destroy({ where: { id: pieceId2 } });
+    }).then(function() {
+      done();
     });
   });
 
@@ -48,14 +53,14 @@ describe('Piece Tests', function() {
         .expect(201)
         .expect(function(res) {
           expect(res.body.piece).to.have.property('item', 'Z000');
-
-          Piece.findOne({ where: { item: 'Z000' }}).then(function(piece) {
-            pieceId = piece.id;
-
-            expect(piece).to.be.ok;
-          });
+          pieceId = res.body.piece.id;
         })
-        .end(done);
+        .end(function() {
+          return Piece.findOne({ where: { item: 'Z000' }}).then(function(piece) {
+            expect(piece).to.be.ok;
+            done();
+          });
+        });
     });
 
     it('should retrieve a single piece', function(done) {
@@ -89,24 +94,25 @@ describe('Piece Tests', function() {
         .expect(200)
         .expect(function(res) {
           expect(res.body.piece).to.have.property('description', 'new description');
-
+        })
+        .end(function() {
           Piece.findOne({ where: { item: 'Z000' }}).then(function(piece) {
             expect(piece.description).to.equal('new description');
+            done();
           });
-        })
-        .end(done);
+        });
     });
 
     it('should remove a piece', function(done) {
       request(app)
         .delete('/pieces/' + pieceId)
         .expect(204)
-        .expect(function(res) {
+        .end(function() {
           Piece.findOne({ where: { item: 'Z000' }}).then(function(piece) {
             expect(piece).to.not.be.ok;
+            done();
           });
-        })
-        .end(done);
+        });
     });
 
     it('should associate a new piece with a type', function(done) {
@@ -120,20 +126,13 @@ describe('Piece Tests', function() {
         })
         .expect(function(res) {
           pieceId2 = res.body.piece.id;
-
+        })
+        .end(function(err, res) {
           PieceType.findById(res.body.piece.typeId).then(function(type) {
             expect(type.name).to.equal('fake');
+            done();
           });
-        })
-        .end(done);
-    });
-
-    after(function(done) {
-      Piece.findOne({ where: { item: 'Z001' }}).then(function(piece) {
-        return piece.destroy();
-      }).then(function() {
-        done();
-      });
+        });
     });
 
     it('should modify a pieces type', function(done) {
@@ -146,12 +145,81 @@ describe('Piece Tests', function() {
         .expect(200)
         .expect(function(res) {
           expect(res.body.piece.description).to.equal('new description');
-
+        })
+        .end(function(err, res) {
           PieceType.findById(res.body.piece.typeId).then(function(type) {
             expect(type.name).to.equal('fake2');
+            done();
           });
-        })
-        .end(done);
+        });
+    });
+
+    before(function(done) {
+      Material.create({
+        item: 'test',
+        description: 'testMaterial'
+      }).then(function(material) {
+        materialId = material.id;
+        done();
+      });
+    });
+
+    it('should associate a material with a piece', function(done) {
+      request(app)
+        .post('/pieces/' + pieceId2 + '/material/' + materialId)
+        .expect(200)
+        .end(function() {
+          PieceMaterial.findOne({
+            where: {
+              pieceId: pieceId2,
+              materialId: materialId
+            }
+          }).then(function(result) {
+            expect(result).to.be.ok;
+            done();
+          });
+        });
+    });
+
+    it('should modify the quantity of an associated material', function(done) {
+      request(app)
+        .put('/pieces/' + pieceId2 + '/material/' + materialId)
+        .send({ qty: 5 })
+        .expect(200)
+        .end(function() {
+          PieceMaterial.findOne({
+            where: {
+              pieceId: pieceId2,
+              materialId: materialId
+            }
+          }).then(function(result) {
+            expect(result.qty).to.equal(5);
+            done();
+          });
+        });
+    });
+
+    after(function(done) {
+      Material.destroy({ where: { id: materialId }}).then(function() {
+        done();
+      });
+    });
+
+    it('should disassociate a material from a piece', function(done) {
+      request(app)
+        .delete('/pieces/' + pieceId2 + '/material/' + materialId)
+        .expect(204)
+        .end(function() {
+          PieceMaterial.findOne({
+            where: {
+              pieceId: pieceId2,
+              materialId: materialId
+            }
+          }).then(function(result) {
+            expect(result).to.not.be.ok;
+            done();
+          });
+        });
     });
 
   });
