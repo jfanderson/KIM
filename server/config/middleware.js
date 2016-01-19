@@ -12,21 +12,24 @@ module.exports = function(app, express) {
   // instantiate destinations
   var materialRouter = express.Router();
   var pieceRouter = express.Router();
+  var settingsRouter = express.Router();
   var typeRouter = express.Router();
-  var vendorRouter = express.Router();
   var unitRouter = express.Router();
+  var vendorRouter = express.Router();
 
   // route requests to proper destination
   app.use('/materials', materialRouter);
   app.use('/pieces', pieceRouter);
+  app.use('/settings', settingsRouter);
   app.use('/types', typeRouter);
-  app.use('/vendors', vendorRouter);
   app.use('/units', unitRouter);
+  app.use('/vendors', vendorRouter);
 
   // define destination pathways
-  require('../materials/materialRoutes')(materialRouter);
+  require('../materials/materialRoutes.js')(materialRouter);
   require('../pieces/pieceRoutes.js')(pieceRouter);
+  require('../settings/settingsRoutes.js')(settingsRouter);
   require('../types/typeRoutes.js')(typeRouter);
-  require('../vendors/vendorRoutes.js')(vendorRouter);
   require('../units/unitRoutes.js')(unitRouter);
+  require('../vendors/vendorRoutes.js')(vendorRouter);
 };
