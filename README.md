@@ -7,3 +7,5 @@ Inventory management software for [Kristin Miller Jewelry](http://kristinmiller.
 * Node.js  
 * NPM  
 * MySQL  
+* Gulp  
+* SASS  
