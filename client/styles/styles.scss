@@ -1,10 +1,24 @@
 $white: #fff;
 $black: #000;
 
-body {
-  background-color: $black;
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
 }
 
-div {
-  color: $white;
+html {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: $white;
+}
+
+h1 {
+  text-align: center;
+}
+
+.container {
+  width: 80%;
 }
