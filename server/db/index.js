@@ -120,15 +120,15 @@ PiecePurchaseOrder.belongsToMany(Piece, { through: 'POPiece', foreignKey: 'piece
 orm.sync();
 
 module.exports = {
-  Material: Material,
-  Piece: Piece,
-  PieceMaterial: PieceMaterial,
-  MaterialType: MaterialType,
-  PieceType: PieceType,
-  MaterialUnit: MaterialUnit,
-  MaterialPurchaseOrder: MaterialPurchaseOrder,
-  PiecePurchaseOrder: PiecePurchaseOrder,
-  Vendor: Vendor,
-  Settings: Settings,
-  Product: Product
+  Material,
+  MaterialPurchaseOrder,
+  MaterialType,
+  MaterialUnit,
+  Piece,
+  PieceMaterial,
+  PiecePurchaseOrder,
+  PieceType,
+  Product,
+  Settings,
+  Vendor
 };
