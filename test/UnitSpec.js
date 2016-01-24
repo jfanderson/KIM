@@ -13,7 +13,7 @@ describe('Material Unit Tests', function() {
 
     it('should add a unit', function(done) {
       request(app)
-        .post('/units/material')
+        .post('/a/units/material')
         .send({
           unit: {
             unit: 'test'
@@ -34,7 +34,7 @@ describe('Material Unit Tests', function() {
 
     it('should retrieve all units', function(done) {
       request(app)
-        .get('/units/material')
+        .get('/a/units/material')
         .expect(200)
         .expect(function(res) {
           expect(res.body.units).to.have.length.above(0);
@@ -46,7 +46,7 @@ describe('Material Unit Tests', function() {
 
     it('should remove a unit', function(done) {
       request(app)
-        .delete('/units/material/' + unitId)
+        .delete('/a/units/material/' + unitId)
         .expect(204)
         .end(function() {
           MaterialUnit.findOne({ where: { unit: 'test' }}).then(function(unit) {

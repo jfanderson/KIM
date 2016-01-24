@@ -44,7 +44,7 @@ describe('Piece Tests', function() {
 
     it('should add a piece', function(done) {
       request(app)
-        .post('/pieces')
+        .post('/a/pieces')
         .send({ piece: {
             item: 'Z000',
             description: 'fake piece'
@@ -65,7 +65,7 @@ describe('Piece Tests', function() {
 
     it('should retrieve a single piece', function(done) {
       request(app)
-        .get('/pieces/' + pieceId)
+        .get('/a/pieces/' + pieceId)
         .expect(200)
         .expect(function(res) {
           expect(res.body.piece.description).to.equal('fake piece');
@@ -75,7 +75,7 @@ describe('Piece Tests', function() {
 
     it('should retrieve all pieces', function(done) {
       request(app)
-        .get('/pieces')
+        .get('/a/pieces')
         .expect(200)
         .expect(function(res) {
           expect(res.body.pieces).to.have.length.above(0);
@@ -87,7 +87,7 @@ describe('Piece Tests', function() {
 
     it('should modify a piece', function(done) {
       request(app)
-        .put('/pieces/' + pieceId)
+        .put('/a/pieces/' + pieceId)
         .send({
           description: 'new description'
         })
@@ -105,7 +105,7 @@ describe('Piece Tests', function() {
 
     it('should remove a piece', function(done) {
       request(app)
-        .delete('/pieces/' + pieceId)
+        .delete('/a/pieces/' + pieceId)
         .expect(204)
         .end(function() {
           Piece.findOne({ where: { item: 'Z000' }}).then(function(piece) {
@@ -117,7 +117,7 @@ describe('Piece Tests', function() {
 
     it('should associate a new piece with a type', function(done) {
       request(app)
-        .post('/pieces')
+        .post('/a/pieces')
         .send({ piece: {
             item: 'Z001',
             description: 'another fake piece',
@@ -137,7 +137,7 @@ describe('Piece Tests', function() {
 
     it('should modify a pieces type', function(done) {
       request(app)
-        .put('/pieces/' + pieceId2)
+        .put('/a/pieces/' + pieceId2)
         .send({
           type: 'fake2',
           description: 'new description'
@@ -166,7 +166,7 @@ describe('Piece Tests', function() {
 
     it('should associate a material with a piece', function(done) {
       request(app)
-        .post('/pieces/' + pieceId2 + '/material/' + materialId)
+        .post('/a/pieces/' + pieceId2 + '/material/' + materialId)
         .expect(200)
         .end(function() {
           PieceMaterial.findOne({
@@ -183,7 +183,7 @@ describe('Piece Tests', function() {
 
     it('should modify the quantity of an associated material', function(done) {
       request(app)
-        .put('/pieces/' + pieceId2 + '/material/' + materialId)
+        .put('/a/pieces/' + pieceId2 + '/material/' + materialId)
         .send({ qty: 5 })
         .expect(200)
         .end(function() {
@@ -207,7 +207,7 @@ describe('Piece Tests', function() {
 
     it('should disassociate a material from a piece', function(done) {
       request(app)
-        .delete('/pieces/' + pieceId2 + '/material/' + materialId)
+        .delete('/a/pieces/' + pieceId2 + '/material/' + materialId)
         .expect(204)
         .end(function() {
           PieceMaterial.findOne({
