@@ -15,7 +15,7 @@ describe('Type Tests', function() {
 
     it('should add a piece type', function(done) {
       request(app)
-        .post('/types/pieces')
+        .post('/a/types/pieces')
         .send({ type: {
             name: 'fakeType',
             lowStock: 10
@@ -36,7 +36,7 @@ describe('Type Tests', function() {
 
     it('should add a material type', function(done) {
       request(app)
-        .post('/types/materials')
+        .post('/a/types/materials')
         .send({ type: {
             name: 'fakeType',
             lowStock: 10
@@ -57,7 +57,7 @@ describe('Type Tests', function() {
 
     it('should retrieve all piece types', function(done) {
       request(app)
-        .get('/types/pieces')
+        .get('/a/types/pieces')
         .expect(200)
         .expect(function(res) {
           expect(res.body.types).to.have.length.above(0);
@@ -69,7 +69,7 @@ describe('Type Tests', function() {
 
     it('should retrieve all material types', function(done) {
       request(app)
-        .get('/types/materials')
+        .get('/a/types/materials')
         .expect(200)
         .expect(function(res) {
           expect(res.body.types).to.have.length.above(0);
@@ -81,7 +81,7 @@ describe('Type Tests', function() {
 
     it('should modify a piece type', function(done) {
       request(app)
-        .put('/types/pieces/' + pieceTypeId)
+        .put('/a/types/pieces/' + pieceTypeId)
         .send({
           lowStock: 2
         })
@@ -99,7 +99,7 @@ describe('Type Tests', function() {
 
     it('should modify a material type', function(done) {
       request(app)
-        .put('/types/materials/' + materialTypeId)
+        .put('/a/types/materials/' + materialTypeId)
         .send({
           lowStock: 2
         })
@@ -117,7 +117,7 @@ describe('Type Tests', function() {
 
     it('should remove a piece type', function(done) {
       request(app)
-        .delete('/types/pieces/' + pieceTypeId)
+        .delete('/a/types/pieces/' + pieceTypeId)
         .expect(204)
         .end(function() {
           PieceType.findOne({ where: { name: 'fakeType' }}).then(function(type) {
@@ -129,7 +129,7 @@ describe('Type Tests', function() {
 
     it('should remove a material type', function(done) {
       request(app)
-        .delete('/types/materials/' + materialTypeId)
+        .delete('/a/types/materials/' + materialTypeId)
         .expect(204)
         .end(function() {
           MaterialType.findOne({ where: { name: 'fakeType' }}).then(function(type) {

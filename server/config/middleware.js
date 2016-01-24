@@ -18,12 +18,12 @@ module.exports = function(app, express) {
   var vendorRouter = express.Router();
 
   // route requests to proper destination
-  app.use('/materials', materialRouter);
-  app.use('/pieces', pieceRouter);
-  app.use('/settings', settingsRouter);
-  app.use('/types', typeRouter);
-  app.use('/units', unitRouter);
-  app.use('/vendors', vendorRouter);
+  app.use('/a/materials', materialRouter);
+  app.use('/a/pieces', pieceRouter);
+  app.use('/a/settings', settingsRouter);
+  app.use('/a/types', typeRouter);
+  app.use('/a/units', unitRouter);
+  app.use('/a/vendors', vendorRouter);
 
   // define destination pathways
   require('../materials/materialRoutes.js')(materialRouter);

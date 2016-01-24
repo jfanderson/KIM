@@ -71,7 +71,7 @@ describe('Material Tests', function() {
 
     it('should add a material', function(done) {
       request(app)
-        .post('/materials')
+        .post('/a/materials')
         .send({ material: {
             item: 'Z000',
             description: 'fake material'
@@ -92,7 +92,7 @@ describe('Material Tests', function() {
 
     it('should retrieve a single material', function(done) {
       request(app)
-        .get('/materials/' + materialId)
+        .get('/a/materials/' + materialId)
         .expect(200)
         .expect(function(res) {
           expect(res.body.material.description).to.equal('fake material');
@@ -102,7 +102,7 @@ describe('Material Tests', function() {
 
     it('should retrieve all materials', function(done) {
       request(app)
-        .get('/materials')
+        .get('/a/materials')
         .expect(200)
         .expect(function(res) {
           expect(res.body.materials).to.have.length.above(0);
@@ -114,7 +114,7 @@ describe('Material Tests', function() {
 
     it('should modify a material', function(done) {
       request(app)
-        .put('/materials/' + materialId)
+        .put('/a/materials/' + materialId)
         .send({
           description: 'new description'
         })
@@ -132,7 +132,7 @@ describe('Material Tests', function() {
 
     it('should remove a material', function(done) {
       request(app)
-        .delete('/materials/' + materialId)
+        .delete('/a/materials/' + materialId)
         .expect(204)
         .end(function(err, res) {
           Material.findOne({ where: { item: 'Z000' }}).then(function(material) {
@@ -144,7 +144,7 @@ describe('Material Tests', function() {
 
     it('should associate a new material with a type, unit, and vendor', function(done) {
       request(app)
-        .post('/materials')
+        .post('/a/materials')
         .send({ material: {
             item: 'Z001',
             description: 'another fake material',
@@ -181,7 +181,7 @@ describe('Material Tests', function() {
 
     it('should modify a materials type, unit, and vendor', function(done) {
       request(app)
-        .put('/materials/' + materialId2)
+        .put('/a/materials/' + materialId2)
         .send({
           type: 'fakeType2',
           unit: 'fakeUnit2',

@@ -13,7 +13,7 @@ describe('Vendor Tests', function() {
 
     it('should add a vendor', function(done) {
       request(app)
-        .post('/vendors')
+        .post('/a/vendors')
         .send({ vendor: {
             company: 'test',
             address: 'fake lane',
@@ -36,7 +36,7 @@ describe('Vendor Tests', function() {
 
     it('should retrieve all vendors', function(done) {
       request(app)
-        .get('/vendors')
+        .get('/a/vendors')
         .expect(200)
         .expect(function(res) {
           expect(res.body.vendors).to.have.length.above(0);
@@ -48,7 +48,7 @@ describe('Vendor Tests', function() {
 
     it('should modify a vendor', function(done) {
       request(app)
-        .put('/vendors/' + vendorId)
+        .put('/a/vendors/' + vendorId)
         .send({
           email: 'new@new.com'
         })
@@ -66,7 +66,7 @@ describe('Vendor Tests', function() {
 
     it('should remove a vendor', function(done) {
       request(app)
-        .delete('/vendors/' + vendorId)
+        .delete('/a/vendors/' + vendorId)
         .expect(204)
         .end(function() {
           Vendor.findOne({ where: { company: 'test' }}).then(function(vendor) {
