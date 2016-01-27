@@ -1,0 +1,17 @@
+.navlink {
+  display: inline-block;
+  width: 13%;
+  margin-right: .5rem;
+  padding-top: .35rem;
+  padding-bottom: .35rem;
+  font-size: .875rem;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  background-color: $gray-heavy;
+  color: $white;
+  transition: background-color .3s;
+}
+.navlink.active {
+  background-color: $black;
+}
