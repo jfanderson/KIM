@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route } from 'react-router';
+import { Router, Route, IndexRoute } from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 import App from './components/App.js';
@@ -18,7 +18,7 @@ const history = createBrowserHistory();
 ReactDOM.render((
   <Router history={history}>
     <Route path='/' component={App}>
-      <Route path='jewelry' component={JewelryProducts}/>
+      <IndexRoute component={JewelryProducts}/>
       <Route path='materials' component={Materials}/>
       <Route path='products' component={OtherProducts}/>
       <Route path='purchaseorders' component={PurchaseOrders}/>
