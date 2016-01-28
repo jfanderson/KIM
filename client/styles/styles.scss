@@ -1,24 +1,9 @@
-$white: #fff;
-$black: #000;
+@import 'parameters';
+@import 'base';
 
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
+@import 'logo';
+@import 'navbar';
+@import 'filters';
+@import 'table';
 
-html {
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  background-color: $white;
-}
-
-h1 {
-  text-align: center;
-}
-
-.container {
-  width: 80%;
-}
+@import 'jewelryProducts';

@@ -1,0 +1,24 @@
+.navbar {
+  background-color: $gray-light;
+}
+.navlink {
+  display: inline-block;
+  width: 13%;
+  margin-right: .5rem;
+  padding-top: .35rem;
+  padding-bottom: .35rem;
+  font-size: $font-size-small;
+  letter-spacing: 1px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  background-color: $gray-heavy;
+  color: $white;
+  transition: background-color .3s;
+}
+.navlink:first-child {
+  margin-left: 2rem;
+}
+.navlink.active {
+  background-color: $black;
+}

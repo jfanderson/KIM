@@ -1,20 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, IndexLink } from 'react-router';
 
 class App extends React.Component {
   render() {
     return (
       <div className="app">
-        <h1>Welcome to KIM!</h1>
-        <ul className="navbar">
-          <li><Link to={'/jewelry'}>Jewelry Products</Link></li>
-          <li><Link to={'/materials'}>Materials</Link></li>
-          <li><Link to={'/products'}>Other Products</Link></li>
-          <li><Link to={'/purchaseorders'}>Purchase Orders</Link></li>
-          <li><Link to={'/sales'}>Sales</Link></li>
-          <li><Link to={'/vendors'}>Vendors</Link></li>
-          <li><Link to={'/settings'}>Settings</Link></li>
-        </ul>
+        <div className="logo-wrapper">
+          <img className="logo" src="../../assets/WebsiteHeader.png" alt="Kristin Miller Jewelry"/>
+        </div>
+        <div className="navbar">
+          <IndexLink to={"/"} className="navlink" activeClassName="active">Jewelry Products</IndexLink>
+          <Link to={"/materials"} className="navlink" activeClassName="active">Materials</Link>
+          <Link to={"/products"} className="navlink" activeClassName="active">Other Products</Link>
+          <Link to={"/purchaseorders"} className="navlink" activeClassName="active">Purchase Orders</Link>
+          <Link to={"/sales"} className="navlink" activeClassName="active">Sales</Link>
+          <Link to={"/vendors"} className="navlink" activeClassName="active">Vendors</Link>
+          <Link to={"/settings"} className="navlink" activeClassName="active">Settings</Link>
+        </div>
         {this.props.children}
       </div>
     );

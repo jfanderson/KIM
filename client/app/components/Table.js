@@ -11,7 +11,7 @@ class Table extends React.Component {
         return column.props.cell(item);
       });
 
-      return <tr key={item[this.props.uniqueId]}>{cells}</tr>;
+      return <tr className="table-row" key={item[this.props.uniqueId]}>{cells}</tr>;
     });
 
     return (
