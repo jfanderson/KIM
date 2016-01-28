@@ -8,19 +8,11 @@ html {
   width: 100%;
   height: 100%;
   font-family: $font-family-sans-serif;
-  font-size: 16px;
-  background-color: $gray-light;
+  font-size: $font-size-base;
+  background-color: $white;
 }
 body {
   margin: 0;
-}
-.logo-wrapper {
-  text-align: center;
-  margin-top: 2rem;
-  margin-bottom: 2.5rem;
-}
-img.logo {
-  width: 200px;
 }
 h1 {
   text-align: center;
@@ -28,8 +20,4 @@ h1 {
 .container {
   width: 95%;
   margin: auto;
-}
-.app .content {
-  background-color: $white;
-  margin: 0;
 }
