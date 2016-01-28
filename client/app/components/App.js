@@ -8,7 +8,7 @@ class App extends React.Component {
         <div className="logo-wrapper">
           <img className="logo" src="../../assets/WebsiteHeader.png" alt="Kristin Miller Jewelry"/>
         </div>
-        <div className="navbar container">
+        <div className="navbar">
           <IndexLink to={"/"} className="navlink" activeClassName="active">Jewelry Products</IndexLink>
           <Link to={"/materials"} className="navlink" activeClassName="active">Materials</Link>
           <Link to={"/products"} className="navlink" activeClassName="active">Other Products</Link>
