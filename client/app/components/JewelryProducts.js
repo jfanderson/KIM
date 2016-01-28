@@ -32,8 +32,16 @@ class JewelryProducts extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1>Jewelry Products</h1>
+      <div className="content">
+        <div className="filters">
+          <span>All</span>
+          <span>Other</span>
+          <span>Low Stock</span>
+          <span>Out of Stock</span>
+
+          <button className="add-button">+</button>
+        </div>
+
         <Table data={this.state.pieces} uniqueId="item">
           <Column header="Item #" cell={piece => ( <Cell>{piece.item}</Cell> )}/>
           <Column header="Description" cell={piece => ( <Cell>{piece.description}</Cell> )}/>
