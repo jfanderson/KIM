@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import 'whatwg-fetch';
 import h from '../helpers.js';
 
@@ -43,14 +44,14 @@ class JewelryProducts extends React.Component {
         </div>
 
         <Table data={this.state.pieces} uniqueId="item">
-          <Column header="Item #" cell={piece => ( <Cell>{piece.item}</Cell> )}/>
-          <Column header="Description" cell={piece => ( <Cell>{piece.description}</Cell> )}/>
-          <Column header="Type" cell={piece => ( <Cell></Cell> )}/>
-          <Column header="Cost" cell={piece => ( <Cell>{piece.totalCost}</Cell> )}/>
-          <Column header="Wholesale" cell={piece => ( <Cell>{piece.wholesalePrice}</Cell> )}/>
-          <Column header="MSRP" cell={piece => ( <Cell>{piece.msrp}</Cell> )}/>
-          <Column header="Qty on Order" cell={piece => ( <Cell>{piece.qtyOnOrder}</Cell> )}/>
-          <Column header="Qty in Stock" cell={piece => ( <Cell>{piece.qtyInStock}</Cell> )}/>
+          <Column header="Item #" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.item}</Link></Cell> )}/>
+          <Column header="Description" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.description}</Link></Cell> )}/>
+          <Column header="Type" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}></Link></Cell> )}/>
+          <Column header="Cost" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.totalCost}</Link></Cell> )}/>
+          <Column header="Wholesale" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.wholesalePrice}</Link></Cell> )}/>
+          <Column header="MSRP" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.msrp}</Link></Cell> )}/>
+          <Column header="Qty on Order" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.qtyOnOrder}</Link></Cell> )}/>
+          <Column header="Qty in Stock" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.qtyInStock}</Link></Cell> )}/>
         </Table>
       </div>
     );
