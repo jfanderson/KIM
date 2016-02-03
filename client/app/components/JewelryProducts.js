@@ -47,9 +47,9 @@ class JewelryProducts extends React.Component {
           <Column header="Item #" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.item}</Link></Cell> )}/>
           <Column header="Description" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.description}</Link></Cell> )}/>
           <Column header="Type" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}></Link></Cell> )}/>
-          <Column header="Cost" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.totalCost}</Link></Cell> )}/>
-          <Column header="Wholesale" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.wholesalePrice}</Link></Cell> )}/>
-          <Column header="MSRP" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.msrp}</Link></Cell> )}/>
+          <Column header="Cost" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{'$' + piece.totalCost}</Link></Cell> )}/>
+          <Column header="Wholesale" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{'$' + piece.wholesalePrice}</Link></Cell> )}/>
+          <Column header="MSRP" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{'$' + piece.msrp}</Link></Cell> )}/>
           <Column header="Qty on Order" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.qtyOnOrder}</Link></Cell> )}/>
           <Column header="Qty in Stock" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.qtyInStock}</Link></Cell> )}/>
         </Table>
