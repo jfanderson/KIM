@@ -5,6 +5,7 @@ import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 import App from './components/App.js';
 import JewelryProducts from './components/JewelryProducts.js';
+import JewelryProduct from './components/JewelryProduct.js';
 import Materials from './components/Materials.js';
 import OtherProducts from './components/OtherProducts.js';
 import PurchaseOrders from './components/PurchaseOrders.js';
@@ -25,6 +26,7 @@ ReactDOM.render((
       <Route path='sales' component={Sales}/>
       <Route path='vendors' component={Vendors}/>
       <Route path='settings' component={Settings}/>
+      <Route path='jewelry/:pieceId' component={JewelryProduct}/>
     </Route>
     <Route path='*' component={NoMatch}/>
   </Router>

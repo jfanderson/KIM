@@ -1,3 +1,6 @@
+//-------------------------------------
+// DEFAULT TABLE
+//-------------------------------------
 table {
   width: 95%;
   margin: auto;
@@ -8,9 +11,11 @@ table {
 tr:nth-child(even) {
   background-color: $gray-light;
 }
+.table-row {
+  cursor: pointer;
+}
 .table-row:hover {
   background-color: $gray;
-  cursor: pointer;
 }
 th {
   padding-top: 1rem;
@@ -20,8 +25,6 @@ th {
   text-transform: uppercase;
 }
 td {
-  padding-top: .3rem;
-  padding-bottom: .3rem;
   font-size: $font-size-small;
 }
 th,
@@ -31,4 +34,37 @@ td {
 th:last-child,
 td:last-child {
   border: none;
+}
+td a {
+  display: block;
+  height: 100%;
+  width: 100%;
+  padding-top: .3rem;
+  padding-bottom: .3rem;
+  text-decoration: none;
+  color: $black;
+}
+
+//-------------------------------------
+// SINGLE ROW JEWELRY PIECE
+//-------------------------------------
+table.piece {
+  th {
+    font-weight: normal;
+  }
+  td {
+    padding-top: .3rem;
+    padding-bottom: .3rem;
+
+    &:hover {
+      background-color: $gray;
+    }
+  }
+  th,
+  td {
+    border: none;
+  }
+  .table-row:hover {
+    background-color: $gray-light;
+  }
 }
