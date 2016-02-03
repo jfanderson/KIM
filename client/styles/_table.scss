@@ -41,6 +41,8 @@ td a {
   width: 100%;
   padding-top: .3rem;
   padding-bottom: .3rem;
+  text-decoration: none;
+  color: $black;
 }
 
 //-------------------------------------
@@ -50,8 +52,19 @@ table.piece {
   th {
     font-weight: normal;
   }
+  td {
+    padding-top: .3rem;
+    padding-bottom: .3rem;
+
+    &:hover {
+      background-color: $gray;
+    }
+  }
   th,
   td {
     border: none;
+  }
+  .table-row:hover {
+    background-color: $gray-light;
   }
 }
