@@ -35,7 +35,7 @@ class JewelryProduct extends React.Component {
     let pieceArray = [this.state.piece];
 
     return (
-      <Table data={ pieceArray } uniqueId="item">
+      <Table classes="piece" data={ pieceArray } uniqueId="item">
         <Column header="Item #" cell={piece => ( <Cell>{piece.item}</Cell> )}/>
         <Column header="Description" cell={piece => ( <Cell>{piece.description}</Cell> )}/>
         <Column header="Type" cell={piece => ( <Cell></Cell> )}/>

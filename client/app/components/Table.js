@@ -15,9 +15,9 @@ class Table extends React.Component {
     });
 
     return (
-      <table>
+      <table className={this.props.classes}>
         <tbody>
-          <tr>{headers}</tr>
+          <tr key="headers">{headers}</tr>
           {rows}
         </tbody>
       </table>
@@ -26,6 +26,7 @@ class Table extends React.Component {
 }
 
 Table.propTypes = {
+  classes: PropTypes.string,
   data: PropTypes.array.isRequired,
   uniqueId: PropTypes.string.isRequired
 };
