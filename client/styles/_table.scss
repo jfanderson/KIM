@@ -7,16 +7,21 @@ table {
   font-family: $font-family-serif;
   text-align: center;
   border-collapse: collapse;
+  table-layout: fixed;
 }
+
 tr:nth-child(even) {
   background-color: $gray-light;
 }
+
 .table-row {
   cursor: pointer;
+
+  &:hover {
+    background-color: $gray;
+  }
 }
-.table-row:hover {
-  background-color: $gray;
-}
+
 th {
   padding-top: 1rem;
   padding-bottom: .5rem;
@@ -24,17 +29,20 @@ th {
   font-size: $font-size-smaller;
   text-transform: uppercase;
 }
+
 td {
   font-size: $font-size-small;
 }
+
 th,
 td {
   border-right: 1px solid $gray-heavy;
+
+  &:last-child {
+    border: none;
+  }
 }
-th:last-child,
-td:last-child {
-  border: none;
-}
+
 td a {
   display: block;
   height: 100%;
@@ -45,6 +53,10 @@ td a {
   color: $black;
 }
 
+.extra-wide {
+  width: 300px;
+}
+
 //-------------------------------------
 // SINGLE ROW JEWELRY PIECE
 //-------------------------------------
@@ -52,6 +64,7 @@ table.piece {
   th {
     font-weight: normal;
   }
+
   td {
     padding-top: .3rem;
     padding-bottom: .3rem;
@@ -60,11 +73,32 @@ table.piece {
       background-color: $gray;
     }
   }
+
   th,
   td {
     border: none;
   }
+
   .table-row:hover {
     background-color: $gray-light;
+  }
+}
+
+//-------------------------------------
+// EDITABLE CELLS
+//-------------------------------------
+table td.editing {
+  padding: 0;
+}
+
+td.editing input {
+  display: block;
+  width: 100%;
+  border: 1px solid gray;
+  line-height: 18px;
+  text-align: center;
+
+  &:focus {
+    outline: none;
   }
 }

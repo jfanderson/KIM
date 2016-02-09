@@ -3,7 +3,7 @@ import React, {PropTypes} from 'react';
 class Table extends React.Component {
   render() {
     let headers = React.Children.map(this.props.children, column => {
-      return <th key="column.props.header">{column.props.header}</th>;
+      return <th className={column.props.classes} key={column.props.header}>{column.props.header}</th>;
     });
 
     let rows = this.props.data.map(item => {
