@@ -12,6 +12,10 @@ class Cell extends React.Component {
     };
   }
 
+  _handleBlur(event) {
+    this.setState({ editing: false });
+  }
+
   _handleChange(event) {
     this.setState({ value: event.target.value });
   }
@@ -42,12 +46,13 @@ class Cell extends React.Component {
 
     if (props.modifyField && state.editing) {
       return (
-        <td>
+        <td className="editing">
           <input autoFocus type="text"
             ref="inputField"
             value={state.value}
             onKeyDown={this._handleKeyDown.bind(this)}
             onChange={this._handleChange.bind(this)}
+            onBlur={this._handleBlur.bind(this)}
             />
         </td>
       );
