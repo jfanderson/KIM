@@ -5,8 +5,9 @@ class Column extends React.Component {
 }
 
 Column.propTypes = {
-  header: PropTypes.string.isRequired,
-  cell: PropTypes.func.isRequired
+  cell: PropTypes.func.isRequired,
+  classes: PropTypes.string,
+  header: PropTypes.string.isRequired
 };
 
 export default Column;

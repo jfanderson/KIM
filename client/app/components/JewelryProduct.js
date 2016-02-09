@@ -35,36 +35,36 @@ class JewelryProduct extends React.Component {
 
     this.setState({ piece: this.state.piece });
 
-    console.log(this.state);
-    // post to api
+    console.log(this.state.piece);
+    // TODO: post to api
   }
 
   render() {
     return (
       <Table classes="piece" data={ this.state.piece } uniqueId="item">
         <Column header="Item #" cell={piece => (
-          <Cell modifyField={value => this._modifyField('item', value)}>{piece.item}</Cell>
+          <Cell modifyField={this._modifyField.bind(this, 'item')}>{piece.item}</Cell>
         )}/>
-        <Column header="Description" cell={piece => (
-          <Cell modifyField={value => this._modifyField('description', value)}>{piece.description}</Cell>
+        <Column classes="extra-wide" header="Description" cell={piece => (
+          <Cell modifyField={this._modifyField.bind(this, 'description')}>{piece.description}</Cell>
         )}/>
         <Column header="Type" cell={piece => (
-          <Cell modifyField={value => this._modifyField('type', value)}></Cell>
+          <Cell modifyField={this._modifyField.bind(this, 'type')}></Cell>
         )}/>
         <Column header="Cost" cell={piece => (
-          <Cell modifyField={value => this._modifyField('totalCost', value)}>{'$' + piece.totalCost}</Cell>
+          <Cell modifyField={this._modifyField.bind(this, 'totalCost')}>{'$' + piece.totalCost}</Cell>
         )}/>
         <Column header="Wholesale" cell={piece => (
-          <Cell modifyField={value => this._modifyField('wholesalePrice', value)}>{'$' + piece.wholesalePrice}</Cell>
+          <Cell modifyField={this._modifyField.bind(this, 'wholesalePrice')}>{'$' + piece.wholesalePrice}</Cell>
         )}/>
         <Column header="MSRP" cell={piece => (
-          <Cell modifyField={value => this._modifyField('msrp', value)}>{'$' + piece.msrp}</Cell>
+          <Cell modifyField={this._modifyField.bind(this, 'msrp')}>{'$' + piece.msrp}</Cell>
         )}/>
         <Column header="Qty on Order" cell={piece => (
-          <Cell modifyField={value => this._modifyField('qtyOnOrder', value)}>{piece.qtyOnOrder}</Cell>
+          <Cell modifyField={this._modifyField.bind(this, 'qtyOnOrder')}>{piece.qtyOnOrder}</Cell>
         )}/>
         <Column header="Qty in Stock" cell={piece => (
-          <Cell modifyField={value => this._modifyField('qtyInStock', value)}>{piece.qtyInStock}</Cell>
+          <Cell modifyField={this._modifyField.bind(this, 'qtyInStock')}>{piece.qtyInStock}</Cell>
         )}/>
       </Table>
 
