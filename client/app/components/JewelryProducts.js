@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import 'whatwg-fetch';
-import h from '../helpers.js';
+import s from '../services/jewelryService.js';
 
 import Table from './Table.js';
 import Column from './Column.js';
@@ -17,17 +16,12 @@ class JewelryProducts extends React.Component {
   }
 
   componentDidMount() {
-    fetch('/a/pieces')
-      .then(h.checkStatus)
-      .then(h.parseJSON)
-      .then(data => {
-        this.setState({ pieces: data.pieces });
-      })
-      .catch(error => {
-        console.log('Error fetching pieces: ', error);
+    s.getAllPieces()
+      .then(pieces => this.setState({ pieces: pieces }))
+      .catch(() => {
+        // TODO: display error sign
 
-        // TODO: display sign
-        this.setState({ pieces: null });
+        this.setState({ pieces: [] });
       });
   }
 
