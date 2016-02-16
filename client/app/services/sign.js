@@ -1,3 +1,8 @@
+/**
+These methods display a temporary sign at the top of the page to alert the user
+to a brief message.
+**/
+
 let services = {
   setMessage,
   setError
