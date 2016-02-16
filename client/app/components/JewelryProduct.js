@@ -1,6 +1,5 @@
 import React from 'react';
-import 'whatwg-fetch';
-import h from '../helpers.js';
+import s from '../services/jewelryService.js';
 
 import Table from './Table.js';
 import Column from './Column.js';
@@ -11,37 +10,41 @@ class JewelryProduct extends React.Component {
     super();
 
     this.state = {
-      piece: []
+      piece: null
     };
   }
 
   componentDidMount() {
-    fetch('/a/pieces/' + this.props.params.pieceId)
-      .then(h.checkStatus)
-      .then(h.parseJSON)
-      .then(data => {
-        this.setState({ piece: [data.piece] });
-      })
-      .catch(error => {
-        console.log('Error fetching piece: ', error);
+    s.getPiece(this.props.params.pieceId)
+      .then(piece => this.setState({ piece: piece }))
+      .catch(() => {
+        // TODO: display error sign
 
-        // TODO: display sign
         this.setState({ piece: null });
       });
   }
 
   _modifyField(field, value) {
-    this.state.piece[0][field] = value;
-
+    this.state.piece[field] = value;
     this.setState({ piece: this.state.piece });
 
-    console.log(this.state.piece);
-    // TODO: post to api
+    s.modifyPiece(this.props.params.pieceId, field, value)
+      .catch(() => {
+        // TODO: display error sign
+
+        this.setState({ piece: null });
+      });
   }
 
   render() {
+    // table needs an array of data
+    let data = [];
+    if (this.state.piece) {
+      data.push(this.state.piece);
+    }
+
     return (
-      <Table classes="piece" data={ this.state.piece } uniqueId="item">
+      <Table classes="piece" data={data} uniqueId="item">
         <Column header="Item #" cell={piece => (
           <Cell modifyField={this._modifyField.bind(this, 'item')}>{piece.item}</Cell>
         )}/>

@@ -2,7 +2,11 @@ import 'whatwg-fetch';
 
 var helpers = {
   checkStatus,
-  parseJSON
+  parseJSON,
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  }
 };
 
 function checkStatus(res) {
