@@ -3,7 +3,8 @@ import h from '../helpers.js';
 
 let services = {
   getAllPieces,
-  getPiece
+  getPiece,
+  modifyPiece
 };
 
 function getAllPieces() {
@@ -16,14 +17,29 @@ function getAllPieces() {
     });
 }
 
-function getPiece(pieceId) {
-  return fetch('/a/pieces/' + pieceId)
+function getPiece(id) {
+  return fetch('/a/pieces/' + id)
     .then(h.checkStatus)
     .then(h.parseJSON)
     .then(data => data.piece)
     .catch(error => {
       console.log('Error fetching piece: ', error);
     });
+}
+
+function modifyPiece(id, field, value) {
+  return fetch('/a/pieces/' + id, {
+    method: 'put',
+    headers: h.headers,
+    body: JSON.stringify({
+      [field]: value
+    })
+  }).then(h.checkStatus)
+  .then(h.parseJSON)
+  .then(data => data.piece)
+  .catch(error => {
+    console.log('Error modifying piece: ', error);
+  });
 }
 
 export default services;
