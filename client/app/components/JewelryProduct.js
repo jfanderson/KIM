@@ -25,12 +25,15 @@ class JewelryProduct extends React.Component {
   }
 
   _modifyField(field, value) {
-    this.state.piece[0][field] = value;
-
+    this.state.piece[field] = value;
     this.setState({ piece: this.state.piece });
 
-    console.log(this.state.piece);
-    // TODO: post to api
+    s.modifyPiece(this.props.params.pieceId, field, value)
+      .catch(() => {
+        // TODO: display error sign
+
+        this.setState({ piece: null });
+      });
   }
 
   render() {
