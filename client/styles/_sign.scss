@@ -1,0 +1,26 @@
+#sign {
+  position: absolute;
+  left: calc(50% - 200px);
+  width: 400px;
+  padding-top: .1rem;
+  padding-bottom: .2rem;
+  background-color: $gray-heavy;
+  border-radius: 0 0 3px 3px;
+  color: $white;
+  font-size: $font-size-small;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: opacity 0.5s, visibility 0.5s;
+  -moz-transition: opacity 0.5s, visibility 0.5s;
+  transition: opacity 0.5s, visibility 0.5s;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &.error {
+    background-color: $red;
+  }
+}

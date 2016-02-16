@@ -3,6 +3,7 @@
 *::after {
   box-sizing: inherit;
 }
+
 html {
   box-sizing: border-box;
   width: 100%;
@@ -11,13 +12,20 @@ html {
   font-size: $font-size-base;
   background-color: $white;
 }
+
 body {
   margin: 0;
 }
+
 h1 {
   text-align: center;
 }
+
 .container {
   width: 95%;
   margin: auto;
+}
+
+button:focus {
+  outline: none;
 }
