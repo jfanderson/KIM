@@ -1,5 +1,6 @@
 import React from 'react';
 import s from '../services/jewelryService.js';
+import sign from '../services/sign.js';
 
 import Table from './Table.js';
 import Column from './Column.js';
@@ -18,7 +19,7 @@ class JewelryProduct extends React.Component {
     s.getPiece(this.props.params.pieceId)
       .then(piece => this.setState({ piece: piece }))
       .catch(() => {
-        // TODO: display error sign
+        sign.setError('Failed to retrieve jewelry piece. Try refreshing.');
 
         this.setState({ piece: null });
       });
@@ -30,7 +31,7 @@ class JewelryProduct extends React.Component {
 
     s.modifyPiece(this.props.params.pieceId, field, value)
       .catch(() => {
-        // TODO: display error sign
+        sign.setError('Failed to modify jewelry piece.');
 
         this.setState({ piece: null });
       });

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import s from '../services/jewelryService.js';
+import sign from '../services/sign.js';
 
 import Table from './Table.js';
 import Column from './Column.js';
@@ -19,11 +20,13 @@ class JewelryProducts extends React.Component {
     s.getAllPieces()
       .then(pieces => this.setState({ pieces: pieces }))
       .catch(() => {
-        // TODO: display error sign
+        sign.setError('Failed to retrieve jewelry pieces. Try refreshing.');
 
         this.setState({ pieces: [] });
       });
   }
+
+  _handleAdd() {}
 
   render() {
     return (
@@ -34,7 +37,7 @@ class JewelryProducts extends React.Component {
           <span>Low Stock</span>
           <span>Out of Stock</span>
 
-          <button className="add-button">+</button>
+          <button className="add-button" onClick={this._handleAdd.bind(this)}>+</button>
         </div>
 
         <Table data={this.state.pieces} uniqueId="item">
