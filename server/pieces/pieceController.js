@@ -73,10 +73,11 @@ function modifyPiece(req, res) {
     } else if (req.body.hasOwnProperty('type')) {
       // modify type if necessary
       PieceType.findOne({ where: { name: req.body.type }}).then(function(matchedType) {
-        if (matchedType !== null) {
-          piece.typeId = matchedType.id;
-        }
         delete req.body.type;
+
+        if (matchedType !== null) {
+          req.body.typeId = matchedType.id;
+        }
 
         return piece.update(req.body).then(function(updatedPiece) {
           res.status(200).send({ piece: updatedPiece });

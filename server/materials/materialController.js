@@ -105,7 +105,7 @@ module.exports = {
       if (req.body.hasOwnProperty('type')) {
         return MaterialType.findOne({ where: { name: req.body.type }}).then(function(matchedType) {
           if (matchedType !== null) {
-            material.typeId = matchedType.id;
+            material.set('typeId', matchedType.id);
           }
           delete req.body.type;
           return material.save();
@@ -118,7 +118,7 @@ module.exports = {
       if (req.body.hasOwnProperty('unit')) {
         return MaterialUnit.findOne({ where: { unit: req.body.unit }}).then(function(matchedUnit) {
           if (matchedUnit !== null) {
-            material.unitId = matchedUnit.id;
+            material.set('unitId', matchedUnit.id);
           }
           delete req.body.unit;
           return material.save();
@@ -131,7 +131,7 @@ module.exports = {
       if (req.body.hasOwnProperty('vendor')) {
         return Vendor.findOne({ where: { company: req.body.vendor }}).then(function(matchedVendor) {
           if (matchedVendor !== null) {
-            material.vendorId = matchedVendor.id;
+            material.set('vendorId', matchedVendor.id);
           }
           delete req.body.vendor;
           return material.save();
