@@ -30,10 +30,17 @@ class Cell extends React.Component {
   }
 
   _startEditing() {
-    this.setState({
-      editing: true,
-      value: this.props.children.slice(1)
-    });
+    if (this.props.price) {
+      this.setState({
+        editing: true,
+        value: this.props.children.slice(1)
+      });
+    } else {
+      this.setState({
+        editing: true,
+        value: this.props.children
+      });
+    }
 
     setTimeout(() => {
       this.refs.inputField.select();
