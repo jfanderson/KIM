@@ -1,6 +1,7 @@
 import React from 'react';
 import s from '../services/jewelryService.js';
 import sign from '../services/sign.js';
+import h from '../helpers.js';
 
 import Table from './Table.js';
 import Column from './Column.js';
@@ -56,13 +57,13 @@ class JewelryProduct extends React.Component {
           <Cell modifyField={this._modifyField.bind(this, 'type')}></Cell>
         )}/>
         <Column header="Cost" cell={piece => (
-          <Cell modifyField={this._modifyField.bind(this, 'totalCost')}>{'$' + piece.totalCost}</Cell>
+          <Cell modifyField={this._modifyField.bind(this, 'totalCost')} price={true}>{h.displayPrice(piece.totalCost)}</Cell>
         )}/>
         <Column header="Wholesale" cell={piece => (
-          <Cell modifyField={this._modifyField.bind(this, 'wholesalePrice')}>{'$' + piece.wholesalePrice}</Cell>
+          <Cell modifyField={this._modifyField.bind(this, 'wholesalePrice')} price={true}>{h.displayPrice(piece.wholesalePrice)}</Cell>
         )}/>
         <Column header="MSRP" cell={piece => (
-          <Cell modifyField={this._modifyField.bind(this, 'msrp')}>{'$' + piece.msrp}</Cell>
+          <Cell modifyField={this._modifyField.bind(this, 'msrp')} price={true}>{h.displayPrice(piece.msrp)}</Cell>
         )}/>
         <Column header="Qty on Order" cell={piece => (
           <Cell modifyField={this._modifyField.bind(this, 'qtyOnOrder')}>{piece.qtyOnOrder}</Cell>

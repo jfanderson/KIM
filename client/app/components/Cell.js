@@ -32,7 +32,7 @@ class Cell extends React.Component {
   _startEditing() {
     this.setState({
       editing: true,
-      value: this.props.children
+      value: this.props.children.slice(1)
     });
 
     setTimeout(() => {
@@ -75,7 +75,13 @@ class Cell extends React.Component {
 Cell.propTypes = {
   // If passed, make cell editable on click
   // Callback invoked with new cell value
-  modifyField: PropTypes.func
+  modifyField: PropTypes.func,
+  // True if cell represents a price value
+  price: PropTypes.bool
+};
+
+Cell.defaultProps = {
+  price: false
 };
 
 export default Cell;
