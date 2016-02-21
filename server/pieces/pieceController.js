@@ -78,12 +78,12 @@ function modifyPiece(req, res) {
         }
         delete req.body.type;
 
-        piece.update(req.body).then(function(updatedPiece) {
+        return piece.update(req.body).then(function(updatedPiece) {
           res.status(200).send({ piece: updatedPiece });
         });
       });
     } else {
-      piece.update(req.body).then(function(updatedPiece) {
+      return piece.update(req.body).then(function(updatedPiece) {
         res.status(200).send({ piece: updatedPiece });
       });
     }
