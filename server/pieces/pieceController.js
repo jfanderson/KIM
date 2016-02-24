@@ -75,7 +75,9 @@ function modifyPiece(req, res) {
       PieceType.findOne({ where: { name: req.body.type }}).then(function(matchedType) {
         delete req.body.type;
 
-        if (matchedType !== null) {
+        if (matchedType === null) {
+          return res.sendStatus(404);
+        } else {
           req.body.typeId = matchedType.id;
         }
 
