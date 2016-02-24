@@ -4,6 +4,7 @@ import h from '../helpers.js';
 let services = {
   getAllPieces,
   getPiece,
+  getTypes,
   modifyPiece
 };
 
@@ -14,6 +15,7 @@ function getAllPieces() {
     .then(data => data.pieces)
     .catch(error => {
       console.log('Error fetching pieces: ', error);
+      throw error;
     });
 }
 
@@ -24,6 +26,18 @@ function getPiece(id) {
     .then(data => data.piece)
     .catch(error => {
       console.log('Error fetching piece: ', error);
+      throw error;
+    });
+}
+
+function getTypes() {
+  return fetch('/a/types/pieces')
+    .then(h.checkStatus)
+    .then(h.parseJSON)
+    .then(data => data.types)
+    .catch(error => {
+      console.log('Error fetching piece types: ', error);
+      throw error;
     });
 }
 
@@ -39,6 +53,7 @@ function modifyPiece(id, field, value) {
   .then(data => data.piece)
   .catch(error => {
     console.log('Error modifying piece: ', error);
+    throw error;
   });
 }
 

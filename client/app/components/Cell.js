@@ -30,10 +30,17 @@ class Cell extends React.Component {
   }
 
   _startEditing() {
-    this.setState({
-      editing: true,
-      value: this.props.children
-    });
+    if (this.props.price) {
+      this.setState({
+        editing: true,
+        value: this.props.children.slice(1)
+      });
+    } else {
+      this.setState({
+        editing: true,
+        value: this.props.children
+      });
+    }
 
     setTimeout(() => {
       this.refs.inputField.select();
@@ -50,10 +57,16 @@ class Cell extends React.Component {
           <input autoFocus type="text"
             ref="inputField"
             value={state.value}
+            list="items"
             onKeyDown={this._handleKeyDown.bind(this)}
             onChange={this._handleChange.bind(this)}
-            onBlur={this._handleBlur.bind(this)}
-            />
+            onBlur={this._handleBlur.bind(this)}/>
+
+          <datalist id="items">
+            {props.datalist.map(item =>
+              <option key={item} value={item}/>
+            )}
+          </datalist>
         </td>
       );
     } else if (props.modifyField) {
@@ -73,9 +86,18 @@ class Cell extends React.Component {
 }
 
 Cell.propTypes = {
-  // If passed, make cell editable on click
-  // Callback invoked with new cell value
-  modifyField: PropTypes.func
+  // List of items for input autocomplete
+  datalist: PropTypes.array,
+  // If passed, make cell editable on click.
+  // Callback invoked with new cell value.
+  modifyField: PropTypes.func,
+  // True if cell represents a price value
+  price: PropTypes.bool
+};
+
+Cell.defaultProps = {
+  datalist: [],
+  price: false
 };
 
 export default Cell;
