@@ -21,6 +21,19 @@ h1 {
   text-align: center;
 }
 
+select {
+  width: 100%;
+  background-color: inherit;
+  border: none;
+  cursor: pointer;
+  text-align-last: center;
+
+  &:active,
+  &:focus {
+    outline: none;
+  }
+}
+
 .container {
   width: 95%;
   margin: auto;
