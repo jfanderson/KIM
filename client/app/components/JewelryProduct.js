@@ -1,7 +1,7 @@
 import React from 'react';
-import s from '../services/jewelryService.js';
-import sign from '../services/sign.js';
+import j from '../services/jewelryService.js';
 import h from '../helpers.js';
+import sign from '../services/sign.js';
 
 import Table from './Table.js';
 import Column from './Column.js';
@@ -19,14 +19,15 @@ class JewelryProduct extends React.Component {
   }
 
   componentDidMount() {
-    s.getPiece(this.props.params.pieceId)
-      .then(piece => this.setState({ piece: piece }))
-      .catch(() => {
+    j.getPiece(this.props.params.pieceId)
+      .then(piece => {
+        this.setState({ piece: piece });
+      }).catch(() => {
         sign.setError('Failed to retrieve jewelry piece. Try refreshing.');
         this.setState({ piece: null });
       });
 
-    s.getTypes()
+    j.getTypes()
       .then(types => {
         this.setState({ types: types });
       }).catch(() => {
@@ -44,11 +45,34 @@ class JewelryProduct extends React.Component {
     }
     this.setState({ piece: this.state.piece });
 
-    s.modifyPiece(this.props.params.pieceId, field, value)
+    j.modifyPiece(this.props.params.pieceId, field, value)
       .catch(() => {
         sign.setError('Failed to modify jewelry piece.');
         this.setState({ piece: null });
       });
+  }
+
+  _modifyMaterialQty() {
+
+  }
+
+  _renderMaterials() {
+    console.log(this.state.piece);
+    let materials = [];
+    if (this.state.piece) {
+      materials = this.state.piece.materials;
+    }
+
+    return (
+      <Table data={materials} uniqueId="item">
+        <Column header="Part #" cell={material => (<Cell>{material.item}</Cell>)}/>
+        <Column header="Description" classes="extra-wide" cell={material => (<Cell>{material.description}</Cell>)}/>
+        <Column header="Cost/Unit" cell={material => (<Cell>{material.costPerUnit}</Cell>)}/>
+        <Column header="Qty" cell={material => (
+          <Cell modifyField={this._modifyMaterialQty.bind(this)}>{material.PieceMaterial.qty}</Cell>
+        )}/>
+      </Table>
+    );
   }
 
   render() {
@@ -61,17 +85,14 @@ class JewelryProduct extends React.Component {
     } else {
       return (<h6>Loading...</h6>);
     }
-    if (state.types) {
 
-      console.log('>>>Default: ', h.findTypeName(state.types, data[0].typeId));
-    }
     return (
       <div className="content">
         <Table classes="piece" data={data} uniqueId="item">
           <Column header="Item #" cell={piece => (
             <Cell modifyField={this._modifyField.bind(this, 'item')}>{piece.item}</Cell>
           )}/>
-          <Column classes="extra-wide" header="Description" cell={piece => (
+          <Column header="Description" classes="extra-wide" cell={piece => (
             <Cell modifyField={this._modifyField.bind(this, 'description')}>{piece.description}</Cell>
           )}/>
           <Column header="Type" cell={piece => (
@@ -99,6 +120,7 @@ class JewelryProduct extends React.Component {
         <div className="container-left">
           <h2>Bill of Materials</h2>
           <button className="add-button" onClick={this._handleAdd.bind(this)}>+</button>
+          {this._renderMaterials()}
         </div>
       </div>
     );
