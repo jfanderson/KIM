@@ -1,32 +1,23 @@
 .filters {
   margin-top: .3rem;
-  padding-right: 2rem;
-  padding-left: 2rem;
+  padding: .25rem 2rem;
   background-color: $gray;
+  vertical-align: middle;
 }
+
 .filters span {
   display: inline-block;
   margin-left: 1.5rem;
-  padding-top: .25rem;
   padding-bottom: .25rem;
   font-size: $font-size-smaller;
   text-transform: uppercase;
   color: $white;
   cursor: default;
   transition: color .1s;
+  vertical-align: middle;
 }
-.filters button {
-  float: right;
-  font-size: 2rem;
-  font-weight: 500;
-  line-height: .9rem;
-  background-color: inherit;
-  border: none;
-  color: white;
-  transition: color .1s;
-}
-.filters span:hover,
-.filters button:hover {
+
+.filters span:hover {
   color: $gray-heavy;
   cursor: pointer;
 }

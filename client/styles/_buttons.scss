@@ -1,0 +1,21 @@
+.add-button {
+  float: right;
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: .9rem;
+  background-color: inherit;
+  border: none;
+  color: white;
+  transition: color .1s;
+
+  &.inner {
+    position: relative;
+    top: 0.75rem;
+    color: $gray-heavy;
+  }
+
+  &:hover {
+    color: $gray-heavy;
+    cursor: pointer;
+  }
+}

@@ -57,14 +57,13 @@ class JewelryProduct extends React.Component {
   }
 
   _renderMaterials() {
-    console.log(this.state.piece);
     let materials = [];
     if (this.state.piece) {
       materials = this.state.piece.materials;
     }
 
     return (
-      <Table data={materials} uniqueId="item">
+      <Table classes="inner" data={materials} uniqueId="item">
         <Column header="Part #" cell={material => (<Cell>{material.item}</Cell>)}/>
         <Column header="Description" classes="extra-wide" cell={material => (<Cell>{material.description}</Cell>)}/>
         <Column header="Cost/Unit" cell={material => (<Cell>{material.costPerUnit}</Cell>)}/>
@@ -88,7 +87,7 @@ class JewelryProduct extends React.Component {
 
     return (
       <div className="content">
-        <Table classes="piece" data={data} uniqueId="item">
+        <Table classes="single" data={data} uniqueId="item">
           <Column header="Item #" cell={piece => (
             <Cell modifyField={this._modifyField.bind(this, 'item')}>{piece.item}</Cell>
           )}/>
@@ -117,10 +116,19 @@ class JewelryProduct extends React.Component {
           )}/>
         </Table>
 
-        <div className="container-left">
+        <div className="container-70">
           <h2>Bill of Materials</h2>
-          <button className="add-button" onClick={this._handleAdd.bind(this)}>+</button>
+          <button className="add-button inner" onClick={this._handleAdd.bind(this)}>+</button>
           {this._renderMaterials()}
+        </div>
+
+        <div className="container-30">
+          <div className="subtotal">Material Cost Subtotal</div>
+          <div className="value">$31.22</div>
+          <div className="labor-time">Labor in Minutes</div>
+          <div className="value">$31.22</div>
+          <div className="labor-cost">Labor Cost</div>
+          <div className="value">$31.22</div>
         </div>
       </div>
     );

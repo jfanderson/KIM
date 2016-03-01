@@ -21,6 +21,15 @@ h1 {
   text-align: center;
 }
 
+h2 {
+  margin-top: .75rem;
+  margin-bottom: .75rem;
+  color: $gray-heavy;
+  font-size: $font-size-small;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
 select {
   width: 100%;
   background-color: inherit;
@@ -34,9 +43,23 @@ select {
   }
 }
 
-.container {
-  width: 95%;
+.content {
+  width: 1308px;
   margin: auto;
+}
+
+.container-70 {
+  display: inline-block;
+  width: 70%;
+  margin-top: 1rem;
+  vertical-align: top;
+}
+
+.container-30 {
+  display: inline-block;
+  width: 30%;
+  margin-top: 1rem;
+  vertical-align: top;
 }
 
 button:focus {
