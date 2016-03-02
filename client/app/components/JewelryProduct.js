@@ -66,7 +66,7 @@ class JewelryProduct extends React.Component {
       <Table classes="inner" data={materials} uniqueId="item">
         <Column header="Part #" cell={material => (<Cell>{material.item}</Cell>)}/>
         <Column header="Description" classes="extra-wide" cell={material => (<Cell>{material.description}</Cell>)}/>
-        <Column header="Cost/Unit" cell={material => (<Cell>{material.costPerUnit}</Cell>)}/>
+        <Column header="Cost / Unit" cell={material => (<Cell>{material.costPerUnit}</Cell>)}/>
         <Column header="Qty" cell={material => (
           <Cell modifyField={this._modifyMaterialQty.bind(this)}>{material.PieceMaterial.qty}</Cell>
         )}/>
@@ -123,12 +123,24 @@ class JewelryProduct extends React.Component {
         </div>
 
         <div className="container-30">
-          <div className="subtotal">Material Cost Subtotal</div>
-          <div className="value">$31.22</div>
-          <div className="labor-time">Labor in Minutes</div>
-          <div className="value">$31.22</div>
-          <div className="labor-cost">Labor Cost</div>
-          <div className="value">$31.22</div>
+          <div className="labels">
+            <div>Material Cost Subtotal</div>
+            <div>Labor in Minutes</div>
+            <div>Labor Cost</div>
+            <div className="total">Total Cost</div>
+            <button className="convert">Convert Back to Parts</button>
+            <button className="cancel">Cancel</button>
+          </div>
+
+          <div className="values">
+            <div>$31.22</div>
+            <div>45</div>
+            <div>$31.22</div>
+            <div className="total">$100</div>
+            <button className="duplicate">Duplicate</button>
+            <button className="save">Save</button>
+          </div>
+
         </div>
       </div>
     );
