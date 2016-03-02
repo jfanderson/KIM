@@ -1,5 +1,5 @@
 .navbar {
-  background-color: $gray-light;
+  background-color: $light-gray;
 }
 
 .navbar .tabs {
@@ -8,7 +8,7 @@
 
 .navlink {
   display: inline-block;
-  width: 180px;
+  width: 170px;
   margin-right: .5rem;
   padding-top: .35rem;
   padding-bottom: .35rem;
@@ -17,7 +17,7 @@
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
-  background-color: $gray-heavy;
+  background-color: $dark-gray;
   color: $white;
   transition: background-color .3s;
 }
