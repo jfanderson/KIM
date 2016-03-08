@@ -13,6 +13,8 @@ button {
 
 .add-button {
   float: right;
+  position: relative;
+  top: .25rem;
   padding: 0;
   font-size: 2rem;
   font-weight: 500;
@@ -22,7 +24,6 @@ button {
   color: white;
 
   &.inner {
-    position: relative;
     top: 1rem;
     color: $dark-gray;
   }
@@ -36,7 +37,7 @@ button {
 .convert,
 .duplicate {
   width: 100%;
-  margin-top: 3rem;
+  margin-top: 5rem;
   margin-bottom: .5rem;
   background-color: $light-gray;
   color: $black;
@@ -57,7 +58,7 @@ button {
 }
 
 .save {
-  width: 100%;
+  width: 110px;
   background-color: $green;
   color: $white;
 
