@@ -5,6 +5,7 @@ let services = {
   getAllPieces,
   getPiece,
   getTypes,
+  modifyMaterialQty,
   modifyPiece
 };
 
@@ -39,6 +40,18 @@ function getTypes() {
       console.log('Error fetching piece types: ', error);
       throw error;
     });
+}
+
+function modifyMaterialQty(pieceId, materialId, qty) {
+  return fetch('/a/pieces/' + pieceId + '/material/' + materialId, {
+    method: 'put',
+    headers: h.headers,
+    body: JSON.stringify({ qty })
+  }).then(h.checkStatus)
+  .catch(error => {
+    console.log('Error modifying material qty: ', error);
+    throw error;
+  });
 }
 
 function modifyPiece(id, field, value) {

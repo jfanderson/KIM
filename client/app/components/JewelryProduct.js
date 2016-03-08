@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'underscore';
 import j from '../services/jewelryService.js';
 import h from '../helpers.js';
 import sign from '../services/sign.js';
@@ -52,26 +53,16 @@ class JewelryProduct extends React.Component {
       });
   }
 
-  _modifyMaterialQty() {
+  _modifyMaterialQty(materialId, qty) {
+    let material = _.findWhere(this.state.piece.materials, { id: materialId });
+    material.PieceMaterial.qty = qty;
+    this.setState({ piece: this.state.piece });
 
-  }
-
-  _renderMaterials() {
-    let materials = [];
-    if (this.state.piece) {
-      materials = this.state.piece.materials;
-    }
-
-    return (
-      <Table classes="inner" data={materials} uniqueId="item">
-        <Column header="Part #" cell={material => (<Cell>{material.item}</Cell>)}/>
-        <Column header="Description" classes="extra-wide" cell={material => (<Cell>{material.description}</Cell>)}/>
-        <Column header="Cost / Unit" cell={material => (<Cell>{material.costPerUnit}</Cell>)}/>
-        <Column header="Qty" cell={material => (
-          <Cell modifyField={this._modifyMaterialQty.bind(this)}>{material.PieceMaterial.qty}</Cell>
-        )}/>
-      </Table>
-    );
+    j.modifyMaterialQty(this.props.params.pieceId, materialId, qty)
+      .catch(() => {
+        sign.setError('Failed to modify material quantity.');
+        this.setState({ piece: null });
+      });
   }
 
   render() {
@@ -100,19 +91,19 @@ class JewelryProduct extends React.Component {
               defaultValue={h.findTypeName(state.types, piece.typeId)}/>
           )}/>
           <Column header="Cost" cell={piece => (
-            <Cell modifyField={this._modifyField.bind(this, 'totalCost')} price={true}>{h.displayPrice(piece.totalCost)}</Cell>
+            <Cell modifyField={this._modifyField.bind(this, 'totalCost')} price>{h.displayPrice(piece.totalCost)}</Cell>
           )}/>
           <Column header="Wholesale" cell={piece => (
-            <Cell modifyField={this._modifyField.bind(this, 'wholesalePrice')} price={true}>{h.displayPrice(piece.wholesalePrice)}</Cell>
+            <Cell modifyField={this._modifyField.bind(this, 'wholesalePrice')} price>{h.displayPrice(piece.wholesalePrice)}</Cell>
           )}/>
           <Column header="MSRP" cell={piece => (
-            <Cell modifyField={this._modifyField.bind(this, 'msrp')} price={true}>{h.displayPrice(piece.msrp)}</Cell>
+            <Cell modifyField={this._modifyField.bind(this, 'msrp')} price>{h.displayPrice(piece.msrp)}</Cell>
           )}/>
           <Column header="Qty on Order" cell={piece => (
-            <Cell modifyField={this._modifyField.bind(this, 'qtyOnOrder')}>{piece.qtyOnOrder}</Cell>
+            <Cell modifyField={this._modifyField.bind(this, 'qtyOnOrder')} number>{piece.qtyOnOrder}</Cell>
           )}/>
           <Column header="Qty in Stock" cell={piece => (
-            <Cell modifyField={this._modifyField.bind(this, 'qtyInStock')}>{piece.qtyInStock}</Cell>
+            <Cell modifyField={this._modifyField.bind(this, 'qtyInStock')} number>{piece.qtyInStock}</Cell>
           )}/>
         </Table>
 
@@ -140,9 +131,26 @@ class JewelryProduct extends React.Component {
             <button className="duplicate">Duplicate</button>
             <button className="save">Save</button>
           </div>
-
         </div>
       </div>
+    );
+  }
+
+  _renderMaterials() {
+    let materials = [];
+    if (this.state.piece) {
+      materials = this.state.piece.materials;
+    }
+
+    return (
+      <Table classes="inner" data={materials} uniqueId="item">
+        <Column header="Part #" cell={material => (<Cell>{material.item}</Cell>)}/>
+        <Column header="Description" classes="extra-wide" cell={material => (<Cell>{material.description}</Cell>)}/>
+        <Column header="Cost / Unit" cell={material => (<Cell>{material.costPerUnit}</Cell>)}/>
+        <Column header="Qty" cell={material => (
+          <Cell modifyField={this._modifyMaterialQty.bind(this, material.id)}>{material.PieceMaterial.qty}</Cell>
+        )}/>
+      </Table>
     );
   }
 }
