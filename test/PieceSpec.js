@@ -157,7 +157,8 @@ describe('Piece Tests', function() {
     before(function(done) {
       Material.create({
         item: 'test',
-        description: 'testMaterial'
+        description: 'testMaterial',
+        qtyInStock: 20
       }).then(function(material) {
         materialId = material.id;
         done();
@@ -181,7 +182,7 @@ describe('Piece Tests', function() {
         });
     });
 
-    it('should modify the quantity of an associated material', function(done) {
+    it('should modify the quantity of a material used to make the piece', function(done) {
       request(app)
         .put('/a/pieces/' + pieceId2 + '/material/' + materialId)
         .send({ qty: 5 })
@@ -195,6 +196,22 @@ describe('Piece Tests', function() {
           }).then(function(result) {
             expect(result.qty).to.equal(5);
             done();
+          });
+        });
+    });
+
+    it('should update material stock numbers when pieces are made', function(done) {
+      request(app)
+        .put('/a/pieces/' + pieceId2)
+        .send({ qtyInStock: 2 })
+        .expect(200)
+        .end(function() {
+          Material.findById(materialId).then(function(material) {
+            Piece.findById(pieceId2).then(function(piece) {
+              expect(material.qtyInStock).to.equal(10);
+              expect(piece.qtyInStock).to.equal(2);
+              done();
+            });
           });
         });
     });
