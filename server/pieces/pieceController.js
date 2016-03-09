@@ -5,18 +5,18 @@ var Material = models.Material;
 var PieceMaterial = models.PieceMaterial;
 
 module.exports = {
-  getPiece: getPiece,
-  getAllPieces: getAllPieces,
-  addPiece: addPiece,
-  modifyPiece: modifyPiece,
-  removePiece: removePiece,
-  linkMaterial: linkMaterial,
-  modifyMaterialQty: modifyMaterialQty,
-  unlinkMaterial: unlinkMaterial
+  getPiece,
+  getAllPieces,
+  addPiece,
+  modifyPiece,
+  removePiece,
+  linkMaterial,
+  modifyMaterialQty,
+  unlinkMaterial
 };
 
 function getPiece(req, res) {
-  Piece.findById(req.params.pieceId).then(function(piece) {
+  Piece.findById(req.params.pieceId).then(piece => {
     if (piece === null) {
       res.sendStatus(404);
     } else {
@@ -26,16 +26,16 @@ function getPiece(req, res) {
         res.status(200).send({ piece: piece });
       });
     }
-  }).catch(function(error) {
+  }).catch(error => {
     console.log(error);
     res.sendStatus(500);
   });
 }
 
 function getAllPieces(req, res) {
-  Piece.findAll().then(function(pieces) {
+  Piece.findAll().then(pieces => {
     res.status(200).send({ pieces: pieces });
-  }).catch(function(error) {
+  }).catch(error => {
     console.log(error);
     res.sendStatus(500);
   });
@@ -48,10 +48,10 @@ function addPiece(req, res) {
     delete req.body.piece.type;
   }
 
-  Piece.create(req.body.piece).then(function(piece) {
+  Piece.create(req.body.piece).then(piece => {
     // associate type if given
     if (type) {
-      PieceType.findOne({ where: { name: type }}).then(function(matchedType) {
+      PieceType.findOne({ where: { name: type }}).then(matchedType => {
         if (matchedType !== null) {
           piece.typeId = matchedType.id;
         }
@@ -60,7 +60,7 @@ function addPiece(req, res) {
     } else {
       res.status(201).send({ piece: piece });
     }
-  }).catch(function(error) {
+  }).catch(error => {
     console.log(error);
     if (error.errors[0].message === 'item must be unique') {
       res.sendStatus(409);
@@ -71,60 +71,87 @@ function addPiece(req, res) {
 }
 
 function modifyPiece(req, res) {
-  Piece.findById(req.params.pieceId).then(function(piece) {
+  Piece.findById(req.params.pieceId).then(piece => {
     if (piece === null) {
       res.sendStatus(404);
-    } else if (req.body.hasOwnProperty('type')) {
-      // modify type if necessary
-      PieceType.findOne({ where: { name: req.body.type }}).then(function(matchedType) {
+      return;
+    }
+
+    // modify type if necessary
+    if (req.body.hasOwnProperty('type')) {
+      return PieceType.findOne({ where: { name: req.body.type }}).then(matchedType => {
         delete req.body.type;
 
         if (matchedType === null) {
-          return res.sendStatus(404);
+          res.sendStatus(404);
+          return;
         } else {
           req.body.typeId = matchedType.id;
         }
 
-        return piece.update(req.body).then(function(updatedPiece) {
-          res.status(200).send({ piece: updatedPiece });
+        return piece;
+      });
+    } else {
+      return piece;
+    }
+  }).then(piece => {
+    if (!piece) {
+      return;
+    }
+
+    // check for increase in pieces
+    var delta = req.body.qtyInStock - piece.get('qtyInStock');
+
+    // reduce material stock if new pieces have been made
+    if (req.body.hasOwnProperty('qtyInStock') && delta > 0) {
+      return piece.getMaterials().then(materials => {
+        return Promise.all(materials.map(material => {
+          var newQty = material.get('qtyInStock') - (delta * material.PieceMaterial.get('qty'));
+          return material.update({ qtyInStock: newQty });
+        })).then(() => {
+          return piece;
         });
       });
     } else {
-      return piece.update(req.body).then(function(updatedPiece) {
+      return piece;
+    }
+  }).then(piece => {
+    if (piece) {
+      return piece.update(req.body).then(updatedPiece => {
         res.status(200).send({ piece: updatedPiece });
       });
     }
-  }).catch(function(error) {
+  }).catch(error => {
     console.log(error);
     res.sendStatus(500);
   });
 }
 
 function removePiece(req, res) {
-  Piece.findById(req.params.pieceId).then(function(piece) {
+  Piece.findById(req.params.pieceId).then(piece => {
     if (piece === null) {
       res.sendStatus(404);
     } else {
       return piece.destroy();
     }
-  }).then(function() {
+  }).then(() => {
     res.sendStatus(204);
-  }).catch(function(error) {
+  }).catch(error => {
     console.log(error);
     res.sendStatus(500);
   });
 }
 
 function linkMaterial(req, res) {
-  Piece.findById(req.params.pieceId).then(function(piece) {
+  Piece.findById(req.params.pieceId).then(piece => {
     if (piece === null) {
       res.sendStatus(404);
     }
 
-    return piece.addMaterial(req.params.materialId).then(function() {
+    return piece.addMaterial(req.params.materialId).then(() => {
       res.sendStatus(200);
     });
-  }).catch(function(error) {
+  }).catch(error => {
     console.log(error);
     res.sendStatus(500);
   });
@@ -136,30 +163,30 @@ function modifyMaterialQty(req, res) {
       pieceId: req.params.pieceId,
       materialId: req.params.materialId
     }
-  }).then(function(result) {
+  }).then(result => {
     if (result === null) {
       res.sendStatus(404);
     }
 
-    return result.update({ qty: req.body.qty }).then(function() {
+    return result.update({ qty: req.body.qty }).then(() => {
       res.sendStatus(200);
     });
-  }).catch(function(error) {
+  }).catch(error => {
     console.log(error);
     res.sendStatus(500);
   });
 }
 
 function unlinkMaterial(req, res) {
-  Piece.findById(req.params.pieceId).then(function(piece) {
+  Piece.findById(req.params.pieceId).then(piece => {
     if (piece === null) {
       res.sendStatus(404);
     }
 
-    return piece.removeMaterial(req.params.materialId).then(function() {
+    return piece.removeMaterial(req.params.materialId).then(() => {
       res.sendStatus(204);
     });
-  }).catch(function(error) {
+  }).catch(error => {
     console.log(error);
     res.sendStatus(500);
   });
