@@ -23,14 +23,17 @@ button {
   border: none;
   color: white;
 
-  &.inner {
-    top: 1rem;
+  &:hover {
     color: $dark-gray;
   }
 
-  &:hover {
+  &.inner {
+    top: 1rem;
     color: $dark-gray;
-    cursor: pointer;
+
+    &:hover {
+      color: $black;
+    }
   }
 }
 
