@@ -146,7 +146,7 @@ class JewelryProduct extends React.Component {
       <Table classes="inner" data={materials} uniqueId="item">
         <Column header="Part #" cell={material => (<Cell>{material.item}</Cell>)}/>
         <Column header="Description" classes="extra-wide" cell={material => (<Cell>{material.description}</Cell>)}/>
-        <Column header="Cost / Unit" cell={material => (<Cell>{material.costPerUnit}</Cell>)}/>
+        <Column header="Cost / Unit" cell={material => (<Cell>{h.displayPrice(material.costPerUnit)}</Cell>)}/>
         <Column header="Qty" cell={material => (
           <Cell modifyField={this._modifyMaterialQty.bind(this, material.id)}>{material.PieceMaterial.qty}</Cell>
         )}/>
