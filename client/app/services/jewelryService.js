@@ -5,6 +5,7 @@ let services = {
   getAllPieces,
   getPiece,
   getTypes,
+  linkMaterial,
   modifyMaterialQty,
   modifyPiece
 };
@@ -40,6 +41,17 @@ function getTypes() {
       console.log('Error fetching piece types: ', error);
       throw error;
     });
+}
+
+function linkMaterial(pieceId, materialId) {
+  return fetch('/a/pieces/' + pieceId + '/material/' + materialId, {
+    method: 'post',
+    headers: h.headers
+  }).then(h.checkStatus)
+  .catch(error => {
+    console.log('Error linking material to piece: ', error);
+    throw error;
+  });
 }
 
 function modifyMaterialQty(pieceId, materialId, qty) {
