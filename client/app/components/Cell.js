@@ -1,4 +1,5 @@
 import React from 'react';
+import sign from '../services/sign.js';
 
 const PropTypes = React.PropTypes;
 
@@ -22,6 +23,14 @@ class Cell extends React.Component {
 
   _handleKeyDown(event) {
     if (event.keyCode === 13) {
+      // Number validation
+      if (this.props.number || this.props.price) {
+        if (isNaN(Number(this.state.value))) {
+          sign.setError('Value must be a number');
+          return;
+        }
+      }
+
       this.props.modifyField(this.state.value);
       this.setState({ editing: false });
     } else if (event.keyCode === 27) {
@@ -91,6 +100,8 @@ Cell.propTypes = {
   // If passed, make cell editable on click.
   // Callback invoked with new cell value.
   modifyField: PropTypes.func,
+  // True if cell represents a numerical value
+  number: PropTypes.bool,
   // True if cell represents a price value
   price: PropTypes.bool
 };

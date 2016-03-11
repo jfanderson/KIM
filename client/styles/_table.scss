@@ -2,7 +2,7 @@
 // DEFAULT TABLE
 //-------------------------------------
 table {
-  width: 95%;
+  width: 100%;
   margin: auto;
   font-family: $font-family-serif;
   text-align: center;
@@ -11,7 +11,7 @@ table {
 }
 
 tr:nth-child(even) {
-  background-color: $gray-light;
+  background-color: $light-gray;
 }
 
 .table-row {
@@ -36,7 +36,7 @@ td {
 
 th,
 td {
-  border-right: 1px solid $gray-heavy;
+  border-right: 1px solid $dark-gray;
 
   &:last-child {
     border: none;
@@ -58,9 +58,9 @@ td a {
 }
 
 //-------------------------------------
-// SINGLE ROW JEWELRY PIECE
+// SINGLE ROW TABLE
 //-------------------------------------
-table.piece {
+table.single {
   th {
     font-weight: normal;
   }
@@ -80,7 +80,37 @@ table.piece {
   }
 
   .table-row:hover {
-    background-color: $gray-light;
+    background-color: $light-gray;
+  }
+}
+
+//-------------------------------------
+// TABLES WITHIN PAGES
+//-------------------------------------
+table.inner {
+  th {
+    padding-top: .4rem;
+    padding-bottom: .4rem;
+    color: $white;
+    font-weight: normal;
+    background-color: $dark-gray;
+  }
+
+  td {
+    padding-top: .3rem;
+    padding-bottom: .3rem;
+
+    &:hover {
+      background-color: $light-gray;
+    }
+  }
+
+  .table-row {
+    cursor: default;
+
+    &:hover {
+      background-color: $light-gray;
+    }
   }
 }
 

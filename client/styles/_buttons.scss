@@ -1,0 +1,71 @@
+button {
+  padding-top: .4rem;
+  padding-bottom: .4rem;
+  font-family: $font-family-sans-serif;
+  font-size: $font-size-smaller;
+  text-transform: uppercase;
+  background-color: inherit;
+  border: none;
+  cursor: pointer;
+  transition: color .1s;
+  transition: background-color .1s;
+}
+
+.add-button {
+  float: right;
+  position: relative;
+  top: .25rem;
+  padding: 0;
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: .9rem;
+  background-color: inherit;
+  border: none;
+  color: white;
+
+  &:hover {
+    color: $dark-gray;
+  }
+
+  &.inner {
+    top: 1rem;
+    color: $dark-gray;
+
+    &:hover {
+      color: $black;
+    }
+  }
+}
+
+.convert,
+.duplicate {
+  width: 100%;
+  margin-top: 5rem;
+  margin-bottom: .5rem;
+  background-color: $light-gray;
+  color: $black;
+
+  &:hover {
+    background-color: $gray;
+  }
+}
+
+.cancel {
+  float: right;
+  width: 110px;
+  background-color: $light-gray;
+
+  &:hover {
+    background-color: $gray;
+  }
+}
+
+.save {
+  width: 110px;
+  background-color: $green;
+  color: $white;
+
+  &:hover {
+    background-color: $green-hover;
+  }
+}

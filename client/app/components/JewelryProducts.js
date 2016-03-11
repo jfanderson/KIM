@@ -40,7 +40,7 @@ class JewelryProducts extends React.Component {
     let types = this.state.types;
 
     return (
-      <div className="content">
+      <div>
         <div className="filters">
           <span>All</span>
           <span>Other</span>
@@ -50,16 +50,18 @@ class JewelryProducts extends React.Component {
           <button className="add-button" onClick={this._handleAdd.bind(this)}>+</button>
         </div>
 
-        <Table data={this.state.pieces} uniqueId="item">
-          <Column header="Item #" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.item}</Link></Cell> )}/>
-          <Column classes="extra-wide" header="Description" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.description}</Link></Cell> )}/>
-          <Column header="Type" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{h.findTypeName(types, piece.typeId)}</Link></Cell> )}/>
-          <Column header="Cost" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{h.displayPrice(piece.totalCost)}</Link></Cell> )}/>
-          <Column header="Wholesale" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{h.displayPrice(piece.wholesalePrice)}</Link></Cell> )}/>
-          <Column header="MSRP" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{h.displayPrice(piece.msrp)}</Link></Cell> )}/>
-          <Column header="Qty on Order" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.qtyOnOrder}</Link></Cell> )}/>
-          <Column header="Qty in Stock" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.qtyInStock}</Link></Cell> )}/>
-        </Table>
+        <div className="content">
+          <Table data={this.state.pieces} uniqueId="item">
+            <Column header="Item #" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.item}</Link></Cell> )}/>
+            <Column classes="extra-wide" header="Description" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.description}</Link></Cell> )}/>
+            <Column header="Type" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{h.findTypeName(types, piece.typeId)}</Link></Cell> )}/>
+            <Column header="Cost" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{h.displayPrice(piece.totalCost)}</Link></Cell> )}/>
+            <Column header="Wholesale" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{h.displayPrice(piece.wholesalePrice)}</Link></Cell> )}/>
+            <Column header="MSRP" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{h.displayPrice(piece.msrp)}</Link></Cell> )}/>
+            <Column header="Qty on Order" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.qtyOnOrder}</Link></Cell> )}/>
+            <Column header="Qty in Stock" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.qtyInStock}</Link></Cell> )}/>
+          </Table>
+        </div>
       </div>
     );
   }

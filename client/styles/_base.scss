@@ -21,9 +21,45 @@ h1 {
   text-align: center;
 }
 
-.container {
-  width: 95%;
+h2 {
+  margin-top: .75rem;
+  margin-bottom: .75rem;
+  color: $dark-gray;
+  font-size: $font-size-small;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+select {
+  width: 100%;
+  background-color: inherit;
+  border: none;
+  cursor: pointer;
+  text-align-last: center;
+
+  &:active,
+  &:focus {
+    outline: none;
+  }
+}
+
+.content {
+  width: 1238px;
   margin: auto;
+}
+
+.container-70 {
+  display: inline-block;
+  width: 70%;
+  margin-top: 1rem;
+  vertical-align: top;
+}
+
+.container-30 {
+  display: inline-block;
+  width: 30%;
+  margin-top: 1rem;
+  vertical-align: top;
 }
 
 button:focus {

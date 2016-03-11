@@ -1,0 +1,58 @@
+h2 {
+  display: inline-block;
+}
+
+button {
+  display: block;
+}
+
+table.inner td:last-child {
+  cursor: pointer;
+
+  &:hover {
+    background-color: $gray;
+  }
+}
+
+.labels,
+.values {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.labels {
+  margin: 2.7rem 1rem 0 2rem;
+}
+
+.values {
+  margin-top: 2.7rem;
+}
+
+.labels div {
+  width: 213px;
+  margin-bottom: .5rem;
+  padding: .4rem 0 .4rem .5rem;
+  font-size: $font-size-smaller;
+  text-transform: uppercase;
+  background-color: $dark-gray;
+  color: $white;
+}
+
+.values div {
+  width: 110px;
+  margin-bottom: .5rem;
+  padding-top: .4rem;
+  padding-bottom: .4rem;
+  font-size: $font-size-smaller;
+  text-align: center;
+  background-color: $light-gray;
+  color: $black;
+}
+
+.labels .total,
+.values .total {
+  margin-top: 2rem;
+  font-weight: bold;
+  background-color: $black;
+  color: $white;
+}
