@@ -2,9 +2,13 @@ import 'whatwg-fetch';
 import h from '../helpers.js';
 
 let services = {
+  getAllMaterials,
+  getMaterial,
+  getTypes,
+  modifyMaterial
 };
 
-function getAllPieces() {
+function getAllMaterials() {
   return fetch('/a/materials')
     .then(h.checkStatus)
     .then(h.parseJSON)
@@ -15,7 +19,7 @@ function getAllPieces() {
     });
 }
 
-function getPiece(id) {
+function getMaterial(id) {
   return fetch('/a/materials/' + id)
     .then(h.checkStatus)
     .then(h.parseJSON)
@@ -37,7 +41,7 @@ function getTypes() {
     });
 }
 
-function modifyPiece(id, field, value) {
+function modifyMaterial(id, field, value) {
   return fetch('/a/materials/' + id, {
     method: 'put',
     headers: h.headers,

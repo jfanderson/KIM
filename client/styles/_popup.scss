@@ -1,0 +1,35 @@
+.popup {
+  position: absolute;
+  z-index: 10;
+  top: 265px;
+  left: 0;
+  right: 0;
+  width: 500px;
+  margin: auto;
+  text-align: center;
+  background-color: $light-gray;
+  border: 1px solid $dark-gray;
+}
+
+.popup input {
+  display: block;
+  width: 80%;
+  margin: 24px auto;
+  padding-left: 8px;
+  font-size: $font-size-smaller;
+  line-height: 1.5rem;
+  border: none;
+
+
+  &:focus,
+  &:active {
+    outline: none;
+  }
+}
+
+.popup button {
+  float: none;
+  display: inline-block;
+  margin-right: 16px;
+  margin-bottom: 16px;
+}

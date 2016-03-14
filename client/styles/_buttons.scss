@@ -60,6 +60,15 @@ button {
   }
 }
 
+.cancel-form {
+  width: 110px;
+  background-color: $gray;
+
+  &:hover {
+    background-color: $dark-gray;
+  }
+}
+
 .save {
   width: 110px;
   background-color: $green;
