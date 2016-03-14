@@ -14,14 +14,6 @@ tr:nth-child(even) {
   background-color: $light-gray;
 }
 
-.table-row {
-  cursor: pointer;
-
-  &:hover {
-    background-color: $gray;
-  }
-}
-
 th {
   padding-top: 1rem;
   padding-bottom: .5rem;
@@ -58,6 +50,17 @@ td a {
 }
 
 //-------------------------------------
+// TABLE WITH SELECTABLE ROWS
+//-------------------------------------
+table.row-select .table-row {
+  cursor: pointer;
+
+  &:hover {
+    background-color: $gray;
+  }
+}
+
+//-------------------------------------
 // SINGLE ROW TABLE
 //-------------------------------------
 table.single {
@@ -68,6 +71,7 @@ table.single {
   td {
     padding-top: .3rem;
     padding-bottom: .3rem;
+    cursor: pointer;
 
     &:hover {
       background-color: $gray;
@@ -99,18 +103,10 @@ table.inner {
   td {
     padding-top: .3rem;
     padding-bottom: .3rem;
-
-    &:hover {
-      background-color: $light-gray;
-    }
   }
 
   .table-row {
     cursor: default;
-
-    &:hover {
-      background-color: $light-gray;
-    }
   }
 }
 

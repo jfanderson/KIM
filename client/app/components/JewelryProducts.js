@@ -51,7 +51,7 @@ class JewelryProducts extends React.Component {
         </div>
 
         <div className="content">
-          <Table data={this.state.pieces} uniqueId="item">
+          <Table classes="row-select" data={this.state.pieces} uniqueId="item">
             <Column header="Item #" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.item}</Link></Cell> )}/>
             <Column classes="extra-wide" header="Description" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.description}</Link></Cell> )}/>
             <Column header="Type" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{h.findTypeName(types, piece.typeId)}</Link></Cell> )}/>
