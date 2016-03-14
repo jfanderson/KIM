@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
-import s from '../services/jewelryService.js';
+import classnames from 'classnames';
+
+import j from '../services/jewelryService.js';
 import sign from '../services/sign.js';
 import h from '../helpers.js';
 
@@ -14,19 +16,15 @@ class JewelryProducts extends React.Component {
 
     this.state = {
       pieces: [],
+      removeMode: false, // If true, display removal column in table
       types: []
     };
   }
 
   componentDidMount() {
-    s.getAllPieces()
-      .then(pieces => this.setState({ pieces: pieces }))
-      .catch(() => {
-        sign.setError('Failed to retrieve jewelry pieces. Try refreshing.');
-        this.setState({ pieces: [] });
-      });
+    this._updatePieces();
 
-    s.getTypes()
+    j.getTypes()
       .then(types => {
         this.setState({ types: types });
       }).catch(() => {
@@ -36,8 +34,38 @@ class JewelryProducts extends React.Component {
 
   _handleAdd() {}
 
+  _handleRemove() {
+    this.setState({ removeMode: !this.state.removeMode });
+  }
+
+  _removePiece(piece) {
+    let confirmed = confirm('Are you sure you want to remove ' + piece.description + '?');
+
+    if (confirmed) {
+      j.removePiece(piece.id).then(() => {
+        this._updatePiece();
+      }).catch(error => {
+        sign.setError('Failed to remove piece.');
+      });
+    }
+  }
+
+  _updatePieces() {
+    j.getAllPieces()
+      .then(pieces => this.setState({ pieces: pieces }))
+      .catch(() => {
+        sign.setError('Failed to retrieve jewelry pieces. Try refreshing.');
+        this.setState({ pieces: [] });
+      });
+  }
+
   render() {
     let types = this.state.types;
+
+    let removeClasses = {
+      'remove-button': true,
+      'active': this.state.removeMode
+    };
 
     return (
       <div>
@@ -48,6 +76,7 @@ class JewelryProducts extends React.Component {
           <span>Out of Stock</span>
 
           <button className="add-button" onClick={this._handleAdd.bind(this)}>+</button>
+          <button className={classnames(removeClasses)} onClick={this._handleRemove.bind(this)}>--</button>
         </div>
 
         <div className="content">
@@ -60,10 +89,21 @@ class JewelryProducts extends React.Component {
             <Column header="MSRP" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{h.displayPrice(piece.msrp)}</Link></Cell> )}/>
             <Column header="Qty on Order" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.qtyOnOrder}</Link></Cell> )}/>
             <Column header="Qty in Stock" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.qtyInStock}</Link></Cell> )}/>
+            {this._renderRemoveColumn()}
           </Table>
         </div>
       </div>
     );
+  }
+
+  _renderRemoveColumn() {
+    if (this.state.removeMode) {
+      return (
+        <Column header="Remove" cell={piece => (
+          <Cell><div onClick={this._removePiece.bind(this, piece)}>X</div></Cell>
+        )}/>
+      );
+    }
   }
 }
 
