@@ -7,7 +7,9 @@ let services = {
   getTypes,
   linkMaterial,
   modifyMaterialQty,
-  modifyPiece
+  modifyPiece,
+  removePiece,
+  unlinkMaterial
 };
 
 function getAllPieces() {
@@ -79,6 +81,28 @@ function modifyPiece(id, field, value) {
   .then(data => data.piece)
   .catch(error => {
     console.log('Error modifying piece: ', error);
+    throw error;
+  });
+}
+
+function removePiece(id) {
+  return fetch('/a/pieces/' + id, {
+    method: 'delete',
+    headers: h.headers
+  }).then(h.checkStatus)
+  .catch(error => {
+    console.log('Error removing piece: ', error);
+    throw error;
+  });
+}
+
+function unlinkMaterial(pieceId, materialId) {
+  return fetch('/a/pieces/' + pieceId + '/material/' + materialId, {
+    method: 'delete',
+    headers: h.headers
+  }).then(h.checkStatus)
+  .catch(error => {
+    console.log('Error unlinking material: ', error);
     throw error;
   });
 }
