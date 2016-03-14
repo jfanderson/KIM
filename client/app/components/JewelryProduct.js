@@ -1,32 +1,28 @@
 import React from 'react';
 import _ from 'underscore';
-import j from '../services/jewelryService.js';
 import h from '../helpers.js';
+import j from '../services/jewelryService.js';
 import sign from '../services/sign.js';
 
-import Table from './Table.js';
-import Column from './Column.js';
 import Cell from './Cell.js';
+import Column from './Column.js';
+import LinkMaterialForm from './Form.LinkMaterial.js';
 import SelectCell from './Cell.Select.js';
+import Table from './Table.js';
 
 class JewelryProduct extends React.Component {
   constructor() {
     super();
 
     this.state = {
+      isFormOpen: false,
       piece: null,
       types: [],
     };
   }
 
   componentDidMount() {
-    j.getPiece(this.props.params.pieceId)
-      .then(piece => {
-        this.setState({ piece: piece });
-      }).catch(() => {
-        sign.setError('Failed to retrieve jewelry piece. Try refreshing.');
-        this.setState({ piece: null });
-      });
+    this._updatePiece();
 
     j.getTypes()
       .then(types => {
@@ -36,7 +32,22 @@ class JewelryProduct extends React.Component {
       });
   }
 
-  _handleAdd() {}
+  _handleAddClick(event) {
+    if (event) {
+      event.preventDefault();
+    }
+
+    this.setState({ isFormOpen: !this.state.isFormOpen });
+  }
+
+  _handleFormSubmit(material, qty) {
+    j.linkMaterial(this.props.params.pieceId, material.id, { qty: qty })
+      .then(() => {
+        this._updatePiece();
+      }).catch(error => {
+        sign.setError('Failed to add material. Try refreshing.');
+      });
+  }
 
   _modifyField(field, value) {
     if (field === 'type') {
@@ -61,6 +72,16 @@ class JewelryProduct extends React.Component {
     j.modifyMaterialQty(this.props.params.pieceId, materialId, qty)
       .catch(() => {
         sign.setError('Failed to modify material quantity.');
+        this.setState({ piece: null });
+      });
+  }
+
+  _updatePiece() {
+    j.getPiece(this.props.params.pieceId)
+      .then(piece => {
+        this.setState({ piece: piece });
+      }).catch(() => {
+        sign.setError('Failed to retrieve jewelry piece. Try refreshing.');
         this.setState({ piece: null });
       });
   }
@@ -109,7 +130,7 @@ class JewelryProduct extends React.Component {
 
         <div className="container-70">
           <h2>Bill of Materials</h2>
-          <button className="add-button inner" onClick={this._handleAdd.bind(this)}>+</button>
+          <button className="add-button inner" onClick={this._handleAddClick.bind(this)}>+</button>
           {this._renderMaterials()}
         </div>
 
@@ -132,8 +153,22 @@ class JewelryProduct extends React.Component {
             <button className="save">Save</button>
           </div>
         </div>
+
+        {this._renderForm()}
       </div>
     );
+  }
+
+  _renderForm() {
+    if (this.state.isFormOpen) {
+      return (
+        <LinkMaterialForm
+          cancel={this._handleAddClick.bind(this)}
+          pieceDescription={this.state.piece.description}
+          submit={this._handleFormSubmit.bind(this)}
+        />
+      );
+    }
   }
 
   _renderMaterials() {
