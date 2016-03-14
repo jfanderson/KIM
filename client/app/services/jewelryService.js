@@ -43,10 +43,11 @@ function getTypes() {
     });
 }
 
-function linkMaterial(pieceId, materialId) {
+function linkMaterial(pieceId, materialId, body) {
   return fetch('/a/pieces/' + pieceId + '/material/' + materialId, {
     method: 'post',
-    headers: h.headers
+    headers: h.headers,
+    body: JSON.stringify(body)
   }).then(h.checkStatus)
   .catch(error => {
     console.log('Error linking material to piece: ', error);
