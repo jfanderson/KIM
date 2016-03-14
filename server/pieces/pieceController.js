@@ -148,7 +148,12 @@ function linkMaterial(req, res) {
       res.sendStatus(404);
     }
 
-    return piece.addMaterial(req.params.materialId).then(() => {
+    var options = {};
+    if (req.body.qty) {
+      options.qty = req.body.qty;
+    }
+
+    return piece.addMaterial(req.params.materialId, options).then(() => {
       res.sendStatus(200);
     });
   }).catch(error => {

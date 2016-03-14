@@ -168,6 +168,7 @@ describe('Piece Tests', function() {
     it('should associate a material with a piece', function(done) {
       request(app)
         .post('/a/pieces/' + pieceId2 + '/material/' + materialId)
+        .send({ qty: 10 })
         .expect(200)
         .end(function() {
           PieceMaterial.findOne({
@@ -177,6 +178,7 @@ describe('Piece Tests', function() {
             }
           }).then(function(result) {
             expect(result).to.be.ok;
+            expect(result.qty).to.equal(10);
             done();
           });
         });
