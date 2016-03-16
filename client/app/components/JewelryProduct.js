@@ -123,7 +123,7 @@ class JewelryProduct extends React.Component {
     };
 
     return (
-      <div className="content">
+      <div className="content jewelry-product">
         <Table classes="single" data={data} uniqueId="item">
           <Column header="Item #" cell={piece => (
             <Cell modifyField={this._modifyField.bind(this, 'item')}>{piece.item}</Cell>
@@ -146,10 +146,10 @@ class JewelryProduct extends React.Component {
             <Cell modifyField={this._modifyField.bind(this, 'msrp')} price>{h.displayPrice(piece.msrp)}</Cell>
           )}/>
           <Column header="Qty on Order" cell={piece => (
-            <Cell modifyField={this._modifyField.bind(this, 'qtyOnOrder')} number>{piece.qtyOnOrder}</Cell>
+            <Cell modifyField={this._modifyField.bind(this, 'qtyOnOrder')} integer>{piece.qtyOnOrder}</Cell>
           )}/>
           <Column header="Qty in Stock" cell={piece => (
-            <Cell modifyField={this._modifyField.bind(this, 'qtyInStock')} number>{piece.qtyInStock}</Cell>
+            <Cell modifyField={this._modifyField.bind(this, 'qtyInStock')} integer>{piece.qtyInStock}</Cell>
           )}/>
         </Table>
 

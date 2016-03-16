@@ -22,16 +22,22 @@ class Cell extends React.Component {
   }
 
   _handleKeyDown(event) {
+    let props = this.props;
+    let state = this.state;
+
     if (event.keyCode === 13) {
-      // Number validation
-      if (this.props.number || this.props.price) {
-        if (isNaN(Number(this.state.value))) {
+      // Validation
+      if (props.number || props.price || props.integer) {
+        if (isNaN(Number(state.value))) {
           sign.setError('Value must be a number');
+          return;
+        } else if (props.integer && state.value % 1 !== 0) {
+          sign.setError('Value must be a whole number');
           return;
         }
       }
 
-      this.props.modifyField(this.state.value);
+      props.modifyField(state.value);
       this.setState({ editing: false });
     } else if (event.keyCode === 27) {
       this.setState({ editing: false });
@@ -95,8 +101,10 @@ class Cell extends React.Component {
 }
 
 Cell.propTypes = {
-  // List of items for input autocomplete
+  // List of items for input autocomplete.
   datalist: PropTypes.array,
+  // True if value must be an integer.
+  integer: PropTypes.bool,
   // If passed, make cell editable on click.
   // Callback invoked with new cell value.
   modifyField: PropTypes.func,
@@ -108,6 +116,7 @@ Cell.propTypes = {
 
 Cell.defaultProps = {
   datalist: [],
+  int: false,
   price: false
 };
 
