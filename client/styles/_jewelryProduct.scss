@@ -7,14 +7,6 @@
     display: block;
   }
 
-  table.inner td:last-child {
-    cursor: pointer;
-
-    &:hover {
-      background-color: $gray;
-    }
-  }
-
   .labels,
   .values {
     display: inline-block;

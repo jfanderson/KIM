@@ -86,7 +86,7 @@ class Cell extends React.Component {
       );
     } else if (props.modifyField) {
       return (
-        <td onClick={this._startEditing.bind(this)}>
+        <td className="editable" onClick={this._startEditing.bind(this)}>
           {props.children}
         </td>
       );
