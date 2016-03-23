@@ -5,7 +5,8 @@ let services = {
   getAllMaterials,
   getMaterial,
   getTypes,
-  modifyMaterial
+  modifyMaterial,
+  modifyType
 };
 
 function getAllMaterials() {
@@ -53,6 +54,22 @@ function modifyMaterial(id, field, value) {
   .then(data => data.material)
   .catch(error => {
     console.log('Error modifying material: ', error);
+    throw error;
+  });
+}
+
+function modifyType(id, field, value) {
+  return fetch('/a/types/materials/' + id, {
+    method: 'put',
+    headers: h.headers,
+    body: JSON.stringify({
+      [field]: value
+    })
+  }).then(h.checkStatus)
+  .then(h.parseJSON)
+  .then(data => data.type)
+  .catch(error => {
+    console.log('Error modifying material type: ', error);
     throw error;
   });
 }

@@ -8,6 +8,7 @@ let services = {
   linkMaterial,
   modifyMaterialQty,
   modifyPiece,
+  modifyType,
   removePiece,
   unlinkMaterial
 };
@@ -81,6 +82,22 @@ function modifyPiece(id, field, value) {
   .then(data => data.piece)
   .catch(error => {
     console.log('Error modifying piece: ', error);
+    throw error;
+  });
+}
+
+function modifyType(id, field, value) {
+  return fetch('/a/types/pieces/' + id, {
+    method: 'put',
+    headers: h.headers,
+    body: JSON.stringify({
+      [field]: value
+    })
+  }).then(h.checkStatus)
+  .then(h.parseJSON)
+  .then(data => data.type)
+  .catch(error => {
+    console.log('Error modifying piece type: ', error);
     throw error;
   });
 }
