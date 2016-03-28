@@ -1,58 +1,56 @@
-h2 {
-  display: inline-block;
-}
-
-button {
-  display: block;
-}
-
-table.inner td:last-child {
-  cursor: pointer;
-
-  &:hover {
-    background-color: $gray;
+.jewelry-product {
+  h2 {
+    display: inline-block;
   }
-}
 
-.labels,
-.values {
-  display: inline-block;
-  vertical-align: top;
-}
+  .container-30 button {
+    display: block;
+  }
 
-.labels {
-  margin: 2.7rem 1rem 0 2rem;
-}
+  .labels,
+  .values {
+    display: inline-block;
+    vertical-align: top;
+  }
 
-.values {
-  margin-top: 2.7rem;
-}
+  .labels {
+    margin: 2.7rem 1rem 0 2rem;
+  }
 
-.labels div {
-  width: 213px;
-  margin-bottom: .5rem;
-  padding: .4rem 0 .4rem .5rem;
-  font-size: $font-size-smaller;
-  text-transform: uppercase;
-  background-color: $dark-gray;
-  color: $white;
-}
+  .values {
+    margin-top: 2.7rem;
+  }
 
-.values div {
-  width: 110px;
-  margin-bottom: .5rem;
-  padding-top: .4rem;
-  padding-bottom: .4rem;
-  font-size: $font-size-smaller;
-  text-align: center;
-  background-color: $light-gray;
-  color: $black;
-}
+  .labels div {
+    width: 213px;
+    margin-bottom: .5rem;
+    padding: .4rem 0 .4rem .5rem;
+    font-size: $font-size-smaller;
+    text-transform: uppercase;
+    background-color: $dark-gray;
+    color: $white;
+  }
 
-.labels .total,
-.values .total {
-  margin-top: 2rem;
-  font-weight: bold;
-  background-color: $black;
-  color: $white;
+  .values div {
+    width: 110px;
+    margin-bottom: .5rem;
+    padding-top: .4rem;
+    padding-bottom: .4rem;
+    font-size: $font-size-smaller;
+    text-align: center;
+    background-color: $light-gray;
+    color: $black;
+  }
+
+  .labels .total,
+  .values .total {
+    margin-top: 2rem;
+    font-weight: bold;
+    background-color: $black;
+    color: $white;
+  }
+
+  .popup {
+    top: 290px;
+  }
 }

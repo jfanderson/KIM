@@ -35,6 +35,14 @@ td {
   }
 }
 
+td.editable {
+  cursor: pointer;
+
+  &:hover {
+    background-color: $gray;
+  }
+}
+
 td a {
   display: block;
   height: 100%;

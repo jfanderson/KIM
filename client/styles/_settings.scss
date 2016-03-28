@@ -1,0 +1,19 @@
+.settings {
+  h2 {
+    margin-top: 2rem;
+
+    &.with-button {
+      display: inline-block;
+    }
+  }
+
+  .add-button {
+    top: 2.4rem;
+  }
+
+  .labor-cost {
+    width: 110px;
+    padding: .4rem;
+    margin-right: 1rem;
+  }
+}
