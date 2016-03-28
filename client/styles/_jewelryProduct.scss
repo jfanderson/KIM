@@ -3,7 +3,7 @@
     display: inline-block;
   }
 
-  button {
+  .container-30 button {
     display: block;
   }
 
@@ -48,5 +48,9 @@
     font-weight: bold;
     background-color: $black;
     color: $white;
+  }
+
+  .popup {
+    top: 290px;
   }
 }
