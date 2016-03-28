@@ -2,12 +2,25 @@ import 'whatwg-fetch';
 import h from '../helpers.js';
 
 let services = {
+  addMaterialType,
   getAllMaterials,
   getMaterial,
   getTypes,
   modifyMaterial,
   modifyType
 };
+
+function addMaterialType(type) {
+  return fetch('/a/types/materials', {
+    method: 'post',
+    headers: h.headers,
+    body: JSON.stringify({ type })
+  }).then(h.checkStatus)
+  .catch(error => {
+    console.log('Error adding material type: ', error);
+    throw error;
+  });
+}
 
 function getAllMaterials() {
   return fetch('/a/materials')
