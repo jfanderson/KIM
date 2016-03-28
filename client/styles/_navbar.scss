@@ -3,7 +3,9 @@
 }
 
 .navbar .tabs {
-  @extend .content;
+  width: $content-width;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .navlink {
