@@ -11,7 +11,8 @@ button {
   transition: background-color .1s;
 }
 
-.add-button {
+.add-button,
+.remove-button {
   float: right;
   position: relative;
   top: .25rem;
@@ -32,6 +33,23 @@ button {
     color: $dark-gray;
 
     &:hover {
+      color: $black;
+    }
+  }
+}
+
+.remove-button {
+  top: 0;
+  margin-right: .75rem;
+
+  &.active {
+    color: $dark-gray;
+  }
+
+  &.inner {
+    top: .75rem;
+
+    &.active {
       color: $black;
     }
   }

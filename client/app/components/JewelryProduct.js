@@ -1,5 +1,7 @@
 import React from 'react';
 import _ from 'underscore';
+import classnames from 'classnames';
+
 import h from '../helpers.js';
 import j from '../services/jewelryService.js';
 import sign from '../services/sign.js';
@@ -17,7 +19,8 @@ class JewelryProduct extends React.Component {
     this.state = {
       isFormOpen: false,
       piece: null,
-      types: [],
+      removeMode: false, // If true, display removal column in table
+      types: []
     };
   }
 
@@ -49,6 +52,10 @@ class JewelryProduct extends React.Component {
       });
   }
 
+  _handleRemove() {
+    this.setState({ removeMode: !this.state.removeMode });
+  }
+
   _modifyField(field, value) {
     if (field === 'type') {
       this.state.piece.typeId = h.findTypeId(this.state.types, value);
@@ -76,6 +83,18 @@ class JewelryProduct extends React.Component {
       });
   }
 
+  _removeMaterial(material) {
+    let confirmed = confirm('Are you sure you want to remove ' + material.description + '?');
+
+    if (confirmed) {
+      j.unlinkMaterial(this.state.piece.id, material.id).then(() => {
+        this._updatePiece();
+      }).catch(error => {
+        sign.setError('Failed to remove material.');
+      });
+    }
+  }
+
   _updatePiece() {
     j.getPiece(this.props.params.pieceId)
       .then(piece => {
@@ -96,6 +115,12 @@ class JewelryProduct extends React.Component {
     } else {
       return (<h6>Loading...</h6>);
     }
+
+    let removeClasses = {
+      'remove-button': true,
+      'inner': true,
+      'active': this.state.removeMode
+    };
 
     return (
       <div className="content">
@@ -131,6 +156,7 @@ class JewelryProduct extends React.Component {
         <div className="container-70">
           <h2>Bill of Materials</h2>
           <button className="add-button inner" onClick={this._handleAddClick.bind(this)}>+</button>
+          <button className={classnames(removeClasses)} onClick={this._handleRemove.bind(this)}>--</button>
           {this._renderMaterials()}
         </div>
 
@@ -185,8 +211,19 @@ class JewelryProduct extends React.Component {
         <Column header="Qty" cell={material => (
           <Cell modifyField={this._modifyMaterialQty.bind(this, material.id)}>{material.PieceMaterial.qty}</Cell>
         )}/>
+        {this._renderRemoveColumn()}
       </Table>
     );
+  }
+
+  _renderRemoveColumn() {
+    if (this.state.removeMode) {
+      return (
+        <Column header="Remove" cell={material => (
+          <Cell><div onClick={this._removeMaterial.bind(this, material)}>X</div></Cell>
+        )}/>
+      );
+    }
   }
 }
 
