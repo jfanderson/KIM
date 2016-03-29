@@ -2,6 +2,7 @@ import 'whatwg-fetch';
 import h from '../helpers.js';
 
 let services = {
+  addPiece,
   addPieceType,
   getAllPieces,
   getPiece,
@@ -14,6 +15,18 @@ let services = {
   removePieceType,
   unlinkMaterial
 };
+
+function addPiece(piece) {
+  return fetch('/a/pieces', {
+    method: 'post',
+    headers: h.headers,
+    body: JSON.stringify({ piece })
+  }).then(h.checkStatus)
+  .catch(error => {
+    console.log('Error adding piece: ', error);
+    throw error;
+  });
+}
 
 function addPieceType(type) {
   return fetch('/a/types/pieces', {

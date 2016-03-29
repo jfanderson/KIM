@@ -9,12 +9,14 @@ import h from '../helpers.js';
 import Table from './Table.js';
 import Column from './Column.js';
 import Cell from './Cell.js';
+import AddPieceForm from './Form.AddPiece.js';
 
 class JewelryProducts extends React.Component {
   constructor() {
     super();
 
     this.state = {
+      isFormOpen: false,
       pieces: [],
       removeMode: false, // If true, display removal column in table
       types: []
@@ -32,7 +34,26 @@ class JewelryProducts extends React.Component {
       });
   }
 
-  _handleAdd() {}
+  _handleAddClick(event) {
+    if (event) {
+      event.preventDefault();
+    }
+
+    this.setState({ isFormOpen: !this.state.isFormOpen });
+  }
+
+  _handleFormSubmit(item, description) {
+    j.addPiece({
+      item,
+      description
+    }).then(() => {
+      this._updatePieces();
+    }).catch(error => {
+      sign.setError('Failed to add jewelry piece. Try refreshing.');
+    });
+
+    // TODO: link to piece page
+  }
 
   _handleRemove() {
     this.setState({ removeMode: !this.state.removeMode });
@@ -43,7 +64,7 @@ class JewelryProducts extends React.Component {
 
     if (confirmed) {
       j.removePiece(piece.id).then(() => {
-        this._updatePiece();
+        this._updatePieces();
       }).catch(error => {
         sign.setError('Failed to remove piece.');
       });
@@ -76,7 +97,7 @@ class JewelryProducts extends React.Component {
             <span>Low Stock</span>
             <span>Out of Stock</span>
 
-            <button className="add-button" onClick={this._handleAdd.bind(this)}>+</button>
+            <button className="add-button" onClick={this._handleAddClick.bind(this)}>+</button>
             <button className={classnames(removeClasses)} onClick={this._handleRemove.bind(this)}>--</button>
           </div>
         </div>
@@ -94,8 +115,21 @@ class JewelryProducts extends React.Component {
             {this._renderRemoveColumn()}
           </Table>
         </div>
+
+        {this._renderForm()}
       </div>
     );
+  }
+
+  _renderForm() {
+    if (this.state.isFormOpen) {
+      return (
+        <AddPieceForm
+          cancel={this._handleAddClick.bind(this)}
+          submit={this._handleFormSubmit.bind(this)}
+        />
+      );
+    }
   }
 
   _renderRemoveColumn() {
