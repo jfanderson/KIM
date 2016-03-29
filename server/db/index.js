@@ -29,9 +29,9 @@ var Piece = orm.define('Piece', {
   item: { type: Sequelize.STRING, allowNull: false, unique: true },
   description: { type: Sequelize.STRING, allowNull: false, unique: true },
   laborTime: { type: Sequelize.INTEGER, defaultValue: 0 },
-  totalCost: Sequelize.DECIMAL(10,2),
-  wholesalePrice: Sequelize.DECIMAL(10,2),
-  msrp: Sequelize.DECIMAL(10,2),
+  totalCost: { type: Sequelize.DECIMAL(10,2), defaultValue: 0 },
+  wholesalePrice: { type: Sequelize.DECIMAL(10,2), defaultValue: 0 },
+  msrp: { type: Sequelize.DECIMAL(10,2), defaultValue: 0 },
   qtyInStock: { type: Sequelize.INTEGER, defaultValue: 0 },
   qtyOnOrder: { type: Sequelize.INTEGER, defaultValue: 0 }
 });
@@ -80,10 +80,10 @@ var Settings = orm.define('Settings', {
 var Product = orm.define('Product', {
   item: { type: Sequelize.STRING, allowNull: false, unique: true },
   description: Sequelize.STRING,
-  cost: Sequelize.DECIMAL(10,2),
-  msrp: Sequelize.DECIMAL(10,2),
-  qtyOnHand: Sequelize.INTEGER,
-  qtyOnOrder: Sequelize.INTEGER
+  cost: { type: Sequelize.DECIMAL(10,2), defaultValue: 0 },
+  msrp: { type: Sequelize.DECIMAL(10,2), defaultValue: 0 },
+  qtyOnHand: { type: Sequelize.INTEGER, defaultValue: 0 },
+  qtyOnOrder: { type: Sequelize.INTEGER, defaultValue: 0 }
 });
 
 
