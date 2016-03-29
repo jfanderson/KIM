@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import sign from '../services/sign.js';
 
 const PropTypes = React.PropTypes;
@@ -66,6 +67,10 @@ class Cell extends React.Component {
     let props = this.props;
     let state = this.state;
 
+    let classes = {
+      [props.className]: true
+    };
+
     if (props.modifyField && state.editing) {
       return (
         <td className="editing">
@@ -85,14 +90,16 @@ class Cell extends React.Component {
         </td>
       );
     } else if (props.modifyField) {
+      classes.editable = true;
+
       return (
-        <td className="editable" onClick={this._startEditing.bind(this)}>
+        <td className={classnames(classes)} onClick={this._startEditing.bind(this)}>
           {props.children}
         </td>
       );
     } else {
       return (
-        <td>
+        <td className={classnames(classes)}>
           {props.children}
         </td>
       );
@@ -101,6 +108,7 @@ class Cell extends React.Component {
 }
 
 Cell.propTypes = {
+  className: PropTypes.string,
   // List of items for input autocomplete.
   datalist: PropTypes.array,
   // True if value must be an integer.

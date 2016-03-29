@@ -220,7 +220,7 @@ class JewelryProduct extends React.Component {
     if (this.state.removeMode) {
       return (
         <Column header="Remove" cell={material => (
-          <Cell><div onClick={this._removeMaterial.bind(this, material)}>X</div></Cell>
+          <Cell className="remove"><div onClick={this._removeMaterial.bind(this, material)}>X</div></Cell>
         )}/>
       );
     }

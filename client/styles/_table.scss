@@ -35,7 +35,8 @@ td {
   }
 }
 
-td.editable {
+td.editable,
+td.remove {
   cursor: pointer;
 
   &:hover {
