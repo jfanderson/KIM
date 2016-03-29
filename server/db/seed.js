@@ -17,6 +17,9 @@ var settings = {
 
 var materialTypes = [
   {
+    name: 'none'
+  },
+  {
     name: 'casting',
     lowStock: 15
   },
@@ -86,6 +89,9 @@ var materials = [
 ];
 
 var pieceTypes = [
+  {
+    name: 'none'
+  },
   {
     name: 'necklace',
     lowStock: 5

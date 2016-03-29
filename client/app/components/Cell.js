@@ -68,7 +68,7 @@ class Cell extends React.Component {
     let state = this.state;
 
     let classes = {
-      [props.className]: true
+      [props.className]: props.className
     };
 
     if (props.modifyField && state.editing) {

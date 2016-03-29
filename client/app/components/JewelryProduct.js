@@ -134,7 +134,8 @@ class JewelryProduct extends React.Component {
           <Column header="Type" cell={piece => (
             <SelectCell modifyField={this._modifyField.bind(this, 'type')}
               options={state.types.map(type => type.name)}
-              defaultValue={h.findTypeName(state.types, piece.typeId)}/>
+              defaultValue={h.findTypeName(state.types, piece.typeId)}
+            />
           )}/>
           <Column header="Cost" cell={piece => (
             <Cell modifyField={this._modifyField.bind(this, 'totalCost')} price>{h.displayPrice(piece.totalCost)}</Cell>

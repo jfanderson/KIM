@@ -1,9 +1,5 @@
 import React from 'react';
-import _ from 'underscore';
 
-import h from '../helpers.js';
-import j from '../services/jewelryService.js';
-import m from '../services/materialService.js';
 import sign from '../services/sign.js';
 
 const PropTypes = React.PropTypes;

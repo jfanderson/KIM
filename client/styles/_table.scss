@@ -23,6 +23,8 @@ th {
 }
 
 td {
+  padding-top: .3rem;
+  padding-bottom: .3rem;
   font-size: $font-size-small;
 }
 
@@ -48,8 +50,6 @@ td a {
   display: block;
   height: 100%;
   width: 100%;
-  padding-top: .3rem;
-  padding-bottom: .3rem;
   text-decoration: none;
   color: $black;
 }
@@ -69,6 +69,16 @@ table.row-select .table-row {
   }
 }
 
+table.row-select td {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+table.row-select td a {
+  padding-top: .3rem;
+  padding-bottom: .3rem;
+}
+
 //-------------------------------------
 // SINGLE ROW TABLE
 //-------------------------------------
@@ -78,8 +88,6 @@ table.single {
   }
 
   td {
-    padding-top: .3rem;
-    padding-bottom: .3rem;
     cursor: pointer;
 
     &:hover {
@@ -107,11 +115,6 @@ table.inner {
     color: $white;
     font-weight: normal;
     background-color: $dark-gray;
-  }
-
-  td {
-    padding-top: .3rem;
-    padding-bottom: .3rem;
   }
 
   .table-row {

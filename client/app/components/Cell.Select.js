@@ -25,7 +25,7 @@ class SelectCell extends React.Component {
     let state = this.state;
 
     return (
-      <td>
+      <td className="editable">
         <select value={state.value} onChange={this._handleChange.bind(this)}>
           {props.options.map(item =>
             <option key={item} value={item}>{item}</option>
