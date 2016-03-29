@@ -15,7 +15,7 @@ button {
 .remove-button {
   float: right;
   position: relative;
-  top: .25rem;
+  top: 4px;
   padding: 0;
   font-size: 2rem;
   font-weight: 500;
@@ -29,7 +29,7 @@ button {
   }
 
   &.inner {
-    top: 1rem;
+    top: 16px;
     color: $dark-gray;
 
     &:hover {
@@ -47,7 +47,7 @@ button {
   }
 
   &.inner {
-    top: .75rem;
+    top: 11px;
 
     &.active {
       color: $black;

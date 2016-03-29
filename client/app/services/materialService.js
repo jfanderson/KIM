@@ -7,7 +7,8 @@ let services = {
   getMaterial,
   getTypes,
   modifyMaterial,
-  modifyType
+  modifyType,
+  removeMaterialType
 };
 
 function addMaterialType(type) {
@@ -83,6 +84,17 @@ function modifyType(id, field, value) {
   .then(data => data.type)
   .catch(error => {
     console.log('Error modifying material type: ', error);
+    throw error;
+  });
+}
+
+function removeMaterialType(id) {
+  return fetch('/a/types/materials/' + id, {
+    method: 'delete',
+    headers: h.headers
+  }).then(h.checkStatus)
+  .catch(error => {
+    console.log('Error removing material type: ', error);
     throw error;
   });
 }

@@ -11,6 +11,7 @@ let services = {
   modifyPiece,
   modifyType,
   removePiece,
+  removePieceType,
   unlinkMaterial
 };
 
@@ -122,6 +123,17 @@ function removePiece(id) {
   }).then(h.checkStatus)
   .catch(error => {
     console.log('Error removing piece: ', error);
+    throw error;
+  });
+}
+
+function removePieceType(id) {
+  return fetch('/a/types/pieces/' + id, {
+    method: 'delete',
+    headers: h.headers
+  }).then(h.checkStatus)
+  .catch(error => {
+    console.log('Error removing piece type: ', error);
     throw error;
   });
 }

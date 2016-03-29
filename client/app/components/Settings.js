@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 import j from '../services/jewelryService.js';
 import m from '../services/materialService.js';
@@ -18,7 +19,9 @@ class Settings extends React.Component {
       isPieceFormOpen: false,
       isMaterialFormOpen: false,
       laborCost: 0,
+      materialTypeRemoveMode: false,
       materialTypes: [],
+      pieceTypeRemoveMode: false,
       pieceTypes: []
     };
   }
@@ -68,6 +71,10 @@ class Settings extends React.Component {
     this.setState({ laborCost: event.target.value });
   }
 
+  _handleMaterialTypeRemove() {
+    this.setState({ materialTypeRemoveMode: !this.state.materialTypeRemoveMode });
+  }
+
   _handleMaterialTypeSubmit(name, lowStock) {
     m.addMaterialType({
       name,
@@ -77,6 +84,10 @@ class Settings extends React.Component {
     }).catch(error => {
       sign.setError('Failed to add new material type.');
     });
+  }
+
+  _handlePieceTypeRemove() {
+    this.setState({ pieceTypeRemoveMode: !this.state.pieceTypeRemoveMode });
   }
 
   _handlePieceTypeSubmit(name, lowStock) {
@@ -128,6 +139,30 @@ class Settings extends React.Component {
       });
   }
 
+  _removeMaterialType(type) {
+    let confirmed = confirm('Are you sure you want to remove ' + type.name + '?');
+
+    if (confirmed) {
+      m.removeMaterialType(type.id).then(() => {
+        this._updateMaterialTypes();
+      }).catch(error => {
+        sign.setError('Failed to remove material type.');
+      });
+    }
+  }
+
+  _removePieceType(type) {
+    let confirmed = confirm('Are you sure you want to remove ' + type.name + '?');
+
+    if (confirmed) {
+      j.removePieceType(type.id).then(() => {
+        this._updatePieceTypes();
+      }).catch(error => {
+        sign.setError('Failed to remove jewelry type.');
+      });
+    }
+  }
+
   _updateMaterialTypes() {
     m.getTypes().then(types => {
       this.setState({ materialTypes: types });
@@ -147,6 +182,12 @@ class Settings extends React.Component {
   render() {
     let state = this.state;
 
+    let removeClasses = {
+      'remove-button': true,
+      'inner': true,
+      'active': this.state.removeMode
+    };
+
     return (
       <div className="content settings">
         <div className="container-50">
@@ -158,6 +199,7 @@ class Settings extends React.Component {
 
           <h2 className="with-button">Types of Jewelry</h2>
           <button className="add-button inner" onClick={this._handleAddPieceType.bind(this)}>+</button>
+          <button className={classnames(removeClasses)} onClick={this._handlePieceTypeRemove.bind(this)}>--</button>
           <Table classes="inner" data={state.pieceTypes} uniqueId="name">
             <Column header="Type" cell={type => (
               <Cell modifyField={this._modifyPieceType.bind(this, type.id, 'name')}>{type.name}</Cell>
@@ -165,10 +207,12 @@ class Settings extends React.Component {
             <Column header="Low Stock" cell={type => (
               <Cell modifyField={this._modifyPieceType.bind(this, type.id, 'lowStock')} integer>{type.lowStock}</Cell>
             )}/>
+            {this._renderPieceTypeRemoveColumn()}
           </Table>
 
           <h2 className="with-button">Types of Materials</h2>
           <button className="add-button inner" onClick={this._handleAddMaterialType.bind(this)}>+</button>
+          <button className={classnames(removeClasses)} onClick={this._handleMaterialTypeRemove.bind(this)}>--</button>
           <Table classes="inner" data={state.materialTypes} uniqueId="name">
             <Column header="Type" cell={type => (
               <Cell modifyField={this._modifyMaterialType.bind(this, type.id, 'name')}>{type.name}</Cell>
@@ -176,6 +220,7 @@ class Settings extends React.Component {
             <Column header="Low Stock" cell={type => (
               <Cell modifyField={this._modifyMaterialType.bind(this, type.id, 'lowStock')} integer>{type.lowStock}</Cell>
             )}/>
+            {this._renderMaterialTypeRemoveColumn()}
           </Table>
         </div>
 
@@ -196,6 +241,16 @@ class Settings extends React.Component {
     }
   }
 
+  _renderPieceTypeRemoveColumn() {
+    if (this.state.pieceTypeRemoveMode) {
+      return (
+        <Column header="Remove" cell={pieceType => (
+          <Cell className="remove"><div onClick={this._removePieceType.bind(this, pieceType)}>X</div></Cell>
+        )}/>
+      );
+    }
+  }
+
   _renderMaterialForm() {
     if (this.state.isMaterialFormOpen) {
       return (
@@ -203,6 +258,16 @@ class Settings extends React.Component {
           submit={this._handleMaterialTypeSubmit.bind(this)}
           type="material"
         />
+      );
+    }
+  }
+
+  _renderMaterialTypeRemoveColumn() {
+    if (this.state.materialTypeRemoveMode) {
+      return (
+        <Column header="Remove" cell={materialType => (
+          <Cell className="remove"><div onClick={this._removeMaterialType.bind(this, materialType)}>X</div></Cell>
+        )}/>
       );
     }
   }
