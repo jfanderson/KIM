@@ -69,14 +69,16 @@ class JewelryProducts extends React.Component {
 
     return (
       <div>
-        <div className="filters">
-          <span>All</span>
-          <span>Other</span>
-          <span>Low Stock</span>
-          <span>Out of Stock</span>
+        <div className="filters-container">
+          <div className="filters">
+            <span>All</span>
+            <span>Other</span>
+            <span>Low Stock</span>
+            <span>Out of Stock</span>
 
-          <button className="add-button" onClick={this._handleAdd.bind(this)}>+</button>
-          <button className={classnames(removeClasses)} onClick={this._handleRemove.bind(this)}>--</button>
+            <button className="add-button" onClick={this._handleAdd.bind(this)}>+</button>
+            <button className={classnames(removeClasses)} onClick={this._handleRemove.bind(this)}>--</button>
+          </div>
         </div>
 
         <div className="content">
