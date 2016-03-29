@@ -2,14 +2,28 @@ import 'whatwg-fetch';
 import h from '../helpers.js';
 
 let services = {
+  addMaterial,
   addMaterialType,
   getAllMaterials,
   getMaterial,
   getTypes,
   modifyMaterial,
   modifyType,
+  removeMaterial,
   removeMaterialType
 };
+
+function addMaterial(material) {
+  return fetch('/a/materials', {
+    method: 'post',
+    headers: h.headers,
+    body: JSON.stringify({ material })
+  }).then(h.checkStatus)
+  .catch(error => {
+    console.log('Error adding material: ', error);
+    throw error;
+  });
+}
 
 function addMaterialType(type) {
   return fetch('/a/types/materials', {
@@ -84,6 +98,17 @@ function modifyType(id, field, value) {
   .then(data => data.type)
   .catch(error => {
     console.log('Error modifying material type: ', error);
+    throw error;
+  });
+}
+
+function removeMaterial(id) {
+  return fetch('/a/materials/' + id, {
+    method: 'delete',
+    headers: h.headers
+  }).then(h.checkStatus)
+  .catch(error => {
+    console.log('Error removing material: ', error);
     throw error;
   });
 }
