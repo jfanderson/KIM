@@ -24,7 +24,7 @@
   .labels div {
     width: 213px;
     margin-bottom: .5rem;
-    padding: .4rem 0 .4rem .5rem;
+    padding: 6px 0 6px 8px;
     font-size: $font-size-smaller;
     text-transform: uppercase;
     background-color: $dark-gray;
@@ -34,8 +34,8 @@
   .values div {
     width: 110px;
     margin-bottom: .5rem;
-    padding-top: .4rem;
-    padding-bottom: .4rem;
+    padding-top: 6px;
+    padding-bottom: 6px;
     font-size: $font-size-smaller;
     text-align: center;
     background-color: $light-gray;

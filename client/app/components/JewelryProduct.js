@@ -4,6 +4,7 @@ import classnames from 'classnames';
 
 import h from '../helpers.js';
 import j from '../services/jewelryService.js';
+import s from '../services/settingsService.js';
 import sign from '../services/sign.js';
 
 import Cell from './Cell.js';
@@ -18,6 +19,7 @@ class JewelryProduct extends React.Component {
 
     this.state = {
       isFormOpen: false,
+      laborCost: 0,
       piece: null,
       removeMode: false, // If true, display removal column in table
       types: []
@@ -33,6 +35,30 @@ class JewelryProduct extends React.Component {
       }).catch(() => {
         sign.setError('Failed to retrieve jewelry types. Try refreshing.');
       });
+
+    s.getSettings()
+      .then(settings => {
+        this.setState({ laborCost: settings.laborCost });
+      }).catch(() => {
+        sign.setError('Failed to retrieve labor cost. Try refreshing.');
+      });
+  }
+
+  _calculateMaterialCost() {
+    let materials = this.state.piece.materials;
+    let cost = 0;
+
+    for (let i = 0; i < materials.length; i++) {
+      cost += materials[i].PieceMaterial.qty * materials[i].costPerUnit;
+    }
+
+    return cost;
+  }
+
+  _calculateTotalCost(materialCost) {
+    let state = this.state;
+
+    return state.piece.laborTime/60 * state.laborCost + materialCost;
   }
 
   _handleAddClick(event) {
@@ -122,6 +148,10 @@ class JewelryProduct extends React.Component {
       'active': this.state.removeMode
     };
 
+    // Calculate costs associated with jewelry piece
+    let materialCost = this._calculateMaterialCost();
+    let totalCost = this._calculateTotalCost(materialCost);
+
     return (
       <div className="content jewelry-product">
         <Table classes="single" data={data} uniqueId="item">
@@ -172,10 +202,14 @@ class JewelryProduct extends React.Component {
           </div>
 
           <div className="values">
-            <div>$31.22</div>
-            <div>45</div>
-            <div>$31.22</div>
-            <div className="total">$100</div>
+            <div>{h.displayPrice(materialCost)}</div>
+            <table className="single-cell"><tbody><tr>
+              <Cell modifyField={this._modifyField.bind(this, 'laborTime')} integer>
+                {state.piece.laborTime}
+              </Cell>
+            </tr></tbody></table>
+            <div>{h.displayPrice(state.laborCost)}</div>
+            <div className="total">{h.displayPrice(totalCost)}</div>
             <button className="duplicate">Duplicate</button>
             <button className="save">Save</button>
           </div>

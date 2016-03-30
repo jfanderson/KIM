@@ -106,6 +106,28 @@ table.single {
 }
 
 //-------------------------------------
+// SINGLE CELL TABLE
+//-------------------------------------
+table.single-cell {
+  width: 110px;
+  margin-bottom: .5rem;
+  text-align: center;
+  background-color: $light-gray;
+  color: $black;
+}
+
+table.single-cell td {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-family: $font-family-sans-serif;
+  font-size: 0.75rem;
+
+  &.editing {
+    height: 27px;
+  }
+}
+
+//-------------------------------------
 // TABLES WITHIN PAGES
 //-------------------------------------
 table.inner {
