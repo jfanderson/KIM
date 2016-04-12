@@ -20,6 +20,7 @@ class JewelryProduct extends React.Component {
     this.state = {
       isFormOpen: false,
       laborCost: 0,
+      materialCost: 0,
       piece: null,
       removeMode: false, // If true, display removal column in table
       types: []
@@ -27,7 +28,13 @@ class JewelryProduct extends React.Component {
   }
 
   componentDidMount() {
-    this._updatePiece();
+    s.getSettings()
+      .then(settings => {
+        this.setState({ laborCost: settings.laborCost });
+        this._updatePiece();
+      }).catch(() => {
+        sign.setError('Failed to retrieve labor cost. Try refreshing.');
+      });
 
     j.getTypes()
       .then(types => {
@@ -35,30 +42,33 @@ class JewelryProduct extends React.Component {
       }).catch(() => {
         sign.setError('Failed to retrieve jewelry types. Try refreshing.');
       });
-
-    s.getSettings()
-      .then(settings => {
-        this.setState({ laborCost: settings.laborCost });
-      }).catch(() => {
-        sign.setError('Failed to retrieve labor cost. Try refreshing.');
-      });
   }
 
-  _calculateMaterialCost() {
-    let materials = this.state.piece.materials;
-    let cost = 0;
+  _calculateCosts() {
+    let state = this.state;
+    let materials = state.piece.materials;
+    let materialCost = 0;
 
     for (let i = 0; i < materials.length; i++) {
-      cost += materials[i].PieceMaterial.qty * materials[i].costPerUnit;
+      materialCost += materials[i].PieceMaterial.qty * materials[i].costPerUnit;
     }
 
-    return cost;
+    this.setState({ materialCost });
+
+    let totalCost = state.piece.laborTime/60 * state.laborCost + materialCost;
+
+    if (totalCost !== state.piece.totalCost) {
+      this._modifyField('totalCost', totalCost);
+    }
   }
 
-  _calculateTotalCost(materialCost) {
+  _calculateTotalCost() {
     let state = this.state;
+    let cost = state.piece.laborTime/60 * state.laborCost + state.materialCost;
 
-    return state.piece.laborTime/60 * state.laborCost + materialCost;
+    if (cost !== state.piece.totalCost) {
+      this._modifyField('totalCost', cost);
+    }
   }
 
   _handleAddClick(event) {
@@ -90,6 +100,11 @@ class JewelryProduct extends React.Component {
     }
     this.setState({ piece: this.state.piece });
 
+    // Recalculate total cost if labor time changes
+    if (field === 'laborTime') {
+      this._calculateCosts();
+    }
+
     j.modifyPiece(this.props.params.pieceId, field, value)
       .catch(() => {
         sign.setError('Failed to modify jewelry piece.');
@@ -99,8 +114,12 @@ class JewelryProduct extends React.Component {
 
   _modifyMaterialQty(materialId, qty) {
     let material = _.findWhere(this.state.piece.materials, { id: materialId });
+
     material.PieceMaterial.qty = qty;
+
     this.setState({ piece: this.state.piece });
+
+    this._calculateCosts();
 
     j.modifyMaterialQty(this.props.params.pieceId, materialId, qty)
       .catch(() => {
@@ -124,7 +143,7 @@ class JewelryProduct extends React.Component {
   _updatePiece() {
     j.getPiece(this.props.params.pieceId)
       .then(piece => {
-        this.setState({ piece: piece });
+        this.setState({ piece }, this._calculateCosts);
       }).catch(() => {
         sign.setError('Failed to retrieve jewelry piece. Try refreshing.');
         this.setState({ piece: null });
@@ -134,7 +153,7 @@ class JewelryProduct extends React.Component {
   render() {
     let state = this.state;
 
-    // table needs an array of data
+    // Table needs an array of data
     let data = [];
     if (state.piece) {
       data.push(state.piece);
@@ -147,10 +166,6 @@ class JewelryProduct extends React.Component {
       'inner': true,
       'active': this.state.removeMode
     };
-
-    // Calculate costs associated with jewelry piece
-    let materialCost = this._calculateMaterialCost();
-    let totalCost = this._calculateTotalCost(materialCost);
 
     return (
       <div className="content jewelry-product">
@@ -168,7 +183,7 @@ class JewelryProduct extends React.Component {
             />
           )}/>
           <Column header="Cost" cell={piece => (
-            <Cell modifyField={this._modifyField.bind(this, 'totalCost')} price>{h.displayPrice(piece.totalCost)}</Cell>
+            <Cell>{h.displayPrice(piece.totalCost)}</Cell>
           )}/>
           <Column header="Wholesale" cell={piece => (
             <Cell modifyField={this._modifyField.bind(this, 'wholesalePrice')} price>{h.displayPrice(piece.wholesalePrice)}</Cell>
@@ -202,14 +217,14 @@ class JewelryProduct extends React.Component {
           </div>
 
           <div className="values">
-            <div>{h.displayPrice(materialCost)}</div>
+            <div>{h.displayPrice(state.materialCost)}</div>
             <table className="single-cell"><tbody><tr>
               <Cell modifyField={this._modifyField.bind(this, 'laborTime')} integer>
                 {state.piece.laborTime}
               </Cell>
             </tr></tbody></table>
             <div>{h.displayPrice(state.laborCost)}</div>
-            <div className="total">{h.displayPrice(totalCost)}</div>
+            <div className="total">{h.displayPrice(state.piece.totalCost)}</div>
             <button className="duplicate">Duplicate</button>
             <button className="save">Save</button>
           </div>

@@ -118,7 +118,6 @@ var pieces = [
   {
     item: 'N001',
     description: 'Valor Necklace',
-    totalCost: 10,
     wholesalePrice: 20,
     msrp: 50,
     qtyInStock: 20
@@ -126,7 +125,6 @@ var pieces = [
   {
     item: 'E001',
     description: 'Facade Earrings',
-    totalCost: 8,
     wholesalePrice: 15,
     msrp: 40,
     qtyInStock: 12
@@ -134,7 +132,6 @@ var pieces = [
   {
     item: 'B001',
     description: 'Cosmic Cuff',
-    totalCost: 15,
     wholesalePrice: 30,
     msrp: 70,
     qtyInStock: 8
@@ -142,7 +139,6 @@ var pieces = [
   {
     item: 'R001',
     description: 'Eclipse Ring',
-    totalCost: 20,
     wholesalePrice: 40,
     msrp: 80,
     qtyInStock: 3
@@ -150,7 +146,6 @@ var pieces = [
   {
     item: 'N006',
     description: 'Mayan Necklace',
-    totalCost: 30,
     wholesalePrice: 60,
     msrp: 1500,
     qtyInStock: 5
