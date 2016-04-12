@@ -23,6 +23,7 @@ class JewelryProduct extends React.Component {
       materialCost: 0,
       piece: null,
       removeMode: false, // If true, display removal column in table
+      totalLaborCost: 0,
       types: []
     };
   }
@@ -53,21 +54,17 @@ class JewelryProduct extends React.Component {
       materialCost += materials[i].PieceMaterial.qty * materials[i].costPerUnit;
     }
 
-    this.setState({ materialCost });
+    let totalLaborCost = state.piece.laborTime/60 * state.laborCost;
 
-    let totalCost = state.piece.laborTime/60 * state.laborCost + materialCost;
+    let totalCost = totalLaborCost + materialCost;
+
+    this.setState({
+      materialCost,
+      totalLaborCost
+    });
 
     if (totalCost !== state.piece.totalCost) {
       this._modifyField('totalCost', totalCost);
-    }
-  }
-
-  _calculateTotalCost() {
-    let state = this.state;
-    let cost = state.piece.laborTime/60 * state.laborCost + state.materialCost;
-
-    if (cost !== state.piece.totalCost) {
-      this._modifyField('totalCost', cost);
     }
   }
 
@@ -223,7 +220,7 @@ class JewelryProduct extends React.Component {
                 {state.piece.laborTime}
               </Cell>
             </tr></tbody></table>
-            <div>{h.displayPrice(state.laborCost)}</div>
+            <div>{h.displayPrice(state.totalLaborCost)}</div>
             <div className="total">{h.displayPrice(state.piece.totalCost)}</div>
             <button className="duplicate">Duplicate</button>
             <button className="save">Save</button>
