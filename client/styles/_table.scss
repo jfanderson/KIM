@@ -87,21 +87,9 @@ table.single {
     font-weight: normal;
   }
 
-  td {
-    cursor: pointer;
-
-    &:hover {
-      background-color: $gray;
-    }
-  }
-
   th,
   td {
     border: none;
-  }
-
-  .table-row:hover {
-    background-color: $light-gray;
   }
 }
 
