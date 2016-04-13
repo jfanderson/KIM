@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 
 class Table extends React.Component {
   render() {
@@ -30,6 +30,7 @@ class Table extends React.Component {
 }
 
 Table.propTypes = {
+  children: PropTypes.node,
   classes: PropTypes.string,
   data: PropTypes.array.isRequired,
   uniqueId: PropTypes.string.isRequired

@@ -49,7 +49,7 @@ function getAllMaterials() {
 }
 
 function getMaterial(id) {
-  return fetch('/a/materials/' + id)
+  return fetch(`/a/materials/${id}`)
     .then(h.checkStatus)
     .then(h.parseJSON)
     .then(data => data.material)
@@ -71,7 +71,7 @@ function getTypes() {
 }
 
 function modifyMaterial(id, field, value) {
-  return fetch('/a/materials/' + id, {
+  return fetch(`/a/materials/${id}`, {
     method: 'put',
     headers: h.headers,
     body: JSON.stringify({
@@ -87,7 +87,7 @@ function modifyMaterial(id, field, value) {
 }
 
 function modifyType(id, field, value) {
-  return fetch('/a/types/materials/' + id, {
+  return fetch(`/a/types/materials/${id}`, {
     method: 'put',
     headers: h.headers,
     body: JSON.stringify({
@@ -103,7 +103,7 @@ function modifyType(id, field, value) {
 }
 
 function removeMaterial(id) {
-  return fetch('/a/materials/' + id, {
+  return fetch(`/a/materials/${id}`, {
     method: 'delete',
     headers: h.headers
   }).then(h.checkStatus)
@@ -114,7 +114,7 @@ function removeMaterial(id) {
 }
 
 function removeMaterialType(id) {
-  return fetch('/a/types/materials/' + id, {
+  return fetch(`/a/types/materials/${id}`, {
     method: 'delete',
     headers: h.headers
   }).then(h.checkStatus)

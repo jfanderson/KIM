@@ -14,7 +14,7 @@ class Cell extends React.Component {
     };
   }
 
-  _handleBlur(event) {
+  _handleBlur() {
     this.setState({ editing: false });
   }
 
@@ -80,11 +80,12 @@ class Cell extends React.Component {
             list="items"
             onKeyDown={this._handleKeyDown.bind(this)}
             onChange={this._handleChange.bind(this)}
-            onBlur={this._handleBlur.bind(this)}/>
+            onBlur={this._handleBlur.bind(this)}
+          />
 
           <datalist id="items">
             {props.datalist.map(item =>
-              <option key={item} value={item}/>
+              <option key={item} value={item} />
             )}
           </datalist>
         </td>
@@ -97,17 +98,19 @@ class Cell extends React.Component {
           {props.children}
         </td>
       );
-    } else {
-      return (
-        <td className={classnames(classes)}>
-          {props.children}
-        </td>
-      );
     }
+
+    return (
+      <td className={classnames(classes)}>
+        {props.children}
+      </td>
+    );
   }
 }
 
 Cell.propTypes = {
+  // Contents of the Cell.
+  children: PropTypes.node,
   className: PropTypes.string,
   // List of items for input autocomplete.
   datalist: PropTypes.array,

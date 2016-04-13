@@ -28,7 +28,7 @@ class JewelryProducts extends React.Component {
 
     j.getTypes()
       .then(types => {
-        this.setState({ types: types });
+        this.setState({ types });
       }).catch(() => {
         sign.setError('Failed to retrieve jewelry types. Try refreshing.');
       });
@@ -48,7 +48,7 @@ class JewelryProducts extends React.Component {
       description
     }).then(() => {
       this._updatePieces();
-    }).catch(error => {
+    }).catch(() => {
       sign.setError('Failed to add jewelry piece. Try refreshing.');
     });
 
@@ -60,12 +60,12 @@ class JewelryProducts extends React.Component {
   }
 
   _removePiece(piece) {
-    let confirmed = confirm('Are you sure you want to remove ' + piece.description + '?');
+    let confirmed = confirm(`Are you sure you want to remove ${piece.description}?`);
 
     if (confirmed) {
       j.removePiece(piece.id).then(() => {
         this._updatePieces();
-      }).catch(error => {
+      }).catch(() => {
         sign.setError('Failed to remove piece.');
       });
     }
@@ -73,7 +73,7 @@ class JewelryProducts extends React.Component {
 
   _updatePieces() {
     j.getAllPieces()
-      .then(pieces => this.setState({ pieces: pieces }))
+      .then(pieces => this.setState({ pieces }))
       .catch(() => {
         sign.setError('Failed to retrieve jewelry pieces. Try refreshing.');
         this.setState({ pieces: [] });
@@ -85,7 +85,7 @@ class JewelryProducts extends React.Component {
 
     let removeClasses = {
       'remove-button': true,
-      'active': this.state.removeMode
+      active: this.state.removeMode
     };
 
     return (
@@ -104,14 +104,38 @@ class JewelryProducts extends React.Component {
 
         <div className="content">
           <Table classes="row-select" data={this.state.pieces} uniqueId="item">
-            <Column header="Item #" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.item}</Link></Cell> )}/>
-            <Column classes="extra-wide" header="Description" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.description}</Link></Cell> )}/>
-            <Column header="Type" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{h.findTypeName(types, piece.typeId)}</Link></Cell> )}/>
-            <Column header="Cost" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{h.displayPrice(piece.totalCost)}</Link></Cell> )}/>
-            <Column header="Wholesale" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{h.displayPrice(piece.wholesalePrice)}</Link></Cell> )}/>
-            <Column header="MSRP" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{h.displayPrice(piece.msrp)}</Link></Cell> )}/>
-            <Column header="Qty on Order" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.qtyOnOrder}</Link></Cell> )}/>
-            <Column header="Qty in Stock" cell={piece => ( <Cell><Link to={"/jewelry/" + piece.id}>{piece.qtyInStock}</Link></Cell> )}/>
+            <Column header="Item #" cell={piece => (
+                <Cell><Link to={`/jewelry/${piece.id}`}>{piece.item}</Link></Cell>
+              )}
+            />
+            <Column classes="extra-wide" header="Description" cell={piece => (
+                <Cell><Link to={`/jewelry/${piece.id}`}>{piece.description}</Link></Cell>
+              )}
+            />
+            <Column header="Type" cell={piece => (
+                <Cell><Link to={`/jewelry/${piece.id}`}>{h.findTypeName(types, piece.typeId)}</Link></Cell>
+              )}
+            />
+            <Column header="Cost" cell={piece => (
+                <Cell><Link to={`/jewelry/${piece.id}`}>{h.displayPrice(piece.totalCost)}</Link></Cell>
+              )}
+            />
+            <Column header="Wholesale" cell={piece => (
+                <Cell><Link to={`/jewelry/${piece.id}`}>{h.displayPrice(piece.wholesalePrice)}</Link></Cell>
+              )}
+            />
+            <Column header="MSRP" cell={piece => (
+                <Cell><Link to={`/jewelry/${piece.id}`}>{h.displayPrice(piece.msrp)}</Link></Cell>
+              )}
+            />
+            <Column header="Qty on Order" cell={piece => (
+                <Cell><Link to={`/jewelry/${piece.id}`}>{piece.qtyOnOrder}</Link></Cell>
+              )}
+            />
+            <Column header="Qty in Stock" cell={piece => (
+                <Cell><Link to={`/jewelry/${piece.id}`}>{piece.qtyInStock}</Link></Cell>
+              )}
+            />
             {this._renderRemoveColumn()}
           </Table>
         </div>
@@ -136,8 +160,9 @@ class JewelryProducts extends React.Component {
     if (this.state.removeMode) {
       return (
         <Column header="Remove" cell={piece => (
-          <Cell><div onClick={this._removePiece.bind(this, piece)}>X</div></Cell>
-        )}/>
+            <Cell><div onClick={this._removePiece.bind(this, piece)}>X</div></Cell>
+          )}
+        />
       );
     }
   }

@@ -52,7 +52,7 @@ function getAllPieces() {
 }
 
 function getPiece(id) {
-  return fetch('/a/pieces/' + id)
+  return fetch(`/a/pieces/${id}`)
     .then(h.checkStatus)
     .then(h.parseJSON)
     .then(data => data.piece)
@@ -74,7 +74,7 @@ function getTypes() {
 }
 
 function linkMaterial(pieceId, materialId, body) {
-  return fetch('/a/pieces/' + pieceId + '/material/' + materialId, {
+  return fetch(`/a/pieces/${pieceId}/material/${materialId}`, {
     method: 'post',
     headers: h.headers,
     body: JSON.stringify(body)
@@ -86,7 +86,7 @@ function linkMaterial(pieceId, materialId, body) {
 }
 
 function modifyMaterialQty(pieceId, materialId, qty) {
-  return fetch('/a/pieces/' + pieceId + '/material/' + materialId, {
+  return fetch(`/a/pieces/${pieceId}/material/${materialId}`, {
     method: 'put',
     headers: h.headers,
     body: JSON.stringify({ qty })
@@ -98,7 +98,7 @@ function modifyMaterialQty(pieceId, materialId, qty) {
 }
 
 function modifyPiece(id, field, value) {
-  return fetch('/a/pieces/' + id, {
+  return fetch(`/a/pieces/${id}`, {
     method: 'put',
     headers: h.headers,
     body: JSON.stringify({
@@ -114,7 +114,7 @@ function modifyPiece(id, field, value) {
 }
 
 function modifyType(id, field, value) {
-  return fetch('/a/types/pieces/' + id, {
+  return fetch(`/a/types/pieces/${id}`, {
     method: 'put',
     headers: h.headers,
     body: JSON.stringify({
@@ -130,7 +130,7 @@ function modifyType(id, field, value) {
 }
 
 function removePiece(id) {
-  return fetch('/a/pieces/' + id, {
+  return fetch(`/a/pieces/${id}`, {
     method: 'delete',
     headers: h.headers
   }).then(h.checkStatus)
@@ -141,7 +141,7 @@ function removePiece(id) {
 }
 
 function removePieceType(id) {
-  return fetch('/a/types/pieces/' + id, {
+  return fetch(`/a/types/pieces/${id}`, {
     method: 'delete',
     headers: h.headers
   }).then(h.checkStatus)
@@ -152,7 +152,7 @@ function removePieceType(id) {
 }
 
 function unlinkMaterial(pieceId, materialId) {
-  return fetch('/a/pieces/' + pieceId + '/material/' + materialId, {
+  return fetch(`/a/pieces/${pieceId}/material/${materialId}`, {
     method: 'delete',
     headers: h.headers
   }).then(h.checkStatus)

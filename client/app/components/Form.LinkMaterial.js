@@ -19,9 +19,7 @@ class LinkMaterialForm extends React.Component {
 
   componentDidMount() {
     m.getAllMaterials().then(materials => {
-      this.setState({
-        materials: materials
-      });
+      this.setState({ materials });
     });
   }
 
@@ -81,7 +79,7 @@ class LinkMaterialForm extends React.Component {
 
         <datalist id="materials">
           {state.materials.map(material =>
-            <option key={material.item} value={material.description}/>
+            <option key={material.item} value={material.description} />
           )}
         </datalist>
       </div>

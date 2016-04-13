@@ -18,16 +18,16 @@ const history = createBrowserHistory();
 
 ReactDOM.render((
   <Router history={history}>
-    <Route path='/' component={App}>
-      <IndexRoute component={JewelryProducts}/>
-      <Route path='materials' component={Materials}/>
-      <Route path='products' component={OtherProducts}/>
-      <Route path='purchaseorders' component={PurchaseOrders}/>
-      <Route path='sales' component={Sales}/>
-      <Route path='vendors' component={Vendors}/>
-      <Route path='settings' component={Settings}/>
-      <Route path='jewelry/:pieceId' component={JewelryProduct}/>
+    <Route path="/" component={App}>
+      <IndexRoute component={JewelryProducts} />
+      <Route path="materials" component={Materials} />
+      <Route path="products" component={OtherProducts} />
+      <Route path="purchaseorders" component={PurchaseOrders} />
+      <Route path="sales" component={Sales} />
+      <Route path="vendors" component={Vendors} />
+      <Route path="settings" component={Settings} />
+      <Route path="jewelry/:pieceId" component={JewelryProduct} />
     </Route>
-    <Route path='*' component={NoMatch}/>
+    <Route path="*" component={NoMatch} />
   </Router>
 ), document.getElementById('main'));

@@ -1,7 +1,9 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 
 class Column extends React.Component {
-  render() {}
+  render() {
+    return null;
+  }
 }
 
 Column.propTypes = {

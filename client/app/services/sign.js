@@ -11,7 +11,7 @@ let services = {
 function setMessage(message, classes) {
   let sign = document.getElementById('sign');
   sign.innerHTML = message;
-  sign.className = 'active ' + classes;
+  sign.className = `active ${classes}`;
 
   setTimeout(() => {
     sign.className = '';

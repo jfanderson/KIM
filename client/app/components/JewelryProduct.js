@@ -13,6 +13,8 @@ import LinkMaterialForm from './Form.LinkMaterial.js';
 import SelectCell from './Cell.Select.js';
 import Table from './Table.js';
 
+const PropTypes = React.PropTypes;
+
 class JewelryProduct extends React.Component {
   constructor() {
     super();
@@ -39,7 +41,7 @@ class JewelryProduct extends React.Component {
 
     j.getTypes()
       .then(types => {
-        this.setState({ types: types });
+        this.setState({ types });
       }).catch(() => {
         sign.setError('Failed to retrieve jewelry types. Try refreshing.');
       });
@@ -54,7 +56,7 @@ class JewelryProduct extends React.Component {
       materialCost += materials[i].PieceMaterial.qty * materials[i].costPerUnit;
     }
 
-    let totalLaborCost = state.piece.laborTime/60 * state.laborCost;
+    let totalLaborCost = state.piece.laborTime / 60 * state.laborCost;
 
     let totalCost = totalLaborCost + materialCost;
 
@@ -77,10 +79,10 @@ class JewelryProduct extends React.Component {
   }
 
   _handleFormSubmit(material, qty) {
-    j.linkMaterial(this.props.params.pieceId, material.id, { qty: qty })
+    j.linkMaterial(this.props.params.pieceId, material.id, { qty })
       .then(() => {
         this._updatePiece();
-      }).catch(error => {
+      }).catch(() => {
         sign.setError('Failed to add material. Try refreshing.');
       });
   }
@@ -126,12 +128,12 @@ class JewelryProduct extends React.Component {
   }
 
   _removeMaterial(material) {
-    let confirmed = confirm('Are you sure you want to remove ' + material.description + '?');
+    let confirmed = confirm(`Are you sure you want to remove ${material.description}?`);
 
     if (confirmed) {
       j.unlinkMaterial(this.state.piece.id, material.id).then(() => {
         this._updatePiece();
-      }).catch(error => {
+      }).catch(() => {
         sign.setError('Failed to remove material.');
       });
     }
@@ -160,40 +162,48 @@ class JewelryProduct extends React.Component {
 
     let removeClasses = {
       'remove-button': true,
-      'inner': true,
-      'active': this.state.removeMode
+      inner: true,
+      active: this.state.removeMode
     };
 
     return (
       <div className="content jewelry-product">
         <Table classes="single" data={data} uniqueId="item">
           <Column header="Item #" cell={piece => (
-            <Cell modifyField={this._modifyField.bind(this, 'item')}>{piece.item}</Cell>
-          )}/>
+              <Cell modifyField={this._modifyField.bind(this, 'item')}>{piece.item}</Cell>
+            )}
+          />
           <Column header="Description" classes="extra-wide" cell={piece => (
-            <Cell modifyField={this._modifyField.bind(this, 'description')}>{piece.description}</Cell>
-          )}/>
+              <Cell modifyField={this._modifyField.bind(this, 'description')}>{piece.description}</Cell>
+            )}
+          />
           <Column header="Type" cell={piece => (
-            <SelectCell modifyField={this._modifyField.bind(this, 'type')}
-              options={state.types.map(type => type.name)}
-              defaultValue={h.findTypeName(state.types, piece.typeId)}
-            />
-          )}/>
+              <SelectCell modifyField={this._modifyField.bind(this, 'type')}
+                options={state.types.map(type => type.name)}
+                defaultValue={h.findTypeName(state.types, piece.typeId)}
+              />
+            )}
+          />
           <Column header="Cost" cell={piece => (
-            <Cell>{h.displayPrice(piece.totalCost)}</Cell>
-          )}/>
+              <Cell>{h.displayPrice(piece.totalCost)}</Cell>
+            )}
+          />
           <Column header="Wholesale" cell={piece => (
-            <Cell modifyField={this._modifyField.bind(this, 'wholesalePrice')} price>{h.displayPrice(piece.wholesalePrice)}</Cell>
-          )}/>
+              <Cell modifyField={this._modifyField.bind(this, 'wholesalePrice')} price>{h.displayPrice(piece.wholesalePrice)}</Cell>
+            )}
+          />
           <Column header="MSRP" cell={piece => (
-            <Cell modifyField={this._modifyField.bind(this, 'msrp')} price>{h.displayPrice(piece.msrp)}</Cell>
-          )}/>
+              <Cell modifyField={this._modifyField.bind(this, 'msrp')} price>{h.displayPrice(piece.msrp)}</Cell>
+            )}
+          />
           <Column header="Qty on Order" cell={piece => (
-            <Cell modifyField={this._modifyField.bind(this, 'qtyOnOrder')} integer>{piece.qtyOnOrder}</Cell>
-          )}/>
+              <Cell modifyField={this._modifyField.bind(this, 'qtyOnOrder')} integer>{piece.qtyOnOrder}</Cell>
+            )}
+          />
           <Column header="Qty in Stock" cell={piece => (
-            <Cell modifyField={this._modifyField.bind(this, 'qtyInStock')} integer>{piece.qtyInStock}</Cell>
-          )}/>
+              <Cell modifyField={this._modifyField.bind(this, 'qtyInStock')} integer>{piece.qtyInStock}</Cell>
+            )}
+          />
         </Table>
 
         <div className="container-70">
@@ -252,12 +262,13 @@ class JewelryProduct extends React.Component {
 
     return (
       <Table classes="inner" data={materials} uniqueId="item">
-        <Column header="Part #" cell={material => (<Cell>{material.item}</Cell>)}/>
-        <Column header="Description" classes="extra-wide" cell={material => (<Cell>{material.description}</Cell>)}/>
-        <Column header="Cost / Unit" cell={material => (<Cell>{h.displayPrice(material.costPerUnit)}</Cell>)}/>
+        <Column header="Part #" cell={material => (<Cell>{material.item}</Cell>)} />
+        <Column header="Description" classes="extra-wide" cell={material => (<Cell>{material.description}</Cell>)} />
+        <Column header="Cost / Unit" cell={material => (<Cell>{h.displayPrice(material.costPerUnit)}</Cell>)} />
         <Column header="Qty" cell={material => (
-          <Cell modifyField={this._modifyMaterialQty.bind(this, material.id)}>{material.PieceMaterial.qty}</Cell>
-        )}/>
+            <Cell modifyField={this._modifyMaterialQty.bind(this, material.id)}>{material.PieceMaterial.qty}</Cell>
+          )}
+        />
         {this._renderRemoveColumn()}
       </Table>
     );
@@ -267,11 +278,18 @@ class JewelryProduct extends React.Component {
     if (this.state.removeMode) {
       return (
         <Column header="Remove" cell={material => (
-          <Cell className="remove"><div onClick={this._removeMaterial.bind(this, material)}>X</div></Cell>
-        )}/>
+            <Cell className="remove"><div onClick={this._removeMaterial.bind(this, material)}>X</div></Cell>
+          )}
+        />
       );
     }
   }
 }
+
+JewelryProduct.propTypes = {
+  params: PropTypes.shape({
+    pieceId: PropTypes.string
+  })
+};
 
 export default JewelryProduct;

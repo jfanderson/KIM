@@ -28,7 +28,7 @@ class Materials extends React.Component {
 
     m.getTypes()
       .then(types => {
-        this.setState({ types: types });
+        this.setState({ types });
       }).catch(() => {
         sign.setError('Failed to retrieve material types. Try refreshing.');
       });
@@ -48,7 +48,7 @@ class Materials extends React.Component {
       description
     }).then(() => {
       this._updateMaterials();
-    }).catch(error => {
+    }).catch(() => {
       sign.setError('Failed to add material. Try refreshing.');
     });
   }
@@ -69,7 +69,7 @@ class Materials extends React.Component {
           materials[i][field] = value;
         }
 
-        this.setState({ materials: materials });
+        this.setState({ materials });
         break;
       }
     }
@@ -82,12 +82,12 @@ class Materials extends React.Component {
   }
 
   _removeMaterial(material) {
-    let confirmed = confirm('Are you sure you want to remove ' + material.description + '?');
+    let confirmed = confirm(`Are you sure you want to remove ${material.description}?`);
 
     if (confirmed) {
       m.removeMaterial(material.id).then(() => {
         this._updateMaterials();
-      }).catch(error => {
+      }).catch(() => {
         sign.setError('Failed to remove material.');
       });
     }
@@ -95,7 +95,7 @@ class Materials extends React.Component {
 
   _updateMaterials() {
     m.getAllMaterials()
-      .then(materials => this.setState({ materials: materials }))
+      .then(materials => this.setState({ materials }))
       .catch(() => {
         sign.setError('Failed to retrieve materials. Try refreshing.');
         this.setState({ materials: [] });
@@ -104,11 +104,10 @@ class Materials extends React.Component {
 
   render() {
     let state = this.state;
-    let types = state.types;
 
     let removeClasses = {
       'remove-button': true,
-      'active': state.removeMode
+      active: state.removeMode
     };
 
     return (
@@ -128,23 +127,28 @@ class Materials extends React.Component {
         <div className="content">
           <Table data={state.materials} uniqueId="item">
             <Column header="Item #" cell={material => (
-              <Cell modifyField={this._modifyField.bind(this, material.id, 'item')}>{material.item}</Cell>
-            )}/>
+                <Cell modifyField={this._modifyField.bind(this, material.id, 'item')}>{material.item}</Cell>
+              )}
+            />
             <Column classes="extra-wide" header="Description" cell={material => (
-              <Cell modifyField={this._modifyField.bind(this, material.id, 'description')}>{material.description}</Cell>
-            )}/>
+                <Cell modifyField={this._modifyField.bind(this, material.id, 'description')}>{material.description}</Cell>
+              )}
+            />
             <Column header="Type" cell={material => (
-              <SelectCell modifyField={this._modifyField.bind(this, material.id, 'type')}
-                options={state.types.map(type => type.name)}
-                defaultValue={h.findTypeName(state.types, material.typeId)}
-              />
-            )}/>
+                <SelectCell modifyField={this._modifyField.bind(this, material.id, 'type')}
+                  options={state.types.map(type => type.name)}
+                  defaultValue={h.findTypeName(state.types, material.typeId)}
+                />
+              )}
+            />
             <Column header="Qty on Order" cell={material => (
-              <Cell modifyField={this._modifyField.bind(this, material.id, 'qtyOnOrder')} integer>{material.qtyOnOrder}</Cell>
-            )}/>
+                <Cell modifyField={this._modifyField.bind(this, material.id, 'qtyOnOrder')} integer>{material.qtyOnOrder}</Cell>
+              )}
+            />
             <Column header="Qty in Stock" cell={material => (
-              <Cell modifyField={this._modifyField.bind(this, material.id, 'qtyInStock')} integer>{material.qtyInStock}</Cell>
-            )}/>
+                <Cell modifyField={this._modifyField.bind(this, material.id, 'qtyInStock')} integer>{material.qtyInStock}</Cell>
+              )}
+            />
             {this._renderRemoveColumn()}
           </Table>
         </div>
@@ -169,8 +173,9 @@ class Materials extends React.Component {
     if (this.state.removeMode) {
       return (
         <Column header="Remove" cell={material => (
-          <Cell className="remove"><div onClick={this._removeMaterial.bind(this, material)}>X</div></Cell>
-        )}/>
+            <Cell className="remove"><div onClick={this._removeMaterial.bind(this, material)}>X</div></Cell>
+          )}
+        />
       );
     }
   }

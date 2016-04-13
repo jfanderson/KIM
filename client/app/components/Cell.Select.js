@@ -43,7 +43,7 @@ SelectCell.propTypes = {
   options: PropTypes.array,
   // If passed, make cell editable on click.
   // Callback invoked with new cell value.
-  modifyField: PropTypes.func,
+  modifyField: PropTypes.func
 };
 
 SelectCell.defaultProps = {
