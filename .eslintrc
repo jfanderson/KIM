@@ -1,0 +1,15 @@
+{
+  "extends": "airbnb",
+  "rules": {
+    "comma-dangle": ["error", "never"],
+    "consistent-return": "off",
+    "max-len": [1, 160, 4, { "ignoreUrls": true }],
+    "no-alert": "off",
+    "no-console": "off",
+    "no-use-before-define": ["error", { "functions": false, "classes": true }],
+    "prefer-const": "off",
+    "quotes": ["warn", "single"],
+    "react/jsx-no-bind": "off",
+    "react/sort-comp" : "off"
+  }
+}
