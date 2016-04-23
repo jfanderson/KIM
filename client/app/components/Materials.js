@@ -1,5 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
+import _ from 'underscore';
 
 import m from '../services/materialService.js';
 import sign from '../services/sign.js';
@@ -96,7 +97,8 @@ class Materials extends React.Component {
   _updateMaterials() {
     m.getAllMaterials()
       .then(materials => this.setState({ materials }))
-      .catch(() => {
+      .catch(error => {
+        console.log('[Component] Error retrieving materials: ', error);
         sign.setError('Failed to retrieve materials. Try refreshing.');
         this.setState({ materials: [] });
       });
@@ -140,6 +142,20 @@ class Materials extends React.Component {
                   defaultValue={h.findTypeName(state.types, material.typeId)}
                 />
               )}
+            />
+            <Column header="Cost per Unit" cell={material => {
+              let type = _.findWhere(state.types, { id: material.typeId });
+
+              if (!type) {
+                return null;
+              }
+
+              return (
+                <Cell modifyField={this._modifyField.bind(this, material.id, 'costPerUnit')} pricePerUnit>
+                  {h.displayPricePerUnit(material.costPerUnit, type.unit)}
+                </Cell>
+              );
+            }}
             />
             <Column header="Qty on Order" cell={material => (
                 <Cell modifyField={this._modifyField.bind(this, material.id, 'qtyOnOrder')} integer>{material.qtyOnOrder}</Cell>
