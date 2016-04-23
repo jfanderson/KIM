@@ -5,6 +5,7 @@ let helpers = {
   capitalize,
   checkStatus,
   displayPrice,
+  displayPricePerUnit,
   findTypeId,
   findTypeName,
   parseJSON,
@@ -41,6 +42,14 @@ function displayPrice(price) {
   }
 
   return `$${price.toFixed(2)}`;
+}
+
+function displayPricePerUnit(price, unit) {
+  if (unit) {
+    return `${displayPrice(price)} / ${unit}`;
+  }
+
+  return `${displayPrice(price)} / `;
 }
 
 function findTypeId(types, name) {
