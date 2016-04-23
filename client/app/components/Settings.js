@@ -224,6 +224,10 @@ class Settings extends React.Component {
                 <Cell modifyField={this._modifyMaterialType.bind(this, type.id, 'lowStock')} integer>{type.lowStock}</Cell>
               )}
             />
+            <Column header="Unit" cell={type => (
+                <Cell modifyField={this._modifyMaterialType.bind(this, type.id, 'unit')}>{type.unit}</Cell>
+              )}
+            />
             {this._renderMaterialTypeRemoveColumn()}
           </Table>
         </div>
