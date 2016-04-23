@@ -1,21 +1,16 @@
-var models = require('./index.js');
-var Material = models.Material;
-var Piece = models.Piece;
-var PieceMaterial = models.PieceMaterial;
-var MaterialType = models.MaterialType;
-var PieceType = models.PieceType;
-var MaterialUnit = models.MaterialUnit;
-var MaterialPurchaseOrder = models.MaterialPurchaseOrder;
-var PiecePurchaseOrder = models.PiecePurchaseOrder;
-var Vendor = models.Vendor;
-var Settings = models.Settings;
-var Product = models.Product;
+let models = require('./index.js');
+let Material = models.Material;
+let Piece = models.Piece;
+let MaterialType = models.MaterialType;
+let PieceType = models.PieceType;
+let Vendor = models.Vendor;
+let Settings = models.Settings;
 
-var settings = {
+let settings = {
   laborCost: 15
 };
 
-var materialTypes = [
+let materialTypes = [
   {
     name: 'none'
   },
@@ -25,11 +20,13 @@ var materialTypes = [
   },
   {
     name: 'stone',
-    lowStock: 5
+    lowStock: 5,
+    unit: 'piece'
   },
   {
     name: 'chain',
-    lowStock: 10
+    lowStock: 10,
+    unit: 'inch'
   },
   {
     name: 'finding',
@@ -37,25 +34,22 @@ var materialTypes = [
   }
 ];
 
-var materialUnits = [
-  {
-    unit: 'piece'
-  },
-  {
-    unit: 'inch'
-  }
-];
-
-var vendors = [
+let vendors = [
   {
     company: 'Yakutum',
     address: '111 8th St',
     phone: '999-999-9999',
     email: 'yak@yak.com'
+  },
+  {
+    company: 'Acme, Inc.',
+    address: '321 Acme Lane',
+    phone: '888-888-1234',
+    email: 'ac@me.com'
   }
 ];
 
-var materials = [
+let materials = [
   {
     item: 'F01',
     description: '8mm heishi disc',
@@ -88,7 +82,7 @@ var materials = [
   }
 ];
 
-var pieceTypes = [
+let pieceTypes = [
   {
     name: 'none'
   },
@@ -114,7 +108,7 @@ var pieceTypes = [
   }
 ];
 
-var pieces = [
+let pieces = [
   {
     item: 'N001',
     description: 'Valor Necklace',
@@ -154,19 +148,17 @@ var pieces = [
 
 console.log('Writing to database...');
 
-Settings.create(settings).then(() => {
-  return MaterialType.bulkCreate(materialTypes);
-}).then(() => {
-  return MaterialUnit.bulkCreate(materialUnits);
-}).then(() => {
-  return Vendor.bulkCreate(vendors);
-}).then(() => {
-  return Material.bulkCreate(materials);
-}).then(() => {
-  return PieceType.bulkCreate(pieceTypes);
-}).then(() => {
-  return Piece.bulkCreate(pieces);
-}).then(() => {
+Settings.create(settings).then(() =>
+  MaterialType.bulkCreate(materialTypes)
+).then(() =>
+  Vendor.bulkCreate(vendors)
+).then(() =>
+  Material.bulkCreate(materials)
+).then(() =>
+  PieceType.bulkCreate(pieceTypes)
+).then(() =>
+  Piece.bulkCreate(pieces)
+).then(() => {
   console.log('Done!');
 }).catch(error => {
   console.log('Error: ', error);

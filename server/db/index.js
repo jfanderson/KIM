@@ -1,13 +1,16 @@
+/* eslint-disable new-cap */
+
 var Sequelize = require('sequelize');
 
 /* CONNECTION */
 
 var dbURL = process.env.DATABASE_URL;
 
+var orm;
 if (dbURL) {
-  var orm = new Sequelize(dbURL);
+  orm = new Sequelize(dbURL);
 } else {
-  var orm = new Sequelize('kim', 'root', '', {
+  orm = new Sequelize('kim', 'root', '', {
     host: 'localhost',
     dialect: 'mysql',
     logging: false
@@ -20,7 +23,7 @@ if (dbURL) {
 var Material = orm.define('Material', {
   item: { type: Sequelize.STRING, allowNull: false, unique: true },
   description: { type: Sequelize.STRING, allowNull: false, unique: true },
-  costPerUnit: { type: Sequelize.DECIMAL(10,2), defaultValue: 0 },
+  costPerUnit: { type: Sequelize.DECIMAL(10, 2), defaultValue: 0 },
   qtyInStock: { type: Sequelize.INTEGER, defaultValue: 0 },
   qtyOnOrder: { type: Sequelize.INTEGER, defaultValue: 0 }
 });
@@ -29,9 +32,9 @@ var Piece = orm.define('Piece', {
   item: { type: Sequelize.STRING, allowNull: false, unique: true },
   description: { type: Sequelize.STRING, allowNull: false, unique: true },
   laborTime: { type: Sequelize.INTEGER, defaultValue: 0 },
-  totalCost: { type: Sequelize.DECIMAL(10,2), defaultValue: 0 },
-  wholesalePrice: { type: Sequelize.DECIMAL(10,2), defaultValue: 0 },
-  msrp: { type: Sequelize.DECIMAL(10,2), defaultValue: 0 },
+  totalCost: { type: Sequelize.DECIMAL(10, 2), defaultValue: 0 },
+  wholesalePrice: { type: Sequelize.DECIMAL(10, 2), defaultValue: 0 },
+  msrp: { type: Sequelize.DECIMAL(10, 2), defaultValue: 0 },
   qtyInStock: { type: Sequelize.INTEGER, defaultValue: 0 },
   qtyOnOrder: { type: Sequelize.INTEGER, defaultValue: 0 }
 });
@@ -42,16 +45,13 @@ var PieceMaterial = orm.define('PieceMaterial', {
 
 var MaterialType = orm.define('MaterialType', {
   name: { type: Sequelize.STRING, allowNull: false, unique: true },
-  lowStock: { type: Sequelize.INTEGER, defaultValue: 0 }
+  lowStock: { type: Sequelize.INTEGER, defaultValue: 0 },
+  unit: { type: Sequelize.STRING }
 });
 
 var PieceType = orm.define('PieceType', {
   name: { type: Sequelize.STRING, allowNull: false, unique: true },
   lowStock: { type: Sequelize.INTEGER, defaultValue: 0 }
-});
-
-var MaterialUnit = orm.define('MaterialUnit', {
-  unit: { type: Sequelize.STRING, allowNull: false, unique: true }
 });
 
 var MaterialPurchaseOrder = orm.define('MaterialPurchaseOrder', {
@@ -63,7 +63,7 @@ var MaterialPurchaseOrder = orm.define('MaterialPurchaseOrder', {
 var PiecePurchaseOrder = orm.define('PiecePurchaseOrder', {
   notes: Sequelize.TEXT,
   qty: Sequelize.INTEGER,
-  price: Sequelize.DECIMAL(10,2)
+  price: Sequelize.DECIMAL(10, 2)
 });
 
 var Vendor = orm.define('Vendor', {
@@ -74,14 +74,14 @@ var Vendor = orm.define('Vendor', {
 });
 
 var Settings = orm.define('Settings', {
-  laborCost: Sequelize.DECIMAL(10,2)
+  laborCost: Sequelize.DECIMAL(10, 2)
 });
 
 var Product = orm.define('Product', {
   item: { type: Sequelize.STRING, allowNull: false, unique: true },
   description: Sequelize.STRING,
-  cost: { type: Sequelize.DECIMAL(10,2), defaultValue: 0 },
-  msrp: { type: Sequelize.DECIMAL(10,2), defaultValue: 0 },
+  cost: { type: Sequelize.DECIMAL(10, 2), defaultValue: 0 },
+  msrp: { type: Sequelize.DECIMAL(10, 2), defaultValue: 0 },
   qtyOnHand: { type: Sequelize.INTEGER, defaultValue: 0 },
   qtyOnOrder: { type: Sequelize.INTEGER, defaultValue: 0 }
 });
@@ -92,12 +92,10 @@ var Product = orm.define('Product', {
 Piece.belongsToMany(Material, { through: 'PieceMaterial', foreignKey: 'pieceId' });
 Material.belongsToMany(Piece, { through: 'PieceMaterial', foreignKey: 'materialId' });
 
-Material.belongsTo(MaterialType, { as: 'type'});
+Material.belongsTo(MaterialType, { as: 'type' });
 Piece.belongsTo(PieceType, { as: 'type' });
 
-Material.belongsTo(MaterialUnit, { as: 'unit' });
-
-Material.belongsTo(Vendor, { as: 'vendor' }); // may end up being belongsToMany
+Material.belongsTo(Vendor, { as: 'vendor' });
 
 Material.belongsToMany(MaterialPurchaseOrder, {
   as: 'PurchaseOrders',
@@ -123,7 +121,6 @@ module.exports = {
   Material,
   MaterialPurchaseOrder,
   MaterialType,
-  MaterialUnit,
   Piece,
   PieceMaterial,
   PiecePurchaseOrder,
