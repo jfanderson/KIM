@@ -20,8 +20,8 @@ ReactDOM.render((
   <Router history={history}>
     <Route path="/" component={App}>
       <IndexRoute component={JewelryProducts} />
-      <Route path="materials" component={Materials} />
       <Route path="products" component={OtherProducts} />
+      <Route path="materials" component={Materials} />
       <Route path="purchaseorders" component={PurchaseOrders} />
       <Route path="sales" component={Sales} />
       <Route path="vendors" component={Vendors} />
