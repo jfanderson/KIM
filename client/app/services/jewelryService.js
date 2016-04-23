@@ -23,7 +23,7 @@ function addPiece(piece) {
     body: JSON.stringify({ piece })
   }).then(h.checkStatus)
   .catch(error => {
-    console.log('Error adding piece: ', error);
+    console.log('[Service] Error adding piece: ', error);
     throw error;
   });
 }
@@ -35,7 +35,7 @@ function addPieceType(type) {
     body: JSON.stringify({ type })
   }).then(h.checkStatus)
   .catch(error => {
-    console.log('Error adding piece type: ', error);
+    console.log('[Service] Error adding piece type: ', error);
     throw error;
   });
 }
@@ -46,7 +46,7 @@ function getAllPieces() {
     .then(h.parseJSON)
     .then(data => data.pieces)
     .catch(error => {
-      console.log('Error fetching pieces: ', error);
+      console.log('[Service] Error fetching pieces: ', error);
       throw error;
     });
 }
@@ -57,7 +57,7 @@ function getPiece(id) {
     .then(h.parseJSON)
     .then(data => data.piece)
     .catch(error => {
-      console.log('Error fetching piece: ', error);
+      console.log('[Service] Error fetching piece: ', error);
       throw error;
     });
 }
@@ -68,7 +68,7 @@ function getTypes() {
     .then(h.parseJSON)
     .then(data => data.types)
     .catch(error => {
-      console.log('Error fetching piece types: ', error);
+      console.log('[Service] Error fetching piece types: ', error);
       throw error;
     });
 }
@@ -80,7 +80,7 @@ function linkMaterial(pieceId, materialId, body) {
     body: JSON.stringify(body)
   }).then(h.checkStatus)
   .catch(error => {
-    console.log('Error linking material to piece: ', error);
+    console.log('[Service] Error linking material to piece: ', error);
     throw error;
   });
 }
@@ -92,7 +92,7 @@ function modifyMaterialQty(pieceId, materialId, qty) {
     body: JSON.stringify({ qty })
   }).then(h.checkStatus)
   .catch(error => {
-    console.log('Error modifying material qty: ', error);
+    console.log('[Service] Error modifying material qty: ', error);
     throw error;
   });
 }
@@ -108,7 +108,7 @@ function modifyPiece(id, field, value) {
   .then(h.parseJSON)
   .then(data => data.piece)
   .catch(error => {
-    console.log('Error modifying piece: ', error);
+    console.log('[Service] Error modifying piece: ', error);
     throw error;
   });
 }
@@ -124,7 +124,7 @@ function modifyType(id, field, value) {
   .then(h.parseJSON)
   .then(data => data.type)
   .catch(error => {
-    console.log('Error modifying piece type: ', error);
+    console.log('[Service] Error modifying piece type: ', error);
     throw error;
   });
 }
@@ -135,7 +135,7 @@ function removePiece(id) {
     headers: h.headers
   }).then(h.checkStatus)
   .catch(error => {
-    console.log('Error removing piece: ', error);
+    console.log('[Service] Error removing piece: ', error);
     throw error;
   });
 }
@@ -146,7 +146,7 @@ function removePieceType(id) {
     headers: h.headers
   }).then(h.checkStatus)
   .catch(error => {
-    console.log('Error removing piece type: ', error);
+    console.log('[Service] Error removing piece type: ', error);
     throw error;
   });
 }
@@ -157,7 +157,7 @@ function unlinkMaterial(pieceId, materialId) {
     headers: h.headers
   }).then(h.checkStatus)
   .catch(error => {
-    console.log('Error unlinking material: ', error);
+    console.log('[Service] Error unlinking material: ', error);
     throw error;
   });
 }

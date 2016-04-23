@@ -20,7 +20,7 @@ function addMaterial(material) {
     body: JSON.stringify({ material })
   }).then(h.checkStatus)
   .catch(error => {
-    console.log('Error adding material: ', error);
+    console.log('[Service] Error adding material: ', error);
     throw error;
   });
 }
@@ -32,7 +32,7 @@ function addMaterialType(type) {
     body: JSON.stringify({ type })
   }).then(h.checkStatus)
   .catch(error => {
-    console.log('Error adding material type: ', error);
+    console.log('[Service] Error adding material type: ', error);
     throw error;
   });
 }
@@ -43,7 +43,7 @@ function getAllMaterials() {
     .then(h.parseJSON)
     .then(data => data.materials)
     .catch(error => {
-      console.log('Error fetching materials: ', error);
+      console.log('[Service] Error fetching materials: ', error);
       throw error;
     });
 }
@@ -54,7 +54,7 @@ function getMaterial(id) {
     .then(h.parseJSON)
     .then(data => data.material)
     .catch(error => {
-      console.log('Error fetching material: ', error);
+      console.log('[Service] Error fetching material: ', error);
       throw error;
     });
 }
@@ -65,7 +65,7 @@ function getTypes() {
     .then(h.parseJSON)
     .then(data => data.types)
     .catch(error => {
-      console.log('Error fetching material types: ', error);
+      console.log('[Service] Error fetching material types: ', error);
       throw error;
     });
 }
@@ -81,7 +81,7 @@ function modifyMaterial(id, field, value) {
   .then(h.parseJSON)
   .then(data => data.material)
   .catch(error => {
-    console.log('Error modifying material: ', error);
+    console.log('[Service] Error modifying material: ', error);
     throw error;
   });
 }
@@ -97,7 +97,7 @@ function modifyType(id, field, value) {
   .then(h.parseJSON)
   .then(data => data.type)
   .catch(error => {
-    console.log('Error modifying material type: ', error);
+    console.log('[Service] Error modifying material type: ', error);
     throw error;
   });
 }
@@ -108,7 +108,7 @@ function removeMaterial(id) {
     headers: h.headers
   }).then(h.checkStatus)
   .catch(error => {
-    console.log('Error removing material: ', error);
+    console.log('[Service] Error removing material: ', error);
     throw error;
   });
 }
@@ -119,7 +119,7 @@ function removeMaterialType(id) {
     headers: h.headers
   }).then(h.checkStatus)
   .catch(error => {
-    console.log('Error removing material type: ', error);
+    console.log('[Service] Error removing material type: ', error);
     throw error;
   });
 }

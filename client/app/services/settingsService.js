@@ -12,7 +12,7 @@ function getSettings() {
     .then(h.parseJSON)
     .then(data => data.settings)
     .catch(error => {
-      console.log('Error fetching settings: ', error);
+      console.log('[Service] Error fetching settings: ', error);
       throw error;
     });
 }
@@ -24,7 +24,7 @@ function modifyLaborCost(cost) {
     body: JSON.stringify({ laborCost: cost })
   }).then(h.checkStatus)
   .catch(error => {
-    console.log('Error modifying labor cost: ', error);
+    console.log('[Service] Error modifying labor cost: ', error);
     throw error;
   });
 }
