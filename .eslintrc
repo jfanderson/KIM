@@ -7,9 +7,11 @@
     "no-alert": "off",
     "no-console": "off",
     "no-use-before-define": ["error", { "functions": false, "classes": true }],
+    "no-var": "off",
     "prefer-const": "off",
     "quotes": ["warn", "single"],
     "react/jsx-no-bind": "off",
-    "react/sort-comp" : "off"
+    "react/sort-comp" : "off",
+    "vars-on-top": "off"
   }
 }
