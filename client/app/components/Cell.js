@@ -28,7 +28,7 @@ class Cell extends React.Component {
 
     if (event.keyCode === 13) {
       // Validation
-      if (props.number || props.price || props.integer) {
+      if (props.number || props.price || props.pricePerUnit || props.integer) {
         if (isNaN(Number(state.value))) {
           sign.setError('Value must be a number');
           return;
@@ -46,15 +46,23 @@ class Cell extends React.Component {
   }
 
   _startEditing() {
-    if (this.props.price) {
+    let props = this.props;
+
+    // Trim dollar signs or units as necessary, so only numerical value is left.
+    if (props.price) {
       this.setState({
         editing: true,
-        value: this.props.children.slice(1)
+        value: props.children.slice(1)
+      });
+    } else if (props.pricePerUnit) {
+      this.setState({
+        editing: true,
+        value: props.children.slice(1, props.children.indexOf('/') - 1)
       });
     } else {
       this.setState({
         editing: true,
-        value: this.props.children
+        value: props.children
       });
     }
 
@@ -122,13 +130,16 @@ Cell.propTypes = {
   // True if cell represents a numerical value
   number: PropTypes.bool,
   // True if cell represents a price value
-  price: PropTypes.bool
+  price: PropTypes.bool,
+  // True if cell represents a price per unit value
+  pricePerUnit: PropTypes.bool
 };
 
 Cell.defaultProps = {
   datalist: [],
   int: false,
-  price: false
+  price: false,
+  pricePerUnit: false
 };
 
 export default Cell;
