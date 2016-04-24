@@ -143,7 +143,7 @@ class Materials extends React.Component {
                 />
               )}
             />
-            <Column header="Cost per Unit" cell={material => {
+            <Column header="Cost / Unit" cell={material => {
               let type = _.findWhere(state.types, { id: material.typeId });
 
               if (!type) {
