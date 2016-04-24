@@ -6,6 +6,7 @@ let helpers = {
   checkStatus,
   displayPrice,
   displayPricePerUnit,
+  findPopupTopValue,
   findTypeId,
   findTypeName,
   parseJSON,
@@ -50,6 +51,10 @@ function displayPricePerUnit(price, unit) {
   }
 
   return `${displayPrice(price)} / `;
+}
+
+function findPopupTopValue(element) {
+  return element.getBoundingClientRect().bottom + document.body.scrollTop + 8;
 }
 
 function findTypeId(types, name) {

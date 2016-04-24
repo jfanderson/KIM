@@ -1,6 +1,4 @@
 import React from 'react';
-import classnames from 'classnames';
-import h from '../helpers.js';
 import sign from '../services/sign.js';
 
 const PropTypes = React.PropTypes;
@@ -50,14 +48,12 @@ class AddTypeForm extends React.Component {
     let props = this.props;
     let state = this.state;
 
-    let classes = classnames({
-      popup: true,
-      [props.type]: true
-    });
+    // So the user sees 'Jewelry Type' instead of 'Piece Type'
+    let title = props.type === 'material' ? props.type : 'jewelry';
 
     return (
-      <div className={classes}>
-        <h2>Make a New {h.capitalize(props.type)} Type</h2>
+      <div className="popup" style={{ top: props.top }}>
+        <h2>Make a New {title} Type</h2>
         <form onSubmit={this._handleSubmit.bind(this)}>
           <input autoFocus
             onChange={this._handleNameChange.bind(this)}
@@ -81,6 +77,7 @@ class AddTypeForm extends React.Component {
 AddTypeForm.propTypes = {
   cancel: PropTypes.func,
   submit: PropTypes.func.isRequired,
+  top: PropTypes.number,
   // 'material' or 'piece'
   type: PropTypes.string.isRequired
 };
