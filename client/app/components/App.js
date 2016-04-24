@@ -15,7 +15,6 @@ const App = (props) =>
         <Link to={"/products"} className="navlink" activeClassName="active">Other Products</Link>
         <Link to={"/purchaseorders"} className="navlink" activeClassName="active">Purchase Orders</Link>
         <Link to={"/sales"} className="navlink" activeClassName="active">Sales</Link>
-        <Link to={"/vendors"} className="navlink" activeClassName="active">Vendors</Link>
         <Link to={"/settings"} className="navlink" activeClassName="active">Settings</Link>
       </div>
     </div>

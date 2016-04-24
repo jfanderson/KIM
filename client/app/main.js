@@ -10,7 +10,6 @@ import Materials from './components/Materials.js';
 import OtherProducts from './components/OtherProducts.js';
 import PurchaseOrders from './components/PurchaseOrders.js';
 import Sales from './components/Sales.js';
-import Vendors from './components/Vendors.js';
 import Settings from './components/Settings.js';
 import NoMatch from './components/NoMatch.js';
 
@@ -24,7 +23,6 @@ ReactDOM.render((
       <Route path="materials" component={Materials} />
       <Route path="purchaseorders" component={PurchaseOrders} />
       <Route path="sales" component={Sales} />
-      <Route path="vendors" component={Vendors} />
       <Route path="settings" component={Settings} />
       <Route path="jewelry/:pieceId" component={JewelryProduct} />
     </Route>
