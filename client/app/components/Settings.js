@@ -1,31 +1,39 @@
 import React from 'react';
-import classnames from 'classnames';
 
+import h from '../helpers.js';
 import j from '../services/jewelryService.js';
 import m from '../services/materialService.js';
 import s from '../services/settingsService.js';
+import v from '../services/vendorService.js';
 import sign from '../services/sign.js';
 
 import Cell from './Cell.js';
 import Column from './Column.js';
 import Table from './Table.js';
 import AddTypeForm from './Form.AddType.js';
+import AddVendorForm from './Form.AddVendor.js';
 
 class Settings extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      isPieceFormOpen: false,
-      isMaterialFormOpen: false,
+      isPieceTypeFormOpen: false,
+      isMaterialTypeFormOpen: false,
+      isVendorFormOpen: false,
       laborCost: 0,
       materialTypeRemoveMode: false,
       materialTypes: [],
       pieceTypeRemoveMode: false,
-      pieceTypes: []
+      pieceTypes: [],
+      vendorRemoveMode: false,
+      vendors: []
     };
   }
 
+  //-----------------------------------
+  // LIFECYCLE
+  //-----------------------------------
   componentDidMount() {
     s.getSettings().then(settings => {
       this.setState({ laborCost: settings.laborCost });
@@ -35,27 +43,22 @@ class Settings extends React.Component {
 
     this._updatePieceTypes();
     this._updateMaterialTypes();
+    this._updateVendors();
   }
 
-  _handleAddPieceType(event) {
+  //-----------------------------------
+  // PRIVATE METHODS
+  //-----------------------------------
+  _handleAddFormClick(form, event) {
     if (event) {
       event.preventDefault();
     }
 
+    let state = this.state;
     this.setState({
-      isMaterialFormOpen: false,
-      isPieceFormOpen: !this.state.isPieceFormOpen
-    });
-  }
-
-  _handleAddMaterialType(event) {
-    if (event) {
-      event.preventDefault();
-    }
-
-    this.setState({
-      isMaterialFormOpen: !this.state.isMaterialFormOpen,
-      isPieceFormOpen: false
+      isMaterialTypeFormOpen: form === 'materialType' && !state.isMaterialTypeFormOpen,
+      isPieceTypeFormOpen: form === 'pieceType' && !state.isPieceTypeFormOpen,
+      isVendorFormOpen: form === 'vendor' && !state.isVendorFormOpen
     });
   }
 
@@ -71,10 +74,6 @@ class Settings extends React.Component {
     this.setState({ laborCost: event.target.value });
   }
 
-  _handleMaterialTypeRemove() {
-    this.setState({ materialTypeRemoveMode: !this.state.materialTypeRemoveMode });
-  }
-
   _handleMaterialTypeSubmit(name, lowStock) {
     m.addMaterialType({
       name,
@@ -86,10 +85,6 @@ class Settings extends React.Component {
     });
   }
 
-  _handlePieceTypeRemove() {
-    this.setState({ pieceTypeRemoveMode: !this.state.pieceTypeRemoveMode });
-  }
-
   _handlePieceTypeSubmit(name, lowStock) {
     j.addPieceType({
       name,
@@ -98,6 +93,18 @@ class Settings extends React.Component {
       this._updatePieceTypes();
     }).catch(() => {
       sign.setError('Failed to add new jewelry type.');
+    });
+  }
+
+  _handleRemoveModeClick(entity) {
+    this.setState({ [`${entity}RemoveMode`]: !this.state[`${entity}RemoveMode`] });
+  }
+
+  _handleVendorSubmit(vendor) {
+    v.addVendor(vendor).then(() => {
+      this._updateVendors();
+    }).catch(() => {
+      sign.setError('Failed to add new vendor.');
     });
   }
 
@@ -139,6 +146,25 @@ class Settings extends React.Component {
       });
   }
 
+  _modifyVendor(vendorId, field, value) {
+    let vendors = this.state.vendors;
+
+    for (let i = 0; i < vendors.length; i++) {
+      if (vendors[i].id === vendorId) {
+        vendors[i][field] = value;
+        break;
+      }
+    }
+
+    this.setState({ vendors });
+
+    v.modifyVendor(vendorId, field, value)
+      .catch(() => {
+        sign.setError('Failed to modify vendor. Try refreshing.');
+        this.state.vendors = null;
+      });
+  }
+
   _removeMaterialType(type) {
     let confirmed = confirm(`Are you sure you want to remove ${type.name}?`);
 
@@ -163,6 +189,18 @@ class Settings extends React.Component {
     }
   }
 
+  _removeVendor(vendor) {
+    let confirmed = confirm(`Are you sure you want to remove ${vendor.company}?`);
+
+    if (confirmed) {
+      v.removeVendor(vendor.id).then(() => {
+        this._updateVendors();
+      }).catch(() => {
+        sign.setError('Failed to remove vendor.');
+      });
+    }
+  }
+
   _updateMaterialTypes() {
     m.getTypes().then(types => {
       this.setState({ materialTypes: types });
@@ -179,14 +217,19 @@ class Settings extends React.Component {
     });
   }
 
+  _updateVendors() {
+    v.getVendors().then(vendors => {
+      this.setState({ vendors });
+    }).catch(() => {
+      sign.setError('Failed to retrieve vendors. Try refreshing.');
+    });
+  }
+
+  //-----------------------------------
+  // RENDERING
+  //-----------------------------------
   render() {
     let state = this.state;
-
-    let removeClasses = {
-      'remove-button': true,
-      inner: true,
-      active: this.state.removeMode
-    };
 
     return (
       <div className="content settings">
@@ -197,9 +240,32 @@ class Settings extends React.Component {
             <button className="save" type="button" onClick={this._handleLaborCostButtonClick.bind(this)}>Save</button>
           </div>
 
-          <h2 className="with-button">Types of Jewelry</h2>
-          <button className="add-button inner" onClick={this._handleAddPieceType.bind(this)}>+</button>
-          <button className={classnames(removeClasses)} onClick={this._handlePieceTypeRemove.bind(this)}>--</button>
+          <h2 className="with-button" ref={h2 => { this._vendorTitle = h2; }}>Vendors</h2>
+          <button className="add-button inner" onClick={this._handleAddFormClick.bind(this, 'vendor')}>+</button>
+          <button className="remove-button inner" onClick={this._handleRemoveModeClick.bind(this, 'vendor')}>--</button>
+          <Table classes="inner" data={state.vendors} uniqueId="company">
+            <Column header="Company" cell={vendor => (
+                <Cell modifyField={this._modifyVendor.bind(this, vendor.id, 'company')}>{vendor.company}</Cell>
+              )}
+            />
+            <Column header="Address" cell={vendor => (
+                <Cell modifyField={this._modifyVendor.bind(this, vendor.id, 'address')}>{vendor.address}</Cell>
+              )}
+            />
+            <Column header="Phone" cell={vendor => (
+                <Cell modifyField={this._modifyVendor.bind(this, vendor.id, 'phone')}>{vendor.phone}</Cell>
+              )}
+            />
+            <Column header="Email" cell={vendor => (
+                <Cell modifyField={this._modifyVendor.bind(this, vendor.id, 'email')}>{vendor.email}</Cell>
+              )}
+            />
+            {this._renderVendorRemoveColumn()}
+          </Table>
+
+          <h2 className="with-button" ref={h2 => { this._pieceTypeTitle = h2; }}>Types of Jewelry</h2>
+          <button className="add-button inner" onClick={this._handleAddFormClick.bind(this, 'pieceType')}>+</button>
+          <button className="remove-button inner" onClick={this._handleRemoveModeClick.bind(this, 'pieceType')}>--</button>
           <Table classes="inner" data={state.pieceTypes} uniqueId="name">
             <Column header="Type" cell={type => (
                 <Cell modifyField={this._modifyPieceType.bind(this, type.id, 'name')}>{type.name}</Cell>
@@ -212,9 +278,9 @@ class Settings extends React.Component {
             {this._renderPieceTypeRemoveColumn()}
           </Table>
 
-          <h2 className="with-button">Types of Materials</h2>
-          <button className="add-button inner" onClick={this._handleAddMaterialType.bind(this)}>+</button>
-          <button className={classnames(removeClasses)} onClick={this._handleMaterialTypeRemove.bind(this)}>--</button>
+          <h2 className="with-button" ref={h2 => { this._materialTypeTitle = h2; }}>Types of Materials</h2>
+          <button className="add-button inner" onClick={this._handleAddFormClick.bind(this, 'materialType')}>+</button>
+          <button className="remove-button inner" onClick={this._handleRemoveModeClick.bind(this, 'materialType')}>--</button>
           <Table classes="inner" data={state.materialTypes} uniqueId="name">
             <Column header="Type" cell={type => (
                 <Cell modifyField={this._modifyMaterialType.bind(this, type.id, 'name')}>{type.name}</Cell>
@@ -232,17 +298,19 @@ class Settings extends React.Component {
           </Table>
         </div>
 
-        {this._renderPieceForm()}
-        {this._renderMaterialForm()}
+        {this._renderVendorForm()}
+        {this._renderPieceTypeForm()}
+        {this._renderMaterialTypeForm()}
       </div>
     );
   }
 
-  _renderPieceForm() {
-    if (this.state.isPieceFormOpen) {
+  _renderPieceTypeForm() {
+    if (this.state.isPieceTypeFormOpen) {
       return (
-        <AddTypeForm cancel={this._handleAddPieceType.bind(this)}
+        <AddTypeForm cancel={this._handleAddFormClick.bind(this, 'pieceType')}
           submit={this._handlePieceTypeSubmit.bind(this)}
+          top={h.findPopupTopValue(this._pieceTypeTitle)}
           type="piece"
         />
       );
@@ -260,11 +328,12 @@ class Settings extends React.Component {
     }
   }
 
-  _renderMaterialForm() {
-    if (this.state.isMaterialFormOpen) {
+  _renderMaterialTypeForm() {
+    if (this.state.isMaterialTypeFormOpen) {
       return (
-        <AddTypeForm cancel={this._handleAddMaterialType.bind(this)}
+        <AddTypeForm cancel={this._handleAddFormClick.bind(this, 'materialType')}
           submit={this._handleMaterialTypeSubmit.bind(this)}
+          top={h.findPopupTopValue(this._materialTypeTitle)}
           type="material"
         />
       );
@@ -276,6 +345,28 @@ class Settings extends React.Component {
       return (
         <Column header="Remove" cell={materialType => (
             <Cell className="remove"><div onClick={this._removeMaterialType.bind(this, materialType)}>X</div></Cell>
+          )}
+        />
+      );
+    }
+  }
+
+  _renderVendorForm() {
+    if (this.state.isVendorFormOpen) {
+      return (
+        <AddVendorForm cancel={this._handleAddFormClick.bind(this, 'vendor')}
+          submit={this._handleVendorSubmit.bind(this)}
+          top={h.findPopupTopValue(this._vendorTitle)}
+        />
+      );
+    }
+  }
+
+  _renderVendorRemoveColumn() {
+    if (this.state.vendorRemoveMode) {
+      return (
+        <Column header="Remove" cell={vendor => (
+            <Cell className="remove"><div onClick={this._removeVendor.bind(this, vendor)}>X</div></Cell>
           )}
         />
       );
