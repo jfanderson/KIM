@@ -62,7 +62,7 @@ class Cell extends React.Component {
     } else {
       this.setState({
         editing: true,
-        value: props.children
+        value: props.children || ''
       });
     }
 
