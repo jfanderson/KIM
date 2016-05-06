@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import _ from 'underscore';
 
 import m from '../services/materialService.js';
+import v from '../services/vendorService.js';
 import sign from '../services/sign.js';
 import h from '../helpers.js';
 
@@ -20,19 +21,25 @@ class Materials extends React.Component {
       isFormOpen: false,
       materials: [],
       removeMode: false, // If true, display removal column in table
-      types: []
+      types: [],
+      vendors: []
     };
   }
 
   componentDidMount() {
     this._updateMaterials();
 
-    m.getTypes()
-      .then(types => {
-        this.setState({ types });
-      }).catch(() => {
-        sign.setError('Failed to retrieve material types. Try refreshing.');
-      });
+    m.getTypes().then(types => {
+      this.setState({ types });
+    }).catch(() => {
+      sign.setError('Failed to retrieve material types. Try refreshing.');
+    });
+
+    v.getVendors().then(vendors => {
+      this.setState({ vendors });
+    }).catch(() => {
+      sign.setError('Failed to retrieve vendors. Try refreshing.');
+    });
   }
 
   _handleAddClick(event) {
@@ -66,6 +73,8 @@ class Materials extends React.Component {
       if (materials[i].id === materialId) {
         if (field === 'type') {
           materials[i].typeId = h.findTypeId(state.types, value);
+        } else if (field === 'vendor') {
+          materials[i].vendorId = h.findVendorId(state.vendors, value);
         } else {
           materials[i][field] = value;
         }
@@ -143,11 +152,18 @@ class Materials extends React.Component {
                 />
               )}
             />
+            <Column header="Vendor" cell={material => (
+                <SelectCell modifyField={this._modifyField.bind(this, material.id, 'vendor')}
+                  options={state.vendors.map(vendor => vendor.company)}
+                  defaultValue={h.findVendorCompany(state.vendors, material.vendorId)}
+                />
+              )}
+            />
             <Column header="Cost / Unit" cell={material => {
               let type = _.findWhere(state.types, { id: material.typeId });
 
               if (!type) {
-                return null;
+                return <Cell />;
               }
 
               return (
