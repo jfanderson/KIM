@@ -9,6 +9,8 @@ let helpers = {
   findPopupTopValue,
   findTypeId,
   findTypeName,
+  findVendorId,
+  findVendorCompany,
   parseJSON,
   headers: {
     Accept: 'application/json',
@@ -65,6 +67,16 @@ function findTypeId(types, name) {
 function findTypeName(types, id) {
   let type = _.findWhere(types, { id });
   return type && type.name;
+}
+
+function findVendorId(vendors, company) {
+  let vendor = _.findWhere(vendors, { company });
+  return vendor && vendor.id;
+}
+
+function findVendorCompany(vendors, id) {
+  let vendor = _.findWhere(vendors, { id });
+  return vendor && vendor.company;
 }
 
 function parseJSON(res) {
