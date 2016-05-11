@@ -39,7 +39,8 @@ describe('Type Tests', function() {
         .post('/a/types/materials')
         .send({ type: {
             name: 'fakeType',
-            lowStock: 10
+            lowStock: 10,
+            unit: 'fakeUnit'
           }
         })
         .expect(201)
@@ -101,15 +102,15 @@ describe('Type Tests', function() {
       request(app)
         .put('/a/types/materials/' + materialTypeId)
         .send({
-          lowStock: 2
+          unit: 'newFakeUnit'
         })
         .expect(200)
         .expect(function(res) {
-          expect(res.body.type).to.have.property('lowStock', 2);
+          expect(res.body.type).to.have.property('unit', 'newFakeUnit');
         })
         .end(function() {
           MaterialType.findOne({ where: { name: 'fakeType' }}).then(function(type) {
-            expect(type.lowStock).to.equal(2);
+            expect(type.unit).to.equal('newFakeUnit');
             done();
           });
         });

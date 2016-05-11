@@ -1,16 +1,16 @@
-let models = require('./index.js');
-let Material = models.Material;
-let Piece = models.Piece;
-let MaterialType = models.MaterialType;
-let PieceType = models.PieceType;
-let Vendor = models.Vendor;
-let Settings = models.Settings;
+var models = require('./index.js');
+var Material = models.Material;
+var Piece = models.Piece;
+var MaterialType = models.MaterialType;
+var PieceType = models.PieceType;
+var Vendor = models.Vendor;
+var Settings = models.Settings;
 
-let settings = {
+var settings = {
   laborCost: 15
 };
 
-let materialTypes = [
+var materialTypes = [
   {
     name: 'none'
   },
@@ -34,7 +34,7 @@ let materialTypes = [
   }
 ];
 
-let vendors = [
+var vendors = [
   {
     company: 'Yakutum',
     address: '111 8th St',
@@ -49,7 +49,7 @@ let vendors = [
   }
 ];
 
-let materials = [
+var materials = [
   {
     item: 'F01',
     description: '8mm heishi disc',
@@ -82,7 +82,7 @@ let materials = [
   }
 ];
 
-let pieceTypes = [
+var pieceTypes = [
   {
     name: 'none'
   },
@@ -108,7 +108,7 @@ let pieceTypes = [
   }
 ];
 
-let pieces = [
+var pieces = [
   {
     item: 'N001',
     description: 'Valor Necklace',

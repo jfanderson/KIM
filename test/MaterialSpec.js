@@ -6,7 +6,6 @@ var app = require('../server/app.js');
 var models = require('../server/db/index.js');
 var Material = models.Material;
 var MaterialType = models.MaterialType;
-var MaterialUnit = models.MaterialUnit;
 var Vendor = models.Vendor;
 
 describe('Material Tests', function() {
@@ -16,13 +15,8 @@ describe('Material Tests', function() {
     var materialId2;
 
     var newTypes = [
-      { name: 'fakeType', lowStock: 5 },
+      { name: 'fakeType', lowStock: 5, unit: 'fakeUnit' },
       { name: 'fakeType2' }
-    ];
-
-    var newUnits = [
-      { unit: 'fakeUnit'},
-      { unit: 'fakeUnit2'}
     ];
 
     var newVendors = [
@@ -31,8 +25,6 @@ describe('Material Tests', function() {
     ];
 
     MaterialType.bulkCreate(newTypes).then(function() {
-      return MaterialUnit.bulkCreate(newUnits);
-    }).then(function() {
       return Vendor.bulkCreate(newVendors);
     }).then(function() {
       done();
@@ -46,14 +38,6 @@ describe('Material Tests', function() {
           $in: ['fakeType', 'fakeType2']
         }
       }
-    }).then(function() {
-      return MaterialUnit.destroy({
-        where: {
-          unit: {
-            $in: ['fakeUnit', 'fakeUnit2']
-          }
-        }
-      });
     }).then(function() {
       return Vendor.destroy({
         where: {
@@ -142,14 +126,13 @@ describe('Material Tests', function() {
         });
     });
 
-    it('should associate a new material with a type, unit, and vendor', function(done) {
+    it('should associate a new material with a type, and vendor', function(done) {
       request(app)
         .post('/a/materials')
         .send({ material: {
             item: 'Z001',
             description: 'another fake material',
             type: 'fakeType',
-            unit: 'fakeUnit',
             vendor: 'fakeVendor'
           }
         })
@@ -158,10 +141,7 @@ describe('Material Tests', function() {
 
           MaterialType.findById(res.body.material.typeId).then(function(type) {
             expect(type.name).to.equal('fakeType');
-
-            return MaterialUnit.findById(res.body.material.unitId);
-          }).then(function(unit) {
-            expect(unit.unit).to.equal('fakeUnit');
+            expect(type.unit).to.equal('fakeUnit');
 
             return Vendor.findById(res.body.material.vendorId);
           }).then(function(vendor) {
@@ -179,12 +159,11 @@ describe('Material Tests', function() {
       });
     });
 
-    it('should modify a materials type, unit, and vendor', function(done) {
+    it('should modify a materials type, and vendor', function(done) {
       request(app)
         .put('/a/materials/' + materialId2)
         .send({
           type: 'fakeType2',
-          unit: 'fakeUnit2',
           vendor: 'fakeVendor2',
           description: 'new description'
         })
@@ -194,10 +173,6 @@ describe('Material Tests', function() {
 
           MaterialType.findById(res.body.material.typeId).then(function(type) {
             expect(type.name).to.equal('fakeType2');
-
-            return MaterialUnit.findById(res.body.material.unitId);
-          }).then(function(unit) {
-            expect(unit.unit).to.equal('fakeUnit2');
 
             return Vendor.findById(res.body.material.vendorId);
           }).then(function(vendor) {
