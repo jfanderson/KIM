@@ -1,6 +1,7 @@
 #sign {
-  position: absolute;
+  position: fixed;
   left: calc(50% - 200px);
+  top: 0;
   width: 400px;
   padding-top: .1rem;
   padding-bottom: .2rem;
