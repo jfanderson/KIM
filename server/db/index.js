@@ -1,18 +1,17 @@
 /* eslint-disable new-cap */
-
 var Sequelize = require('sequelize');
 
 /* CONNECTION */
-
-var dbURL = process.env.DATABASE_URL;
-
 var orm;
-if (dbURL) {
-  orm = new Sequelize(dbURL);
+if (process.argv[2] === 'prod') {
+  orm = new Sequelize('kim', 'root', '', {
+    dialect: 'sqlite',
+    storage: '/home/jfa/kim_db/kim.sq3'
+  });
 } else {
   orm = new Sequelize('kim', 'root', '', {
-    host: 'localhost',
-    dialect: 'mysql',
+    dialect: 'sqlite',
+    storage: '/Users/Janderson/Documents/Projects/kim_db/kim.sq3',
     logging: false
   });
 }
