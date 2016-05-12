@@ -1,9 +1,10 @@
 /* eslint-disable new-cap */
+/* global NODE_ENV */
 var Sequelize = require('sequelize');
 
 /* CONNECTION */
 var orm;
-if (process.argv[2] === 'prod') {
+if (NODE_ENV === 'production') {
   orm = new Sequelize('kim', 'root', '', {
     dialect: 'sqlite',
     storage: '/home/jfa/kim_db/kim.sq3'
