@@ -4,7 +4,7 @@ var Sequelize = require('sequelize');
 
 /* CONNECTION */
 var orm;
-if (NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
   orm = new Sequelize('kim', 'root', '', {
     dialect: 'sqlite',
     storage: '/home/jfa/kim_db/kim.sq3'
