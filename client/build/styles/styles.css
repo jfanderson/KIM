@@ -1,0 +1,420 @@
+*,
+*::before,
+*::after {
+  box-sizing: inherit; }
+
+html {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+  font-size: 1rem;
+  background-color: #fcfcfc; }
+
+body {
+  margin: 0; }
+
+h1 {
+  text-align: center; }
+
+h2 {
+  margin-top: .75rem;
+  margin-bottom: .75rem;
+  color: #7c7c7c;
+  font-size: 0.875rem;
+  letter-spacing: 1px;
+  text-transform: uppercase; }
+
+select {
+  width: 100%;
+  background-color: inherit;
+  border: none;
+  cursor: pointer;
+  text-align-last: center; }
+  select:active, select:focus {
+    outline: none; }
+
+.content {
+  width: 1240px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2rem; }
+
+.container-70 {
+  display: inline-block;
+  width: 70%;
+  margin-top: 1rem;
+  vertical-align: top; }
+
+.container-50 {
+  display: inline-block;
+  width: 50%;
+  margin-top: 1rem;
+  vertical-align: top; }
+
+.container-30 {
+  display: inline-block;
+  width: 30%;
+  margin-top: 1rem;
+  vertical-align: top; }
+
+button:focus {
+  outline: none; }
+
+button {
+  padding-top: .4rem;
+  padding-bottom: .4rem;
+  font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  background-color: inherit;
+  border: none;
+  cursor: pointer;
+  transition: color .1s;
+  transition: background-color .1s; }
+
+.add-button,
+.remove-button {
+  float: right;
+  position: relative;
+  top: 5px;
+  padding: 0;
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: .9rem;
+  background-color: inherit;
+  border: none;
+  color: white; }
+  .add-button:hover,
+  .remove-button:hover {
+    color: #7c7c7c; }
+  .add-button.inner,
+  .remove-button.inner {
+    top: 16px;
+    color: #7c7c7c; }
+    .add-button.inner:hover,
+    .remove-button.inner:hover {
+      color: #1a1a1a; }
+
+.remove-button {
+  top: 0;
+  margin-right: .75rem; }
+  .remove-button.active {
+    color: #7c7c7c; }
+  .remove-button.inner {
+    top: 11px; }
+    .remove-button.inner.active {
+      color: #1a1a1a; }
+
+.convert,
+.duplicate {
+  width: 100%;
+  margin-top: 5rem;
+  margin-bottom: .5rem;
+  background-color: #ddd;
+  color: #1a1a1a; }
+  .convert:hover,
+  .duplicate:hover {
+    background-color: #b7b7b7; }
+
+.cancel {
+  float: right;
+  width: 110px;
+  background-color: #ddd; }
+  .cancel:hover {
+    background-color: #b7b7b7; }
+
+.cancel-form {
+  width: 110px;
+  background-color: #b7b7b7; }
+  .cancel-form:hover {
+    background-color: #7c7c7c; }
+
+.save {
+  width: 110px;
+  background-color: #70b348;
+  color: #fcfcfc; }
+  .save:hover {
+    background-color: #5e973d; }
+
+.logo-wrapper {
+  text-align: center;
+  padding-top: 2rem;
+  padding-bottom: 1.5rem;
+  background-color: #ddd; }
+
+img.logo {
+  width: 200px; }
+
+.navbar {
+  background-color: #ddd; }
+
+.navbar .tabs {
+  width: 1240px;
+  margin-left: auto;
+  margin-right: auto; }
+
+.navlink {
+  display: inline-block;
+  width: 200px;
+  margin-right: .5rem;
+  padding-top: .35rem;
+  padding-bottom: .35rem;
+  font-size: 0.875rem;
+  letter-spacing: 1px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  background-color: #7c7c7c;
+  color: #fcfcfc;
+  transition: background-color .3s; }
+
+.navlink:last-child {
+  margin-right: 0; }
+
+.navlink.active {
+  background-color: #1a1a1a; }
+
+.filters-container {
+  width: 100%;
+  margin-top: .3rem;
+  padding: .25rem 0;
+  background-color: #b7b7b7; }
+
+.filters {
+  width: 1240px;
+  margin: auto;
+  vertical-align: middle; }
+
+.filters span {
+  display: inline-block;
+  margin-right: 1.5rem;
+  padding-bottom: .25rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #fcfcfc;
+  cursor: default;
+  transition: color .1s;
+  vertical-align: middle; }
+
+.filters span:hover {
+  color: #7c7c7c;
+  cursor: pointer; }
+
+table {
+  width: 100%;
+  margin: auto;
+  font-family: Garamond, Baskerville, "Baskerville Old Face", "Hoefler Text", "Times New Roman", serif;
+  text-align: center;
+  border-collapse: collapse;
+  table-layout: fixed; }
+
+tr:nth-child(even) {
+  background-color: #ddd; }
+
+th {
+  padding-top: 1rem;
+  padding-bottom: .5rem;
+  font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+  font-size: 0.75rem;
+  text-transform: uppercase; }
+
+td {
+  padding-top: .3rem;
+  padding-bottom: .3rem;
+  font-size: 0.875rem; }
+
+th,
+td {
+  border-right: 1px solid #7c7c7c; }
+  th:last-child,
+  td:last-child {
+    border: none; }
+
+td.editable,
+td.remove {
+  cursor: pointer; }
+  td.editable:hover,
+  td.remove:hover {
+    background-color: #b7b7b7; }
+
+td a {
+  display: block;
+  height: 100%;
+  width: 100%;
+  text-decoration: none;
+  color: #1a1a1a; }
+
+.extra-wide {
+  width: 300px; }
+
+table.row-select .table-row {
+  cursor: pointer; }
+  table.row-select .table-row:hover {
+    background-color: #b7b7b7; }
+
+table.row-select td {
+  padding-top: 0;
+  padding-bottom: 0; }
+
+table.row-select td a {
+  padding-top: .3rem;
+  padding-bottom: .3rem; }
+
+table.single th {
+  font-weight: normal; }
+
+table.single th,
+table.single td {
+  border: none; }
+
+table.single-cell {
+  width: 110px;
+  margin-bottom: .5rem;
+  text-align: center;
+  background-color: #ddd;
+  color: #1a1a1a; }
+
+table.single-cell td {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+  font-size: 0.75rem; }
+  table.single-cell td.editing {
+    height: 27px; }
+
+table.inner th {
+  padding-top: .4rem;
+  padding-bottom: .4rem;
+  color: #fcfcfc;
+  font-weight: normal;
+  background-color: #7c7c7c; }
+
+table.inner .table-row {
+  cursor: default; }
+
+table td.editing {
+  padding: 0; }
+
+td.editing input {
+  display: block;
+  width: 100%;
+  border: 1px solid gray;
+  line-height: 18px;
+  text-align: center; }
+  td.editing input:focus {
+    outline: none; }
+
+#sign {
+  position: fixed;
+  left: calc(50% - 200px);
+  top: 0;
+  width: 400px;
+  padding-top: .1rem;
+  padding-bottom: .2rem;
+  background-color: #7c7c7c;
+  border-radius: 0 0 3px 3px;
+  color: #fcfcfc;
+  font-size: 0.875rem;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: opacity 0.5s, visibility 0.5s;
+  -moz-transition: opacity 0.5s, visibility 0.5s;
+  transition: opacity 0.5s, visibility 0.5s; }
+  #sign.active {
+    opacity: 1;
+    visibility: visible; }
+  #sign.error {
+    background-color: #9d0000; }
+
+.popup {
+  position: absolute;
+  z-index: 10;
+  top: 250px;
+  left: 0;
+  right: 0;
+  width: 500px;
+  margin: auto;
+  text-align: center;
+  background-color: #ddd;
+  border: 1px solid #7c7c7c; }
+
+.popup input {
+  display: block;
+  width: 80%;
+  margin: 24px auto;
+  padding-left: 8px;
+  font-size: 0.75rem;
+  line-height: 1.5rem;
+  border: none; }
+  .popup input:focus, .popup input:active {
+    outline: none; }
+
+.popup button {
+  float: none;
+  display: inline-block;
+  margin-right: 16px;
+  margin-bottom: 16px; }
+
+.jewelry-product h2 {
+  display: inline-block; }
+
+.jewelry-product .container-30 button {
+  display: block; }
+
+.jewelry-product .labels,
+.jewelry-product .values {
+  display: inline-block;
+  vertical-align: top; }
+
+.jewelry-product .labels {
+  margin: 2.7rem 1rem 0 2rem; }
+
+.jewelry-product .values {
+  margin-top: 2.7rem; }
+
+.jewelry-product .labels div {
+  width: 213px;
+  margin-bottom: .5rem;
+  padding: 6px 0 6px 8px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  background-color: #7c7c7c;
+  color: #fcfcfc; }
+
+.jewelry-product .values div {
+  width: 110px;
+  margin-bottom: .5rem;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-size: 0.75rem;
+  text-align: center;
+  background-color: #ddd;
+  color: #1a1a1a; }
+
+.jewelry-product .labels .total,
+.jewelry-product .values .total {
+  margin-top: 2rem;
+  font-weight: bold;
+  background-color: #1a1a1a;
+  color: #fcfcfc; }
+
+.jewelry-product .popup {
+  top: 260px; }
+
+.settings h2 {
+  margin-top: 2rem; }
+  .settings h2.with-button {
+    display: inline-block; }
+
+.settings .add-button {
+  top: 38px; }
+
+.settings .remove-button {
+  top: 33px; }
+
+.settings .labor-cost {
+  width: 110px;
+  padding: .4rem;
+  margin-right: 1rem; }

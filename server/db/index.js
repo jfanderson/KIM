@@ -1,5 +1,4 @@
 /* eslint-disable new-cap */
-/* global NODE_ENV */
 var Sequelize = require('sequelize');
 
 /* CONNECTION */

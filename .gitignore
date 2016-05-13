@@ -1,4 +1,4 @@
 .DS_Store
 .sass-cache
-client/build/
+client/build/main.js
 node_modules
