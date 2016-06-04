@@ -31,6 +31,10 @@ var materialTypes = [
   {
     name: 'finding',
     lowStock: 10
+  },
+  {
+    name: 'other',
+    lowStock: 5
   }
 ];
 
