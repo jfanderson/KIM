@@ -23,6 +23,9 @@ class JewelryProducts extends React.Component {
     };
   }
 
+  //-----------------------------------
+  // LIFECYCLE METHODS
+  //-----------------------------------
   componentDidMount() {
     this._updatePieces();
 
@@ -34,52 +37,9 @@ class JewelryProducts extends React.Component {
       });
   }
 
-  _handleAddClick(event) {
-    if (event) {
-      event.preventDefault();
-    }
-
-    this.setState({ isFormOpen: !this.state.isFormOpen });
-  }
-
-  _handleFormSubmit(item, description) {
-    j.addPiece({
-      item,
-      description
-    }).then(() => {
-      this._updatePieces();
-    }).catch(() => {
-      sign.setError('Failed to add jewelry piece. Try refreshing.');
-    });
-
-    // TODO: link to piece page
-  }
-
-  _handleRemove() {
-    this.setState({ removeMode: !this.state.removeMode });
-  }
-
-  _removePiece(piece) {
-    let confirmed = confirm(`Are you sure you want to remove ${piece.description}?`);
-
-    if (confirmed) {
-      j.removePiece(piece.id).then(() => {
-        this._updatePieces();
-      }).catch(() => {
-        sign.setError('Failed to remove piece.');
-      });
-    }
-  }
-
-  _updatePieces() {
-    j.getAllPieces()
-      .then(pieces => this.setState({ pieces }))
-      .catch(() => {
-        sign.setError('Failed to retrieve jewelry pieces. Try refreshing.');
-        this.setState({ pieces: [] });
-      });
-  }
-
+  //-----------------------------------
+  // RENDERING
+  //-----------------------------------
   render() {
     let types = this.state.types;
 
@@ -165,6 +125,55 @@ class JewelryProducts extends React.Component {
         />
       );
     }
+  }
+
+  //-----------------------------------
+  // PRIVATE METHODS
+  //-----------------------------------
+  _handleAddClick(event) {
+    if (event) {
+      event.preventDefault();
+    }
+
+    this.setState({ isFormOpen: !this.state.isFormOpen });
+  }
+
+  _handleFormSubmit(item, description) {
+    j.addPiece({
+      item,
+      description
+    }).then(() => {
+      this._updatePieces();
+    }).catch(() => {
+      sign.setError('Failed to add jewelry piece. Try refreshing.');
+    });
+
+    // TODO: link to piece page
+  }
+
+  _handleRemove() {
+    this.setState({ removeMode: !this.state.removeMode });
+  }
+
+  _removePiece(piece) {
+    let confirmed = confirm(`Are you sure you want to remove ${piece.description}?`);
+
+    if (confirmed) {
+      j.removePiece(piece.id).then(() => {
+        this._updatePieces();
+      }).catch(() => {
+        sign.setError('Failed to remove piece.');
+      });
+    }
+  }
+
+  _updatePieces() {
+    j.getAllPieces()
+      .then(pieces => this.setState({ pieces }))
+      .catch(() => {
+        sign.setError('Failed to retrieve jewelry pieces. Try refreshing.');
+        this.setState({ pieces: [] });
+      });
   }
 }
 

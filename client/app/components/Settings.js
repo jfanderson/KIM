@@ -47,6 +47,154 @@ class Settings extends React.Component {
   }
 
   //-----------------------------------
+  // RENDERING
+  //-----------------------------------
+  render() {
+    let state = this.state;
+
+    return (
+      <div className="content settings">
+        <div className="container-50">
+          <div>
+            <h2>Labor Cost</h2>
+            <input className="labor-cost" type="text" value={state.laborCost} onChange={this._handleLaborCostChange.bind(this)} />
+            <button className="save" type="button" onClick={this._handleLaborCostButtonClick.bind(this)}>Save</button>
+          </div>
+
+          <h2 className="with-button" ref={h2 => { this._vendorTitle = h2; }}>Vendors</h2>
+          <button className="add-button inner" onClick={this._handleAddFormClick.bind(this, 'vendor')}>+</button>
+          <button className="remove-button inner" onClick={this._handleRemoveModeClick.bind(this, 'vendor')}>--</button>
+          <Table classes="inner" data={state.vendors} uniqueId="company">
+            <Column header="Company" cell={vendor => (
+                <Cell modifyField={this._modifyVendor.bind(this, vendor.id, 'company')}>{vendor.company}</Cell>
+              )}
+            />
+            <Column header="Address" cell={vendor => (
+                <Cell modifyField={this._modifyVendor.bind(this, vendor.id, 'address')}>{vendor.address}</Cell>
+              )}
+            />
+            <Column header="Phone" cell={vendor => (
+                <Cell modifyField={this._modifyVendor.bind(this, vendor.id, 'phone')}>{vendor.phone}</Cell>
+              )}
+            />
+            <Column header="Email" cell={vendor => (
+                <Cell modifyField={this._modifyVendor.bind(this, vendor.id, 'email')}>{vendor.email}</Cell>
+              )}
+            />
+            {this._renderVendorRemoveColumn()}
+          </Table>
+
+          <h2 className="with-button" ref={h2 => { this._pieceTypeTitle = h2; }}>Types of Jewelry</h2>
+          <button className="add-button inner" onClick={this._handleAddFormClick.bind(this, 'pieceType')}>+</button>
+          <button className="remove-button inner" onClick={this._handleRemoveModeClick.bind(this, 'pieceType')}>--</button>
+          <Table classes="inner" data={state.pieceTypes} uniqueId="name">
+            <Column header="Type" cell={type => (
+                <Cell modifyField={this._modifyPieceType.bind(this, type.id, 'name')}>{type.name}</Cell>
+              )}
+            />
+            <Column header="Low Stock" cell={type => (
+                <Cell modifyField={this._modifyPieceType.bind(this, type.id, 'lowStock')} integer>{type.lowStock}</Cell>
+              )}
+            />
+            {this._renderPieceTypeRemoveColumn()}
+          </Table>
+
+          <h2 className="with-button" ref={h2 => { this._materialTypeTitle = h2; }}>Types of Materials</h2>
+          <button className="add-button inner" onClick={this._handleAddFormClick.bind(this, 'materialType')}>+</button>
+          <button className="remove-button inner" onClick={this._handleRemoveModeClick.bind(this, 'materialType')}>--</button>
+          <Table classes="inner" data={state.materialTypes} uniqueId="name">
+            <Column header="Type" cell={type => (
+                <Cell modifyField={this._modifyMaterialType.bind(this, type.id, 'name')}>{type.name}</Cell>
+              )}
+            />
+            <Column header="Low Stock" cell={type => (
+                <Cell modifyField={this._modifyMaterialType.bind(this, type.id, 'lowStock')} integer>{type.lowStock}</Cell>
+              )}
+            />
+            <Column header="Unit" cell={type => (
+                <Cell modifyField={this._modifyMaterialType.bind(this, type.id, 'unit')}>{type.unit}</Cell>
+              )}
+            />
+            {this._renderMaterialTypeRemoveColumn()}
+          </Table>
+        </div>
+
+        {this._renderVendorForm()}
+        {this._renderPieceTypeForm()}
+        {this._renderMaterialTypeForm()}
+      </div>
+    );
+  }
+
+  _renderPieceTypeForm() {
+    if (this.state.isPieceTypeFormOpen) {
+      return (
+        <AddTypeForm cancel={this._handleAddFormClick.bind(this, 'pieceType')}
+          submit={this._handlePieceTypeSubmit.bind(this)}
+          top={h.findPopupTopValue(this._pieceTypeTitle)}
+          type="piece"
+        />
+      );
+    }
+  }
+
+  _renderPieceTypeRemoveColumn() {
+    if (this.state.pieceTypeRemoveMode) {
+      return (
+        <Column header="Remove" cell={pieceType => (
+            <Cell className="remove"><div onClick={this._removePieceType.bind(this, pieceType)}>X</div></Cell>
+          )}
+        />
+      );
+    }
+  }
+
+  _renderMaterialTypeForm() {
+    if (this.state.isMaterialTypeFormOpen) {
+      return (
+        <AddTypeForm cancel={this._handleAddFormClick.bind(this, 'materialType')}
+          submit={this._handleMaterialTypeSubmit.bind(this)}
+          top={h.findPopupTopValue(this._materialTypeTitle)}
+          type="material"
+        />
+      );
+    }
+  }
+
+  _renderMaterialTypeRemoveColumn() {
+    if (this.state.materialTypeRemoveMode) {
+      return (
+        <Column header="Remove" cell={materialType => (
+            <Cell className="remove"><div onClick={this._removeMaterialType.bind(this, materialType)}>X</div></Cell>
+          )}
+        />
+      );
+    }
+  }
+
+  _renderVendorForm() {
+    if (this.state.isVendorFormOpen) {
+      return (
+        <AddVendorForm cancel={this._handleAddFormClick.bind(this, 'vendor')}
+          submit={this._handleVendorSubmit.bind(this)}
+          top={h.findPopupTopValue(this._vendorTitle)}
+        />
+      );
+    }
+  }
+
+  _renderVendorRemoveColumn() {
+    if (this.state.vendorRemoveMode) {
+      return (
+        <Column header="Remove" cell={vendor => (
+            <Cell className="remove"><div onClick={this._removeVendor.bind(this, vendor)}>X</div></Cell>
+          )}
+        />
+      );
+    }
+  }
+
+  //-----------------------------------
   // PRIVATE METHODS
   //-----------------------------------
   _handleAddFormClick(form, event) {
@@ -223,154 +371,6 @@ class Settings extends React.Component {
     }).catch(() => {
       sign.setError('Failed to retrieve vendors. Try refreshing.');
     });
-  }
-
-  //-----------------------------------
-  // RENDERING
-  //-----------------------------------
-  render() {
-    let state = this.state;
-
-    return (
-      <div className="content settings">
-        <div className="container-50">
-          <div>
-            <h2>Labor Cost</h2>
-            <input className="labor-cost" type="text" value={state.laborCost} onChange={this._handleLaborCostChange.bind(this)} />
-            <button className="save" type="button" onClick={this._handleLaborCostButtonClick.bind(this)}>Save</button>
-          </div>
-
-          <h2 className="with-button" ref={h2 => { this._vendorTitle = h2; }}>Vendors</h2>
-          <button className="add-button inner" onClick={this._handleAddFormClick.bind(this, 'vendor')}>+</button>
-          <button className="remove-button inner" onClick={this._handleRemoveModeClick.bind(this, 'vendor')}>--</button>
-          <Table classes="inner" data={state.vendors} uniqueId="company">
-            <Column header="Company" cell={vendor => (
-                <Cell modifyField={this._modifyVendor.bind(this, vendor.id, 'company')}>{vendor.company}</Cell>
-              )}
-            />
-            <Column header="Address" cell={vendor => (
-                <Cell modifyField={this._modifyVendor.bind(this, vendor.id, 'address')}>{vendor.address}</Cell>
-              )}
-            />
-            <Column header="Phone" cell={vendor => (
-                <Cell modifyField={this._modifyVendor.bind(this, vendor.id, 'phone')}>{vendor.phone}</Cell>
-              )}
-            />
-            <Column header="Email" cell={vendor => (
-                <Cell modifyField={this._modifyVendor.bind(this, vendor.id, 'email')}>{vendor.email}</Cell>
-              )}
-            />
-            {this._renderVendorRemoveColumn()}
-          </Table>
-
-          <h2 className="with-button" ref={h2 => { this._pieceTypeTitle = h2; }}>Types of Jewelry</h2>
-          <button className="add-button inner" onClick={this._handleAddFormClick.bind(this, 'pieceType')}>+</button>
-          <button className="remove-button inner" onClick={this._handleRemoveModeClick.bind(this, 'pieceType')}>--</button>
-          <Table classes="inner" data={state.pieceTypes} uniqueId="name">
-            <Column header="Type" cell={type => (
-                <Cell modifyField={this._modifyPieceType.bind(this, type.id, 'name')}>{type.name}</Cell>
-              )}
-            />
-            <Column header="Low Stock" cell={type => (
-                <Cell modifyField={this._modifyPieceType.bind(this, type.id, 'lowStock')} integer>{type.lowStock}</Cell>
-              )}
-            />
-            {this._renderPieceTypeRemoveColumn()}
-          </Table>
-
-          <h2 className="with-button" ref={h2 => { this._materialTypeTitle = h2; }}>Types of Materials</h2>
-          <button className="add-button inner" onClick={this._handleAddFormClick.bind(this, 'materialType')}>+</button>
-          <button className="remove-button inner" onClick={this._handleRemoveModeClick.bind(this, 'materialType')}>--</button>
-          <Table classes="inner" data={state.materialTypes} uniqueId="name">
-            <Column header="Type" cell={type => (
-                <Cell modifyField={this._modifyMaterialType.bind(this, type.id, 'name')}>{type.name}</Cell>
-              )}
-            />
-            <Column header="Low Stock" cell={type => (
-                <Cell modifyField={this._modifyMaterialType.bind(this, type.id, 'lowStock')} integer>{type.lowStock}</Cell>
-              )}
-            />
-            <Column header="Unit" cell={type => (
-                <Cell modifyField={this._modifyMaterialType.bind(this, type.id, 'unit')}>{type.unit}</Cell>
-              )}
-            />
-            {this._renderMaterialTypeRemoveColumn()}
-          </Table>
-        </div>
-
-        {this._renderVendorForm()}
-        {this._renderPieceTypeForm()}
-        {this._renderMaterialTypeForm()}
-      </div>
-    );
-  }
-
-  _renderPieceTypeForm() {
-    if (this.state.isPieceTypeFormOpen) {
-      return (
-        <AddTypeForm cancel={this._handleAddFormClick.bind(this, 'pieceType')}
-          submit={this._handlePieceTypeSubmit.bind(this)}
-          top={h.findPopupTopValue(this._pieceTypeTitle)}
-          type="piece"
-        />
-      );
-    }
-  }
-
-  _renderPieceTypeRemoveColumn() {
-    if (this.state.pieceTypeRemoveMode) {
-      return (
-        <Column header="Remove" cell={pieceType => (
-            <Cell className="remove"><div onClick={this._removePieceType.bind(this, pieceType)}>X</div></Cell>
-          )}
-        />
-      );
-    }
-  }
-
-  _renderMaterialTypeForm() {
-    if (this.state.isMaterialTypeFormOpen) {
-      return (
-        <AddTypeForm cancel={this._handleAddFormClick.bind(this, 'materialType')}
-          submit={this._handleMaterialTypeSubmit.bind(this)}
-          top={h.findPopupTopValue(this._materialTypeTitle)}
-          type="material"
-        />
-      );
-    }
-  }
-
-  _renderMaterialTypeRemoveColumn() {
-    if (this.state.materialTypeRemoveMode) {
-      return (
-        <Column header="Remove" cell={materialType => (
-            <Cell className="remove"><div onClick={this._removeMaterialType.bind(this, materialType)}>X</div></Cell>
-          )}
-        />
-      );
-    }
-  }
-
-  _renderVendorForm() {
-    if (this.state.isVendorFormOpen) {
-      return (
-        <AddVendorForm cancel={this._handleAddFormClick.bind(this, 'vendor')}
-          submit={this._handleVendorSubmit.bind(this)}
-          top={h.findPopupTopValue(this._vendorTitle)}
-        />
-      );
-    }
-  }
-
-  _renderVendorRemoveColumn() {
-    if (this.state.vendorRemoveMode) {
-      return (
-        <Column header="Remove" cell={vendor => (
-            <Cell className="remove"><div onClick={this._removeVendor.bind(this, vendor)}>X</div></Cell>
-          )}
-        />
-      );
-    }
   }
 }
 

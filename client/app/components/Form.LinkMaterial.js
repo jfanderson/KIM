@@ -23,36 +23,6 @@ class LinkMaterialForm extends React.Component {
     });
   }
 
-  _handleDescriptionChange(event) {
-    this.setState({ description: event.target.value });
-  }
-
-  _handleQtyChange(event) {
-    this.setState({ qty: event.target.value });
-  }
-
-  _handleSubmit(event) {
-    event.preventDefault();
-
-    let state = this.state;
-    let material = _.findWhere(state.materials, { description: state.description });
-    let qty = Number(state.qty);
-
-    if (material) {
-      if (isNaN(qty) || qty % 1 !== 0) {
-        sign.setMessage('Make sure quantity is a whole number.');
-      } else if (qty) {
-        this.props.submit(material, qty);
-        this.props.cancel();
-      } else {
-        this.props.submit(material, 0);
-        this.props.cancel();
-      }
-    } else {
-      sign.setMessage('That\'s not a material.');
-    }
-  }
-
   render() {
     let props = this.props;
     let state = this.state;
@@ -84,6 +54,36 @@ class LinkMaterialForm extends React.Component {
         </datalist>
       </div>
     );
+  }
+
+  _handleDescriptionChange(event) {
+    this.setState({ description: event.target.value });
+  }
+
+  _handleQtyChange(event) {
+    this.setState({ qty: event.target.value });
+  }
+
+  _handleSubmit(event) {
+    event.preventDefault();
+
+    let state = this.state;
+    let material = _.findWhere(state.materials, { description: state.description });
+    let qty = Number(state.qty);
+
+    if (material) {
+      if (isNaN(qty) || qty % 1 !== 0) {
+        sign.setMessage('Make sure quantity is a whole number.');
+      } else if (qty) {
+        this.props.submit(material, qty);
+        this.props.cancel();
+      } else {
+        this.props.submit(material, 0);
+        this.props.cancel();
+      }
+    } else {
+      sign.setMessage('That\'s not a material.');
+    }
   }
 }
 

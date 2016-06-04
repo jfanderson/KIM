@@ -14,27 +14,6 @@ class AddMaterialForm extends React.Component {
     };
   }
 
-  _handleDescriptionChange(event) {
-    this.setState({ description: event.target.value });
-  }
-
-  _handleItemChange(event) {
-    this.setState({ item: event.target.value });
-  }
-
-  _handleSubmit(event) {
-    event.preventDefault();
-
-    let state = this.state;
-
-    if (!state.item || !state.description) {
-      sign.setMessage('Give it an item number and description.');
-    } else {
-      this.props.submit(state.item, state.description);
-      this.props.cancel();
-    }
-  }
-
   render() {
     let props = this.props;
     let state = this.state;
@@ -59,6 +38,27 @@ class AddMaterialForm extends React.Component {
         </form>
       </div>
     );
+  }
+
+  _handleDescriptionChange(event) {
+    this.setState({ description: event.target.value });
+  }
+
+  _handleItemChange(event) {
+    this.setState({ item: event.target.value });
+  }
+
+  _handleSubmit(event) {
+    event.preventDefault();
+
+    let state = this.state;
+
+    if (!state.item || !state.description) {
+      sign.setMessage('Give it an item number and description.');
+    } else {
+      this.props.submit(state.item, state.description);
+      this.props.cancel();
+    }
   }
 }
 

@@ -15,11 +15,6 @@ class SelectCell extends React.Component {
     this.setState({ value: nextProps.defaultValue });
   }
 
-  _handleChange(event) {
-    this.setState({ value: event.target.value });
-    this.props.modifyField(event.target.value);
-  }
-
   render() {
     let props = this.props;
     let state = this.state;
@@ -33,6 +28,11 @@ class SelectCell extends React.Component {
         </select>
       </td>
     );
+  }
+
+  _handleChange(event) {
+    this.setState({ value: event.target.value });
+    this.props.modifyField(event.target.value);
   }
 }
 

@@ -16,22 +16,6 @@ class AddVendorForm extends React.Component {
     };
   }
 
-  _handleFieldChange(field, event) {
-    this.setState({ [field]: event.target.value });
-  }
-
-  _handleSubmit(event) {
-    event.preventDefault();
-
-    if (!this.state.company) {
-      sign.setMessage('Give it a company name.');
-    } else {
-      let vendor = this.state;
-      this.props.submit(vendor);
-      this.props.cancel();
-    }
-  }
-
   render() {
     let props = this.props;
     let state = this.state;
@@ -66,6 +50,22 @@ class AddVendorForm extends React.Component {
         </form>
       </div>
     );
+  }
+
+  _handleFieldChange(field, event) {
+    this.setState({ [field]: event.target.value });
+  }
+
+  _handleSubmit(event) {
+    event.preventDefault();
+
+    if (!this.state.company) {
+      sign.setMessage('Give it a company name.');
+    } else {
+      let vendor = this.state;
+      this.props.submit(vendor);
+      this.props.cancel();
+    }
   }
 }
 

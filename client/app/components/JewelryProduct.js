@@ -30,6 +30,9 @@ class JewelryProduct extends React.Component {
     };
   }
 
+  //-----------------------------------
+  // LIFECYCLE METHODS
+  //-----------------------------------
   componentDidMount() {
     s.getSettings()
       .then(settings => {
@@ -47,108 +50,9 @@ class JewelryProduct extends React.Component {
       });
   }
 
-  _calculateCosts() {
-    let state = this.state;
-    let materials = state.piece.materials;
-    let materialCost = 0;
-
-    for (let i = 0; i < materials.length; i++) {
-      materialCost += materials[i].PieceMaterial.qty * materials[i].costPerUnit;
-    }
-
-    let totalLaborCost = state.piece.laborTime / 60 * state.laborCost;
-
-    let totalCost = totalLaborCost + materialCost;
-
-    this.setState({
-      materialCost,
-      totalLaborCost
-    });
-
-    if (totalCost !== state.piece.totalCost) {
-      this._modifyField('totalCost', totalCost);
-    }
-  }
-
-  _handleAddClick(event) {
-    if (event) {
-      event.preventDefault();
-    }
-
-    this.setState({ isFormOpen: !this.state.isFormOpen });
-  }
-
-  _handleFormSubmit(material, qty) {
-    j.linkMaterial(this.props.params.pieceId, material.id, { qty })
-      .then(() => {
-        this._updatePiece();
-      }).catch(() => {
-        sign.setError('Failed to add material. Try refreshing.');
-      });
-  }
-
-  _handleRemove() {
-    this.setState({ removeMode: !this.state.removeMode });
-  }
-
-  _modifyField(field, value) {
-    if (field === 'type') {
-      this.state.piece.typeId = h.findTypeId(this.state.types, value);
-    } else {
-      this.state.piece[field] = value;
-    }
-    this.setState({ piece: this.state.piece });
-
-    // Recalculate total cost if labor time changes
-    if (field === 'laborTime') {
-      this._calculateCosts();
-    }
-
-    j.modifyPiece(this.props.params.pieceId, field, value)
-      .catch(() => {
-        sign.setError('Failed to modify jewelry piece.');
-        this.setState({ piece: null });
-      });
-  }
-
-  _modifyMaterialQty(materialId, qty) {
-    let material = _.findWhere(this.state.piece.materials, { id: materialId });
-
-    material.PieceMaterial.qty = qty;
-
-    this.setState({ piece: this.state.piece });
-
-    this._calculateCosts();
-
-    j.modifyMaterialQty(this.props.params.pieceId, materialId, qty)
-      .catch(() => {
-        sign.setError('Failed to modify material quantity.');
-        this.setState({ piece: null });
-      });
-  }
-
-  _removeMaterial(material) {
-    let confirmed = confirm(`Are you sure you want to remove ${material.description}?`);
-
-    if (confirmed) {
-      j.unlinkMaterial(this.state.piece.id, material.id).then(() => {
-        this._updatePiece();
-      }).catch(() => {
-        sign.setError('Failed to remove material.');
-      });
-    }
-  }
-
-  _updatePiece() {
-    j.getPiece(this.props.params.pieceId)
-      .then(piece => {
-        this.setState({ piece }, this._calculateCosts);
-      }).catch(() => {
-        sign.setError('Failed to retrieve jewelry piece. Try refreshing.');
-        this.setState({ piece: null });
-      });
-  }
-
+  //-----------------------------------
+  // RENDERING
+  //-----------------------------------
   render() {
     let state = this.state;
 
@@ -283,6 +187,111 @@ class JewelryProduct extends React.Component {
         />
       );
     }
+  }
+
+  //-----------------------------------
+  // PRIVATE METHODS
+  //-----------------------------------
+  _calculateCosts() {
+    let state = this.state;
+    let materials = state.piece.materials;
+    let materialCost = 0;
+
+    for (let i = 0; i < materials.length; i++) {
+      materialCost += materials[i].PieceMaterial.qty * materials[i].costPerUnit;
+    }
+
+    let totalLaborCost = state.piece.laborTime / 60 * state.laborCost;
+
+    let totalCost = totalLaborCost + materialCost;
+
+    this.setState({
+      materialCost,
+      totalLaborCost
+    });
+
+    if (totalCost !== state.piece.totalCost) {
+      this._modifyField('totalCost', totalCost);
+    }
+  }
+
+  _handleAddClick(event) {
+    if (event) {
+      event.preventDefault();
+    }
+
+    this.setState({ isFormOpen: !this.state.isFormOpen });
+  }
+
+  _handleFormSubmit(material, qty) {
+    j.linkMaterial(this.props.params.pieceId, material.id, { qty })
+      .then(() => {
+        this._updatePiece();
+      }).catch(() => {
+        sign.setError('Failed to add material. Try refreshing.');
+      });
+  }
+
+  _handleRemove() {
+    this.setState({ removeMode: !this.state.removeMode });
+  }
+
+  _modifyField(field, value) {
+    if (field === 'type') {
+      this.state.piece.typeId = h.findTypeId(this.state.types, value);
+    } else {
+      this.state.piece[field] = value;
+    }
+    this.setState({ piece: this.state.piece });
+
+    // Recalculate total cost if labor time changes
+    if (field === 'laborTime') {
+      this._calculateCosts();
+    }
+
+    j.modifyPiece(this.props.params.pieceId, field, value)
+      .catch(() => {
+        sign.setError('Failed to modify jewelry piece.');
+        this.setState({ piece: null });
+      });
+  }
+
+  _modifyMaterialQty(materialId, qty) {
+    let material = _.findWhere(this.state.piece.materials, { id: materialId });
+
+    material.PieceMaterial.qty = qty;
+
+    this.setState({ piece: this.state.piece });
+
+    this._calculateCosts();
+
+    j.modifyMaterialQty(this.props.params.pieceId, materialId, qty)
+      .catch(() => {
+        sign.setError('Failed to modify material quantity.');
+        this.setState({ piece: null });
+      });
+  }
+
+  _removeMaterial(material) {
+    let confirmed = confirm(`Are you sure you want to remove ${material.description}?`);
+
+    if (confirmed) {
+      j.unlinkMaterial(this.state.piece.id, material.id).then(() => {
+        this._updatePiece();
+      }).catch(() => {
+        sign.setError('Failed to remove material.');
+      });
+    }
+  }
+
+  _updatePiece() {
+    j.getPiece(this.props.params.pieceId)
+      .then(piece => {
+        this.setState({ piece }, this._calculateCosts);
+      }).catch(() => {
+        sign.setError('Failed to retrieve jewelry piece. Try refreshing.');
+        this.setState({ piece: null });
+      });
   }
 }
 

@@ -14,6 +14,57 @@ class Cell extends React.Component {
     };
   }
 
+  //-----------------------------------
+  // RENDERING
+  //-----------------------------------
+  render() {
+    let props = this.props;
+    let state = this.state;
+
+    let classes = {
+      [props.className]: props.className
+    };
+
+    if (props.modifyField && state.editing) {
+      return (
+        <td className="editing">
+          <input autoFocus type="text"
+            ref="inputField"
+            value={state.value}
+            list="items"
+            onKeyDown={this._handleKeyDown.bind(this)}
+            onChange={this._handleChange.bind(this)}
+            onBlur={this._handleBlur.bind(this)}
+          />
+
+          <datalist id="items">
+            {props.datalist.map(item =>
+              <option key={item} value={item} />
+            )}
+          </datalist>
+        </td>
+      );
+    } else if (props.modifyField) {
+      classes.editable = true;
+
+      return (
+        <td className={classnames(classes)} onClick={this._startEditing.bind(this)}>
+          {props.children}
+        </td>
+      );
+    }
+
+    return (
+      <td className={classnames(classes)}>
+        {props.children}
+      </td>
+    );
+  }
+
+
+  //-----------------------------------
+  // PRIVATE METHODS
+  //-----------------------------------
   _handleBlur() {
     this.setState({ editing: false });
   }
@@ -69,50 +120,6 @@ class Cell extends React.Component {
     setTimeout(() => {
       this.refs.inputField.select();
     }, 0);
-  }
-
-  render() {
-    let props = this.props;
-    let state = this.state;
-
-    let classes = {
-      [props.className]: props.className
-    };
-
-    if (props.modifyField && state.editing) {
-      return (
-        <td className="editing">
-          <input autoFocus type="text"
-            ref="inputField"
-            value={state.value}
-            list="items"
-            onKeyDown={this._handleKeyDown.bind(this)}
-            onChange={this._handleChange.bind(this)}
-            onBlur={this._handleBlur.bind(this)}
-          />
-
-          <datalist id="items">
-            {props.datalist.map(item =>
-              <option key={item} value={item} />
-            )}
-          </datalist>
-        </td>
-      );
-    } else if (props.modifyField) {
-      classes.editable = true;
-
-      return (
-        <td className={classnames(classes)} onClick={this._startEditing.bind(this)}>
-          {props.children}
-        </td>
-      );
-    }
-
-    return (
-      <td className={classnames(classes)}>
-        {props.children}
-      </td>
-    );
   }
 }
 
