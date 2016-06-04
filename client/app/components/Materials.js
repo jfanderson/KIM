@@ -18,6 +18,7 @@ class Materials extends React.Component {
     super();
 
     this.state = {
+      filteredMaterials: [],
       isFormOpen: false,
       materials: [],
       removeMode: false, // If true, display removal column in table
@@ -26,6 +27,9 @@ class Materials extends React.Component {
     };
   }
 
+  //-----------------------------------
+  // LIFECYCLE METHODS
+  //-----------------------------------
   componentDidMount() {
     this._updateMaterials();
 
@@ -42,77 +46,9 @@ class Materials extends React.Component {
     });
   }
 
-  _handleAddClick(event) {
-    if (event) {
-      event.preventDefault();
-    }
-
-    this.setState({ isFormOpen: !this.state.isFormOpen });
-  }
-
-  _handleFormSubmit(item, description) {
-    m.addMaterial({
-      item,
-      description
-    }).then(() => {
-      this._updateMaterials();
-    }).catch(() => {
-      sign.setError('Failed to add material. Try refreshing.');
-    });
-  }
-
-  _handleRemove() {
-    this.setState({ removeMode: !this.state.removeMode });
-  }
-
-  _modifyField(materialId, field, value) {
-    let state = this.state;
-    let materials = state.materials;
-
-    for (let i = 0; i < materials.length; i++) {
-      if (materials[i].id === materialId) {
-        if (field === 'type') {
-          materials[i].typeId = h.findTypeId(state.types, value);
-        } else if (field === 'vendor') {
-          materials[i].vendorId = h.findVendorId(state.vendors, value);
-        } else {
-          materials[i][field] = value;
-        }
-
-        this.setState({ materials });
-        break;
-      }
-    }
-
-    m.modifyMaterial(materialId, field, value)
-      .catch(() => {
-        sign.setError('Failed to modify material.');
-        this.setState({ materials: [] });
-      });
-  }
-
-  _removeMaterial(material) {
-    let confirmed = confirm(`Are you sure you want to remove ${material.description}?`);
-
-    if (confirmed) {
-      m.removeMaterial(material.id).then(() => {
-        this._updateMaterials();
-      }).catch(() => {
-        sign.setError('Failed to remove material.');
-      });
-    }
-  }
-
-  _updateMaterials() {
-    m.getAllMaterials()
-      .then(materials => this.setState({ materials }))
-      .catch(error => {
-        console.log('[Component] Error retrieving materials: ', error);
-        sign.setError('Failed to retrieve materials. Try refreshing.');
-        this.setState({ materials: [] });
-      });
-  }
-
+  //-----------------------------------
+  // RENDERING
+  //-----------------------------------
   render() {
     let state = this.state;
 
@@ -125,10 +61,16 @@ class Materials extends React.Component {
       <div>
         <div className="filters-container">
           <div className="filters">
-            <span>All</span>
-            <span>Other</span>
-            <span>Low Stock</span>
-            <span>Out of Stock</span>
+            <span onClick={this._clearFilter.bind(this)}>All</span>
+            {state.types.map(type => {
+              if (type.name === 'none') {
+                return null;
+              }
+
+              return <span key={type.id} onClick={this._filterByType.bind(this, type.id)}>{type.name}</span>;
+            })}
+            <span onClick={this._filterByLowStock.bind(this)}>Low Stock</span>
+            <span onClick={this._filterByOutOfStock.bind(this)}>Out of Stock</span>
 
             <button className="add-button" onClick={this._handleAddClick.bind(this)}>+</button>
             <button className={classnames(removeClasses)} onClick={this._handleRemove.bind(this)}>--</button>
@@ -136,7 +78,7 @@ class Materials extends React.Component {
         </div>
 
         <div className="content">
-          <Table data={state.materials} uniqueId="item">
+          <Table data={state.filteredMaterials} uniqueId="item">
             <Column header="Item #" cell={material => (
                 <Cell modifyField={this._modifyField.bind(this, material.id, 'item')}>{material.item}</Cell>
               )}
@@ -210,6 +152,121 @@ class Materials extends React.Component {
         />
       );
     }
+  }
+
+  //-----------------------------------
+  // PRIVATE METHODS
+  //-----------------------------------
+  _clearFilter() {
+    this.setState({ filteredMaterials: this.state.materials });
+  }
+
+  _filterByLowStock() {
+    let filteredMaterials = this.state.materials.filter(material => {
+      let type = _.findWhere(this.state.types, { id: material.typeId });
+
+      return material.qtyInStock <= type.lowStock;
+    });
+
+    this.setState({ filteredMaterials });
+  }
+
+  _filterByOutOfStock() {
+    let filteredMaterials = this.state.materials.filter(material => material.qtyInStock <= 0);
+
+    this.setState({ filteredMaterials });
+  }
+
+  _filterByType(typeId) {
+    let filteredMaterials = this.state.materials.filter(material => material.typeId === typeId);
+
+    this.setState({ filteredMaterials });
+  }
+
+  _handleAddClick(event) {
+    if (event) {
+      event.preventDefault();
+    }
+
+    this.setState({ isFormOpen: !this.state.isFormOpen });
+  }
+
+  _handleFormSubmit(item, description) {
+    m.addMaterial({
+      item,
+      description
+    }).then(() => {
+      this._updateMaterials();
+    }).catch(() => {
+      sign.setError('Failed to add material. Try refreshing.');
+    });
+  }
+
+  _handleRemove() {
+    this.setState({ removeMode: !this.state.removeMode });
+  }
+
+  _modifyField(materialId, field, value) {
+    let state = this.state;
+    let materials = state.materials;
+
+    for (let i = 0; i < materials.length; i++) {
+      if (materials[i].id === materialId) {
+        if (field === 'type') {
+          materials[i].typeId = h.findTypeId(state.types, value);
+        } else if (field === 'vendor') {
+          materials[i].vendorId = h.findVendorId(state.vendors, value);
+        } else {
+          materials[i][field] = value;
+        }
+
+        this.setState({ materials });
+        break;
+      }
+    }
+
+    m.modifyMaterial(materialId, field, value)
+      .catch(() => {
+        sign.setError('Failed to modify material.');
+        this.setState({ materials: [] });
+      });
+  }
+
+  _removeMaterial(material) {
+    let confirmed = confirm(`Are you sure you want to remove ${material.description}?`);
+
+    if (confirmed) {
+      m.removeMaterial(material.id).then(() => {
+        this._updateMaterials();
+
+        // Remove from array of filtered materials.
+        let filteredMaterials = this.state.filteredMaterials.slice(0);
+        for (let i = 0; i < filteredMaterials; i++) {
+          if (filteredMaterials[i].id === material.id) {
+            let newFilteredMaterials = filteredMaterials.splice(i, 1);
+
+            this.setState({ filteredMaterials: newFilteredMaterials });
+          }
+        }
+      }).catch(() => {
+        sign.setError('Failed to remove material.');
+      });
+    }
+  }
+
+  _updateMaterials() {
+    m.getAllMaterials()
+      .then(materials => this.setState({ materials }, () => {
+        // Reset to "All" filter if there are no items displayed.
+        if (this.state.filteredMaterials.length === 0) {
+          this.setState({ filteredMaterials: this.state.materials });
+        }
+      }))
+      .catch(error => {
+        console.log('[Component] Error retrieving materials: ', error);
+        sign.setError('Failed to retrieve materials. Try refreshing.');
+        this.setState({ materials: [] });
+      });
   }
 }
 
