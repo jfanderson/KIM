@@ -31,7 +31,12 @@ class Materials extends React.Component {
   // LIFECYCLE METHODS
   //-----------------------------------
   componentDidMount() {
-    this._updateMaterials();
+    this._getMaterials().then(materials => {
+      this.setState({
+        materials,
+        filteredMaterials: materials
+      });
+    });
 
     m.getTypes().then(types => {
       this.setState({ types });
@@ -73,7 +78,7 @@ class Materials extends React.Component {
             <span onClick={this._filterByOutOfStock.bind(this)}>Out of Stock</span>
 
             <button className="add-button" onClick={this._handleAddClick.bind(this)}>+</button>
-            <button className={classnames(removeClasses)} onClick={this._handleRemove.bind(this)}>--</button>
+            <button className={classnames(removeClasses)} onClick={this._handleRemoveClick.bind(this)}>--</button>
           </div>
         </div>
 
@@ -196,13 +201,21 @@ class Materials extends React.Component {
       item,
       description
     }).then(() => {
-      this._updateMaterials();
+      this._getMaterials().then(materials => {
+        // Revert to "All" filter when new material is added.
+        this.setState({
+          materials,
+          filteredMaterials: materials
+        });
+
+        sign.setMessage('Showing all materials');
+      });
     }).catch(() => {
       sign.setError('Failed to add material. Try refreshing.');
     });
   }
 
-  _handleRemove() {
+  _handleRemoveClick() {
     this.setState({ removeMode: !this.state.removeMode });
   }
 
@@ -237,36 +250,33 @@ class Materials extends React.Component {
 
     if (confirmed) {
       m.removeMaterial(material.id).then(() => {
-        this._updateMaterials();
+        this._getMaterials().then(materials => {
+          let filteredMaterials = this.state.filteredMaterials.slice(0);
 
-        // Remove from array of filtered materials.
-        let filteredMaterials = this.state.filteredMaterials.slice(0);
-        for (let i = 0; i < filteredMaterials; i++) {
-          if (filteredMaterials[i].id === material.id) {
-            let newFilteredMaterials = filteredMaterials.splice(i, 1);
-
-            this.setState({ filteredMaterials: newFilteredMaterials });
+          for (let i = 0; i < filteredMaterials.length; i++) {
+            if (filteredMaterials[i].id === material.id) {
+              filteredMaterials.splice(i, 1);
+              break;
+            }
           }
-        }
+
+          this.setState({
+            materials,
+            filteredMaterials
+          });
+        });
       }).catch(() => {
         sign.setError('Failed to remove material.');
       });
     }
   }
 
-  _updateMaterials() {
-    m.getAllMaterials()
-      .then(materials => this.setState({ materials }, () => {
-        // Reset to "All" filter if there are no items displayed.
-        if (this.state.filteredMaterials.length === 0) {
-          this.setState({ filteredMaterials: this.state.materials });
-        }
-      }))
-      .catch(error => {
-        console.log('[Component] Error retrieving materials: ', error);
-        sign.setError('Failed to retrieve materials. Try refreshing.');
-        this.setState({ materials: [] });
-      });
+  _getMaterials() {
+    return m.getAllMaterials().catch(error => {
+      console.log('[Component] Error retrieving materials: ', error);
+      sign.setError('Failed to retrieve materials. Try refreshing.');
+      this.setState({ materials: [] });
+    });
   }
 }
 
