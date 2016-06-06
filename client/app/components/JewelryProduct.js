@@ -123,8 +123,8 @@ class JewelryProduct extends React.Component {
             <div>Labor in Minutes</div>
             <div>Labor Cost</div>
             <div className="total">Total Cost</div>
-            <button className="convert">Convert Back to Parts</button>
-            <button className="cancel">Cancel</button>
+            {/* <button className="convert">Convert Back to Parts</button>
+            <button className="cancel">Cancel</button> */}
           </div>
 
           <div className="values">
@@ -136,8 +136,8 @@ class JewelryProduct extends React.Component {
             </tr></tbody></table>
             <div>{h.displayPrice(state.totalLaborCost)}</div>
             <div className="total">{h.displayPrice(state.piece.totalCost)}</div>
-            <button className="duplicate">Duplicate</button>
-            <button className="save">Save</button>
+            {/* <button className="duplicate">Duplicate</button>
+            <button className="save">Save</button> */}
           </div>
         </div>
 
