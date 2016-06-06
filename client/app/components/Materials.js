@@ -250,6 +250,7 @@ class Materials extends React.Component {
 
     if (confirmed) {
       m.removeMaterial(material.id).then(() => {
+        // Remove material from filtered set.
         this._getMaterials().then(materials => {
           let filteredMaterials = this.state.filteredMaterials.slice(0);
 

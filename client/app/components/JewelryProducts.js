@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import classnames from 'classnames';
+import _ from 'underscore';
 
 import j from '../services/jewelryService.js';
 import sign from '../services/sign.js';
@@ -16,6 +17,7 @@ class JewelryProducts extends React.Component {
     super();
 
     this.state = {
+      filteredPieces: [],
       isFormOpen: false,
       pieces: [],
       removeMode: false, // If true, display removal column in table
@@ -27,7 +29,12 @@ class JewelryProducts extends React.Component {
   // LIFECYCLE METHODS
   //-----------------------------------
   componentDidMount() {
-    this._updatePieces();
+    this._getPieces().then(pieces => {
+      this.setState({
+        pieces,
+        filteredPieces: pieces
+      });
+    });
 
     j.getTypes()
       .then(types => {
@@ -41,29 +48,36 @@ class JewelryProducts extends React.Component {
   // RENDERING
   //-----------------------------------
   render() {
-    let types = this.state.types;
+    let state = this.state;
+    let types = state.types;
 
     let removeClasses = {
       'remove-button': true,
-      active: this.state.removeMode
+      active: state.removeMode
     };
 
     return (
       <div>
         <div className="filters-container">
           <div className="filters">
-            <span>All</span>
-            <span>Other</span>
-            <span>Low Stock</span>
-            <span>Out of Stock</span>
+            <span onClick={this._clearFilter.bind(this)}>All</span>
+            {state.types.map(type => {
+              if (type.name === 'none') {
+                return null;
+              }
+
+              return <span key={type.id} onClick={this._filterByType.bind(this, type.id)}>{type.name}</span>;
+            })}
+            <span onClick={this._filterByLowStock.bind(this)}>Low Stock</span>
+            <span onClick={this._filterByOutOfStock.bind(this)}>Out of Stock</span>
 
             <button className="add-button" onClick={this._handleAddClick.bind(this)}>+</button>
-            <button className={classnames(removeClasses)} onClick={this._handleRemove.bind(this)}>--</button>
+            <button className={classnames(removeClasses)} onClick={this._handleRemoveClick.bind(this)}>--</button>
           </div>
         </div>
 
         <div className="content">
-          <Table classes="row-select" data={this.state.pieces} uniqueId="item">
+          <Table classes="row-select" data={state.filteredPieces} uniqueId="item">
             <Column header="Item #" cell={piece => (
                 <Cell><Link to={`/jewelry/${piece.id}`}>{piece.item}</Link></Cell>
               )}
@@ -130,6 +144,32 @@ class JewelryProducts extends React.Component {
   //-----------------------------------
   // PRIVATE METHODS
   //-----------------------------------
+  _clearFilter() {
+    this.setState({ filteredPieces: this.state.pieces });
+  }
+
+  _filterByLowStock() {
+    let filteredPieces = this.state.pieces.filter(piece => {
+      let type = _.findWhere(this.state.types, { id: piece.typeId });
+
+      return piece.qtyInStock <= type.lowStock;
+    });
+
+    this.setState({ filteredPieces });
+  }
+
+  _filterByOutOfStock() {
+    let filteredPieces = this.state.pieces.filter(piece => piece.qtyInStock <= 0);
+
+    this.setState({ filteredPieces });
+  }
+
+  _filterByType(typeId) {
+    let filteredPieces = this.state.pieces.filter(piece => piece.typeId === typeId);
+
+    this.setState({ filteredPieces });
+  }
+
   _handleAddClick(event) {
     if (event) {
       event.preventDefault();
@@ -143,7 +183,15 @@ class JewelryProducts extends React.Component {
       item,
       description
     }).then(() => {
-      this._updatePieces();
+      this._getPieces().then(pieces => {
+        // Revert to "All" filter when new piece is added.
+        this.setState({
+          pieces,
+          filteredPieces: pieces
+        });
+
+        sign.setMessage('Showing all jewelry products');
+      });
     }).catch(() => {
       sign.setError('Failed to add jewelry piece. Try refreshing.');
     });
@@ -151,7 +199,7 @@ class JewelryProducts extends React.Component {
     // TODO: link to piece page
   }
 
-  _handleRemove() {
+  _handleRemoveClick() {
     this.setState({ removeMode: !this.state.removeMode });
   }
 
@@ -160,20 +208,33 @@ class JewelryProducts extends React.Component {
 
     if (confirmed) {
       j.removePiece(piece.id).then(() => {
-        this._updatePieces();
+        this._getPieces().then(pieces => {
+          // Remove piece from filtered set.
+          let filteredPieces = this.state.filteredPieces.slice(0);
+
+          for (let i = 0; i < filteredPieces.length; i++) {
+            if (filteredPieces[i].id === piece.id) {
+              filteredPieces.splice(i, 1);
+              break;
+            }
+          }
+
+          this.setState({
+            pieces,
+            filteredPieces
+          });
+        });
       }).catch(() => {
         sign.setError('Failed to remove piece.');
       });
     }
   }
 
-  _updatePieces() {
-    j.getAllPieces()
-      .then(pieces => this.setState({ pieces }))
-      .catch(() => {
-        sign.setError('Failed to retrieve jewelry pieces. Try refreshing.');
-        this.setState({ pieces: [] });
-      });
+  _getPieces() {
+    return j.getAllPieces().catch(() => {
+      sign.setError('Failed to retrieve jewelry pieces. Try refreshing.');
+      this.setState({ pieces: [] });
+    });
   }
 }
 
