@@ -16,6 +16,7 @@ module.exports = function(app, express) {
   var typeRouter = express.Router();
   var unitRouter = express.Router();
   var vendorRouter = express.Router();
+  var contractorRouter = express.Router();
 
   // route requests to proper destination
   app.use('/a/materials', materialRouter);
@@ -24,6 +25,7 @@ module.exports = function(app, express) {
   app.use('/a/types', typeRouter);
   app.use('/a/units', unitRouter);
   app.use('/a/vendors', vendorRouter);
+  app.use('/a/contractors', contractorRouter);
 
   // define destination pathways
   require('../materials/materialRoutes.js')(materialRouter);
@@ -32,4 +34,5 @@ module.exports = function(app, express) {
   require('../types/typeRoutes.js')(typeRouter);
   require('../units/unitRoutes.js')(unitRouter);
   require('../vendors/vendorRoutes.js')(vendorRouter);
+  require('../contractors/contractorRoutes.js')(contractorRouter);
 };
