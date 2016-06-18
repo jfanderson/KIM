@@ -14,7 +14,6 @@ module.exports = function(app, express) {
   var pieceRouter = express.Router();
   var settingsRouter = express.Router();
   var typeRouter = express.Router();
-  var unitRouter = express.Router();
   var vendorRouter = express.Router();
   var contractorRouter = express.Router();
 
@@ -23,7 +22,6 @@ module.exports = function(app, express) {
   app.use('/a/pieces', pieceRouter);
   app.use('/a/settings', settingsRouter);
   app.use('/a/types', typeRouter);
-  app.use('/a/units', unitRouter);
   app.use('/a/vendors', vendorRouter);
   app.use('/a/contractors', contractorRouter);
 
@@ -32,7 +30,6 @@ module.exports = function(app, express) {
   require('../pieces/pieceRoutes.js')(pieceRouter);
   require('../settings/settingsRoutes.js')(settingsRouter);
   require('../types/typeRoutes.js')(typeRouter);
-  require('../units/unitRoutes.js')(unitRouter);
   require('../vendors/vendorRoutes.js')(vendorRouter);
   require('../contractors/contractorRoutes.js')(contractorRouter);
 };

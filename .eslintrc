@@ -13,7 +13,8 @@
     "prefer-const": "off",
     "quotes": ["warn", "single"],
     "react/jsx-no-bind": "off",
-    "react/sort-comp" : "off",
+    "react/sort-comp": "off",
+    "space-before-function-paren": ["error", {"anonymous": "never", "named": "never"}],
     "vars-on-top": "off"
   }
 }

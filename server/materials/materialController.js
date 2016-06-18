@@ -1,7 +1,6 @@
 var models = require('../db/index.js');
 var Material = models.Material;
 var MaterialType = models.MaterialType;
-var MaterialUnit = models.MaterialUnit;
 var Vendor = models.Vendor;
 
 module.exports = {
@@ -68,18 +67,6 @@ function addMaterial(req, res) {
 
     return material;
   }).then(material => {
-    // associate unit if given
-    if (unit) {
-      return MaterialUnit.findOne({ where: { unit } }).then(matchedUnit => {
-        if (matchedUnit !== null) {
-          material.unitId = matchedUnit.id;
-        }
-        return material.save();
-      });
-    }
-
-    return material;
-  }).then(material => {
     // associate vendor if given
     if (vendor) {
       return Vendor.findOne({ where: { company: vendor } }).then(matchedVendor => {
@@ -118,19 +105,6 @@ function modifyMaterial(req, res) {
           material.set('typeId', matchedType.id);
         }
         delete req.body.type;
-        return material.save();
-      });
-    }
-
-    return material;
-  }).then(material => {
-    // modify unit if necessary
-    if (req.body.hasOwnProperty('unit')) {
-      return MaterialUnit.findOne({ where: { unit: req.body.unit } }).then(matchedUnit => {
-        if (matchedUnit !== null) {
-          material.set('unitId', matchedUnit.id);
-        }
-        delete req.body.unit;
         return material.save();
       });
     }
