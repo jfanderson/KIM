@@ -1,7 +1,9 @@
 /* eslint-disable new-cap */
 var Sequelize = require('sequelize');
 
-/* CONNECTION */
+//-----------------------------------
+// CONNECTION
+//-----------------------------------
 var orm;
 if (process.env.NODE_ENV === 'production') {
   orm = new Sequelize('kim', 'root', '', {
@@ -16,9 +18,9 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-
-/* SCHEMA */
-
+//-----------------------------------
+// SCHEMA
+//-----------------------------------
 var Material = orm.define('Material', {
   item: { type: Sequelize.STRING, allowNull: false, unique: true },
   description: { type: Sequelize.STRING, allowNull: false, unique: true },
@@ -85,9 +87,17 @@ var Product = orm.define('Product', {
   qtyOnOrder: { type: Sequelize.INTEGER, defaultValue: 0 }
 });
 
+var Contractor = orm.define('Contractor', {
+  name: { type: Sequelize.STRING, allowNull: false, unique: true }
+});
 
-/* ASSOCIATIONS */
+var ContractorMaterial = orm.define('ContractorMaterial', {
+  qty: { type: Sequelize.INTEGER, defaultValue: 0 }
+});
 
+//-----------------------------------
+// ASSOCIATIONS
+//-----------------------------------
 Piece.belongsToMany(Material, { through: 'PieceMaterial', foreignKey: 'pieceId' });
 Material.belongsToMany(Piece, { through: 'PieceMaterial', foreignKey: 'materialId' });
 
@@ -112,6 +122,8 @@ Piece.belongsToMany(PiecePurchaseOrder, {
 
 PiecePurchaseOrder.belongsToMany(Piece, { through: 'POPiece', foreignKey: 'pieceId' });
 
+Contractor.belongsToMany(Material, { through: 'ContractorMaterial', foreignKey: 'contractorId' });
+Material.belongsToMany(Contractor, { through: 'ContractorMaterial', foreignKey: 'materialId' });
 
 // create tables if they do not already exist
 orm.sync();
@@ -126,5 +138,7 @@ module.exports = {
   PieceType,
   Product,
   Settings,
-  Vendor
+  Vendor,
+  Contractor,
+  ContractorMaterial
 };

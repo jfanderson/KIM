@@ -9,6 +9,7 @@
     "no-console": "off",
     "no-use-before-define": ["error", { "functions": false, "classes": true }],
     "no-var": "off",
+    "no-param-reassign": "off",
     "prefer-const": "off",
     "quotes": ["warn", "single"],
     "react/jsx-no-bind": "off",
