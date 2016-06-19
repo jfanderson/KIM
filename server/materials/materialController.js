@@ -36,8 +36,8 @@ function getAllMaterials(req, res) {
 
 function addMaterial(req, res) {
   Material.create(req.body.material).then(material => {
-    return Contractor.findAll().then(contractors => {
-      return Promise.all(contractors.map(contractor => contractor.addMaterial(material.id)))
+    Contractor.findAll().then(contractors => {
+      return Promise.all(contractors.map(contractor => contractor.addMaterial(material)))
       .then(() => {
         res.status(201).send({ material });
       });

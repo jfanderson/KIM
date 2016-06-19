@@ -7,6 +7,8 @@ var models = require('../server/db/index.js');
 var Material = models.Material;
 var MaterialType = models.MaterialType;
 var Vendor = models.Vendor;
+var Contractor = models.Contractor;
+var ContractorMaterial = models.ContractorMaterial;
 
 describe('Material Tests', function() {
 
@@ -155,6 +157,37 @@ describe('Material Tests', function() {
             done();
           });
         });
+    });
+
+    it('should automatically associate a new contractor with a material', function(done) {
+      request(app)
+        .post('/a/contractors')
+        .send({ contractor: {
+            name: 'test name'
+          }
+        })
+        .expect(201)
+        .expect(function(res) {
+          contractorId = res.body.contractor.id;
+        })
+        .end(function() {
+          ContractorMaterial.findOne({
+            where: {
+              contractorId: contractorId,
+              materialId: materialId
+            }
+          }).then(function(result) {
+            expect(result).to.be.ok;
+            expect(result.qty).to.equal(0);
+            done();
+          });
+        });
+    });
+
+    after(function(done) {
+      Contractor.destroy({ where: { id: contractorId }}).then(function() {
+        done();
+      });
     });
 
     it('should remove a material', function(done) {

@@ -1,6 +1,7 @@
 var models = require('../db/index.js');
 var Contractor = models.Contractor;
 var ContractorMaterial = models.ContractorMaterial;
+var Material = models.Material;
 
 module.exports = {
   getContractor,
@@ -41,7 +42,12 @@ function getAllContractors(req, res) {
 
 function addContractor(req, res) {
   Contractor.create(req.body.contractor).then(contractor => {
-    res.status(201).send({ contractor });
+    Material.findAll().then(materials => {
+      return Promise.all(materials.map(material => material.addContractor(contractor.id)))
+      .then(() => {
+        res.status(201).send({ contractor });
+      });
+    });
   }).catch(error => {
     console.log(error);
     if (error.errors[0].message === 'item must be unique') {
