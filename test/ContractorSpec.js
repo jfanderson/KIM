@@ -1,7 +1,6 @@
 /* eslint-disable */
 var request = require('supertest');
 var expect = require('chai').expect;
-var express = require('express');
 
 var app = require('../server/app.js');
 var models = require('../server/db/index.js');
@@ -75,22 +74,19 @@ describe('Contractor Tests', function() {
         });
     });
 
-    before(function(done) {
-      Material.create({
-        item: 'test',
-        description: 'testMaterial',
-        qtyInStock: 20
-      }).then(function(material) {
-        materialId = material.id;
-        done();
-      });
-    });
-
-    it('should associate a material with a contractor', function(done) {
+    it('should automatically associate a new material with a contractor', function(done) {
       request(app)
-        .post('/a/contractors/' + contractorId + '/material/' + materialId)
-        .send({ qty: 10 })
-        .expect(200)
+        .post('/a/materials')
+        .send({ material: {
+            item: 'test',
+            description: 'testMaterial',
+            qtyInStock: 20
+          }
+        })
+        .expect(201)
+        .expect(function(res) {
+          materialId = res.body.material.id;
+        })
         .end(function() {
           ContractorMaterial.findOne({
             where: {
@@ -99,7 +95,7 @@ describe('Contractor Tests', function() {
             }
           }).then(function(result) {
             expect(result).to.be.ok;
-            expect(result.qty).to.equal(10);
+            expect(result.qty).to.equal(0);
             done();
           });
         });
@@ -127,23 +123,6 @@ describe('Contractor Tests', function() {
       Material.destroy({ where: { id: materialId }}).then(function() {
         done();
       });
-    });
-
-    it('should disassociate a material from a contractor', function(done) {
-      request(app)
-        .delete('/a/contractors/' + contractorId + '/material/' + materialId)
-        .expect(204)
-        .end(function() {
-          ContractorMaterial.findOne({
-            where: {
-              contractorId: contractorId,
-              materialId: materialId
-            }
-          }).then(function(result) {
-            expect(result).to.not.be.ok;
-            done();
-          });
-        });
     });
 
     it('should remove a contractor', function(done) {

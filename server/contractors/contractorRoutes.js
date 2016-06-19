@@ -6,9 +6,7 @@ module.exports = function (app) {
     .post(contractorController.addContractor);
 
   app.route('/:contractorId/material/:materialId')
-    .post(contractorController.linkMaterial)
-    .put(contractorController.modifyMaterialQty)
-    .delete(contractorController.unlinkMaterial);
+    .put(contractorController.modifyMaterialQty);
 
   app.route('/:contractorId')
     .get(contractorController.getContractor)

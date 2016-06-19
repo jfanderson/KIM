@@ -2,6 +2,7 @@ var models = require('../db/index.js');
 var Material = models.Material;
 var MaterialType = models.MaterialType;
 var Vendor = models.Vendor;
+var Contractor = models.Contractor;
 
 module.exports = {
   getMaterial,
@@ -34,52 +35,13 @@ function getAllMaterials(req, res) {
 }
 
 function addMaterial(req, res) {
-  // save type, unit and vendor to associate later
-  var type;
-  var unit;
-  var vendor;
-
-  if (req.body.material.hasOwnProperty('type')) {
-    type = req.body.material.type;
-    delete req.body.material.type;
-  }
-
-  if (req.body.material.hasOwnProperty('unit')) {
-    unit = req.body.material.unit;
-    delete req.body.material.unit;
-  }
-
-  if (req.body.material.hasOwnProperty('vendor')) {
-    vendor = req.body.material.vendor;
-    delete req.body.material.vendor;
-  }
-
   Material.create(req.body.material).then(material => {
-    // associate type if given
-    if (type) {
-      return MaterialType.findOne({ where: { name: type } }).then(matchedType => {
-        if (matchedType !== null) {
-          material.typeId = matchedType.id;
-        }
-        return material.save();
+    return Contractor.findAll().then(contractors => {
+      return Promise.all(contractors.map(contractor => contractor.addMaterial(material.id)))
+      .then(() => {
+        res.status(201).send({ material });
       });
-    }
-
-    return material;
-  }).then(material => {
-    // associate vendor if given
-    if (vendor) {
-      return Vendor.findOne({ where: { company: vendor } }).then(matchedVendor => {
-        if (matchedVendor !== null) {
-          material.vendorId = matchedVendor.id;
-        }
-        return material.save();
-      });
-    }
-
-    return material;
-  }).then(material => {
-    res.status(201).send({ material });
+    });
   }).catch(error => {
     console.log(error);
     if (error.errors[0].message === 'item must be unique') {
