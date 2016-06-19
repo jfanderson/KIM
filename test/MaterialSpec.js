@@ -1,6 +1,6 @@
+/* eslint-disable */
 var request = require('supertest');
 var expect = require('chai').expect;
-var express = require('express');
 
 var app = require('../server/app.js');
 var models = require('../server/db/index.js');
@@ -12,7 +12,6 @@ describe('Material Tests', function() {
 
   beforeEach(function(done) {
     var materialId;
-    var materialId2;
 
     var newTypes = [
       { name: 'fakeType', lowStock: 5, unit: 'fakeUnit' },
@@ -114,31 +113,15 @@ describe('Material Tests', function() {
         });
     });
 
-    it('should remove a material', function(done) {
+    it('should associate a material with a type and vendor', function(done) {
       request(app)
-        .delete('/a/materials/' + materialId)
-        .expect(204)
-        .end(function(err, res) {
-          Material.findOne({ where: { item: 'Z000' }}).then(function(material) {
-            expect(material).to.not.be.ok;
-            done();
-          });
-        });
-    });
-
-    it('should associate a new material with a type, and vendor', function(done) {
-      request(app)
-        .post('/a/materials')
-        .send({ material: {
-            item: 'Z001',
-            description: 'another fake material',
-            type: 'fakeType',
-            vendor: 'fakeVendor'
-          }
+        .put('/a/materials/' + materialId)
+        .send({
+          type: 'fakeType',
+          vendor: 'fakeVendor'
         })
+        .expect(200)
         .end(function(err, res) {
-          materialId2 = res.body.material.id;
-
           MaterialType.findById(res.body.material.typeId).then(function(type) {
             expect(type.name).to.equal('fakeType');
             expect(type.unit).to.equal('fakeUnit');
@@ -151,17 +134,9 @@ describe('Material Tests', function() {
         });
     });
 
-    after(function(done) {
-      Material.findOne({ where: { item: 'Z001' }}).then(function(material) {
-        return material.destroy();
-      }).then(function() {
-        done();
-      });
-    });
-
-    it('should modify a materials type, and vendor', function(done) {
+    it('should modify a materials type and vendor', function(done) {
       request(app)
-        .put('/a/materials/' + materialId2)
+        .put('/a/materials/' + materialId)
         .send({
           type: 'fakeType2',
           vendor: 'fakeVendor2',
@@ -182,5 +157,16 @@ describe('Material Tests', function() {
         });
     });
 
+    it('should remove a material', function(done) {
+      request(app)
+        .delete('/a/materials/' + materialId)
+        .expect(204)
+        .end(function(err, res) {
+          Material.findOne({ where: { item: 'Z000' }}).then(function(material) {
+            expect(material).to.not.be.ok;
+            done();
+          });
+        });
+    });
   });
 });
