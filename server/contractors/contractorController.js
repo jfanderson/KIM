@@ -2,6 +2,7 @@ var models = require('../db/index.js');
 var Contractor = models.Contractor;
 var ContractorMaterial = models.ContractorMaterial;
 var Material = models.Material;
+var Piece = models.Piece;
 
 module.exports = {
   getContractor,
@@ -10,7 +11,8 @@ module.exports = {
   modifyContractor,
   removeContractor,
   linkMaterial,
-  modifyMaterialQty,
+  materialsToContractor,
+  piecesFromContractor,
   unlinkMaterial
 };
 
@@ -109,7 +111,8 @@ function linkMaterial(req, res) {
   });
 }
 
-function modifyMaterialQty(req, res) {
+// Add to contractor's qty and deduct from qtyInStock.
+function materialsToContractor(req, res) {
   ContractorMaterial.findOne({
     where: {
       contractorId: req.params.contractorId,
@@ -117,12 +120,43 @@ function modifyMaterialQty(req, res) {
     }
   }).then(result => {
     if (result === null) {
-      res.sendStatus(404);
+      return res.sendStatus(404);
     }
 
-    return result.update({ qty: req.body.qty }).then(() => {
-      res.sendStatus(200);
-    });
+    var newQty = result.qty + req.body.qty;
+    return result.update({ qty: newQty });
+  }).then(() => {
+    return Material.findById(req.params.materialId);
+  }).then(material => {
+    var newQtyInStock = material.qtyInStock - req.body.qty;
+    return material.update({ qtyInStock: newQtyInStock });
+  }).then(() => {
+    res.sendStatus(200);
+  }).catch(error => {
+    console.log(error);
+    res.sendStatus(500);
+  });
+}
+
+function piecesFromContractor(req, res) {
+  Piece.findById(req.params.pieceId).then(piece => {
+    return piece.update({ qtyInStock: piece.qtyInStock + req.body.qty });
+  }).then(piece => {
+    return piece.getMaterials();
+  }).then(materials => {
+    return Promise.all(materials.map(material => {
+      return ContractorMaterial.findOne({
+        where: {
+          contractorId: req.params.contractorId,
+          materialId: material.id
+        }
+      }).then(result => {
+        var newQty = result.qty - material.PieceMaterial.qty;
+        return result.update({ qty: newQty });
+      });
+    }));
+  }).then(() => {
+    res.sendStatus(200);
   }).catch(error => {
     console.log(error);
     res.sendStatus(500);
