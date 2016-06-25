@@ -7,6 +7,7 @@ import s from '../services/settingsService.js';
 import v from '../services/vendorService.js';
 import sign from '../services/sign.js';
 
+import ContractorSettings from './Settings.Contractors.js';
 import Cell from './Cell.js';
 import Column from './Column.js';
 import Table from './Table.js';
@@ -41,9 +42,9 @@ class Settings extends React.Component {
       sign.setError('Failed to retrieve settings. Try refreshing.');
     });
 
+    this._updateVendors();
     this._updatePieceTypes();
     this._updateMaterialTypes();
-    this._updateVendors();
   }
 
   //-----------------------------------
@@ -60,6 +61,8 @@ class Settings extends React.Component {
             <input className="labor-cost" type="text" value={state.laborCost} onChange={this._handleLaborCostChange.bind(this)} />
             <button className="save" type="button" onClick={this._handleLaborCostButtonClick.bind(this)}>Save</button>
           </div>
+
+          <ContractorSettings />
 
           <h2 className="with-button" ref={h2 => { this._vendorTitle = h2; }}>Vendors</h2>
           <button className="add-button inner" onClick={this._handleAddFormClick.bind(this, 'vendor')}>+</button>
