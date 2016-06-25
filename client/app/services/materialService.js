@@ -70,12 +70,12 @@ function getTypes() {
     });
 }
 
-function modifyMaterial(id, field, value) {
+function modifyMaterial(id, key, value) {
   return fetch(`/a/materials/${id}`, {
     method: 'put',
     headers: h.headers,
     body: JSON.stringify({
-      [field]: value
+      [key]: value
     })
   }).then(h.checkStatus)
   .then(h.parseJSON)
@@ -86,12 +86,12 @@ function modifyMaterial(id, field, value) {
   });
 }
 
-function modifyType(id, field, value) {
+function modifyType(id, key, value) {
   return fetch(`/a/types/materials/${id}`, {
     method: 'put',
     headers: h.headers,
     body: JSON.stringify({
-      [field]: value
+      [key]: value
     })
   }).then(h.checkStatus)
   .then(h.parseJSON)

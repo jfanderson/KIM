@@ -97,12 +97,12 @@ function modifyMaterialQty(pieceId, materialId, qty) {
   });
 }
 
-function modifyPiece(id, field, value) {
+function modifyPiece(id, key, value) {
   return fetch(`/a/pieces/${id}`, {
     method: 'put',
     headers: h.headers,
     body: JSON.stringify({
-      [field]: value
+      [key]: value
     })
   }).then(h.checkStatus)
   .then(h.parseJSON)
@@ -113,12 +113,12 @@ function modifyPiece(id, field, value) {
   });
 }
 
-function modifyType(id, field, value) {
+function modifyType(id, key, value) {
   return fetch(`/a/types/pieces/${id}`, {
     method: 'put',
     headers: h.headers,
     body: JSON.stringify({
-      [field]: value
+      [key]: value
     })
   }).then(h.checkStatus)
   .then(h.parseJSON)

@@ -31,12 +31,12 @@ function getVendors() {
     });
 }
 
-function modifyVendor(id, field, value) {
+function modifyVendor(id, key, value) {
   return fetch(`/a/vendors/${id}`, {
     method: 'put',
     headers: h.headers,
     body: JSON.stringify({
-      [field]: value
+      [key]: value
     })
   }).then(h.checkStatus)
   .then(h.parseJSON)
