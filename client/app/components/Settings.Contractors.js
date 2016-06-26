@@ -24,6 +24,9 @@ class ContractorSettings extends React.Component {
     this._updateContractors();
   }
 
+  //-----------------------------------
+  // RENDERING
+  //-----------------------------------
   render() {
     return (
       <div className="contractors">
@@ -65,6 +68,9 @@ class ContractorSettings extends React.Component {
     }
   }
 
+  //-----------------------------------
+  // PRIVATE METHODS
+  //-----------------------------------
   _handleAddClick(event) {
     if (event) {
       event.preventDefault();

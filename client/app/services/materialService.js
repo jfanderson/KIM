@@ -3,14 +3,14 @@ import h from '../helpers.js';
 
 let services = {
   addMaterial,
-  addMaterialType,
+  addType,
   getAllMaterials,
   getMaterial,
   getTypes,
   modifyMaterial,
   modifyType,
   removeMaterial,
-  removeMaterialType
+  removeType
 };
 
 function addMaterial(material) {
@@ -25,7 +25,7 @@ function addMaterial(material) {
   });
 }
 
-function addMaterialType(type) {
+function addType(type) {
   return fetch('/a/types/materials', {
     method: 'post',
     headers: h.headers,
@@ -113,7 +113,7 @@ function removeMaterial(id) {
   });
 }
 
-function removeMaterialType(id) {
+function removeType(id) {
   return fetch(`/a/types/materials/${id}`, {
     method: 'delete',
     headers: h.headers

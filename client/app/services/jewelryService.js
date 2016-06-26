@@ -3,7 +3,7 @@ import h from '../helpers.js';
 
 let services = {
   addPiece,
-  addPieceType,
+  addType,
   getAllPieces,
   getPiece,
   getTypes,
@@ -12,7 +12,7 @@ let services = {
   modifyPiece,
   modifyType,
   removePiece,
-  removePieceType,
+  removeType,
   unlinkMaterial
 };
 
@@ -28,7 +28,7 @@ function addPiece(piece) {
   });
 }
 
-function addPieceType(type) {
+function addType(type) {
   return fetch('/a/types/pieces', {
     method: 'post',
     headers: h.headers,
@@ -140,7 +140,7 @@ function removePiece(id) {
   });
 }
 
-function removePieceType(id) {
+function removeType(id) {
   return fetch(`/a/types/pieces/${id}`, {
     method: 'delete',
     headers: h.headers

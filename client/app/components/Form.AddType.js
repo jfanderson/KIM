@@ -78,8 +78,7 @@ AddTypeForm.propTypes = {
   cancel: PropTypes.func,
   submit: PropTypes.func.isRequired,
   top: PropTypes.number,
-  // 'material' or 'piece'
-  type: PropTypes.string.isRequired
+  type: PropTypes.oneOf(['material', 'piece']).isRequired
 };
 
 export default AddTypeForm;
