@@ -1,7 +1,6 @@
 var models = require('../db/index.js');
 var Piece = models.Piece;
 var PieceType = models.PieceType;
-var Material = models.Material;
 var PieceMaterial = models.PieceMaterial;
 
 module.exports = {
@@ -23,7 +22,7 @@ function getPiece(req, res) {
       piece.getMaterials().then(materials => {
         piece = piece.toJSON();
         piece.materials = materials || [];
-        res.status(200).send({ piece: piece });
+        res.status(200).send({ piece });
       });
     }
   }).catch(error => {
@@ -34,7 +33,7 @@ function getPiece(req, res) {
 
 function getAllPieces(req, res) {
   Piece.findAll().then(pieces => {
-    res.status(200).send({ pieces: pieces });
+    res.status(200).send({ pieces });
   }).catch(error => {
     console.log(error);
     res.sendStatus(500);
@@ -43,22 +42,23 @@ function getAllPieces(req, res) {
 
 function addPiece(req, res) {
   // save type to associate later
+  var type;
   if (req.body.piece.hasOwnProperty('type')) {
-    var type = req.body.piece.type;
+    type = req.body.piece.type;
     delete req.body.piece.type;
   }
 
   Piece.create(req.body.piece).then(piece => {
     // associate type if given
     if (type) {
-      PieceType.findOne({ where: { name: type }}).then(matchedType => {
+      PieceType.findOne({ where: { name: type } }).then(matchedType => {
         if (matchedType !== null) {
           piece.typeId = matchedType.id;
         }
-        res.status(201).send({ piece: piece });
+        res.status(201).send({ piece });
       });
     } else {
-      res.status(201).send({ piece: piece });
+      res.status(201).send({ piece });
     }
   }).catch(error => {
     console.log(error);
@@ -79,7 +79,7 @@ function modifyPiece(req, res) {
 
     // modify type if necessary
     if (req.body.hasOwnProperty('type')) {
-      return PieceType.findOne({ where: { name: req.body.type }}).then(matchedType => {
+      return PieceType.findOne({ where: { name: req.body.type } }).then(matchedType => {
         delete req.body.type;
 
         if (matchedType === null) {
