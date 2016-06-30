@@ -17,7 +17,11 @@ function getMaterial(req, res) {
     if (material === null) {
       res.sendStatus(404);
     } else {
-      res.status(200).send({ material });
+      return material.getContractors().then(contractors => {
+        material = material.toJSON();
+        material.contractors = contractors || [];
+        res.status(200).send({ material });
+      });
     }
   }).catch(error => {
     console.log(error);
@@ -27,6 +31,14 @@ function getMaterial(req, res) {
 
 function getAllMaterials(req, res) {
   Material.findAll().then(materials => {
+    return Promise.all(materials.map(material => {
+      return material.getContractors().then(contractors => {
+        material = material.toJSON();
+        material.contractors = contractors || [];
+        return material;
+      });
+    }));
+  }).then(materials => {
     res.status(200).send({ materials });
   }).catch(error => {
     console.log(error);
