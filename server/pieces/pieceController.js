@@ -19,7 +19,7 @@ function getPiece(req, res) {
     if (piece === null) {
       res.sendStatus(404);
     } else {
-      piece.getMaterials().then(materials => {
+      return piece.getMaterials().then(materials => {
         piece = piece.toJSON();
         piece.materials = materials || [];
         res.status(200).send({ piece });

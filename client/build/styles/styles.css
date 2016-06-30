@@ -418,3 +418,6 @@ td.editing input {
   width: 110px;
   padding: .4rem;
   margin-right: 1rem; }
+
+.settings .contractors {
+  width: 50%; }

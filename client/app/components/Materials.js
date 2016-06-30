@@ -32,6 +32,8 @@ class Materials extends React.Component {
   //-----------------------------------
   componentDidMount() {
     this._getMaterials().then(materials => {
+      this._orderedContractorNames = materials[0].contractors.map(contractor => contractor.name);
+
       this.setState({
         materials,
         filteredMaterials: materials
@@ -124,6 +126,7 @@ class Materials extends React.Component {
                 <Cell modifyField={this._modifyField.bind(this, material.id, 'qtyOnOrder')} integer>{material.qtyOnOrder}</Cell>
               )}
             />
+            {this._renderContractorQtys()}
             <Column header="Qty in Stock" cell={material => (
                 <Cell modifyField={this._modifyField.bind(this, material.id, 'qtyInStock')} integer>{material.qtyInStock}</Cell>
               )}
@@ -137,14 +140,20 @@ class Materials extends React.Component {
     );
   }
 
-  _renderForm() {
-    if (this.state.isFormOpen) {
-      return (
-        <AddMaterialForm
-          cancel={this._handleAddClick.bind(this)}
-          submit={this._handleFormSubmit.bind(this)}
-        />
-      );
+  _renderContractorQtys() {
+    if (this._orderedContractorNames) {
+      return this._orderedContractorNames.map(name => {
+        return (
+          <Column key={name} header={`Qty with ${name}`} cell={material => {
+            let contractor = material.contractors.find(c => c.name === name);
+
+            return (
+              <Cell integer>{contractor.ContractorMaterial.qty}</Cell>
+            );
+          }}
+          />
+        );
+      });
     }
   }
 
@@ -154,6 +163,17 @@ class Materials extends React.Component {
         <Column header="Remove" cell={material => (
             <Cell className="remove"><div onClick={this._removeMaterial.bind(this, material)}>X</div></Cell>
           )}
+        />
+      );
+    }
+  }
+
+  _renderForm() {
+    if (this.state.isFormOpen) {
+      return (
+        <AddMaterialForm
+          cancel={this._handleAddClick.bind(this)}
+          submit={this._handleFormSubmit.bind(this)}
         />
       );
     }
