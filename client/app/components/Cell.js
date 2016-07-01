@@ -10,7 +10,7 @@ class Cell extends React.Component {
 
     this.state = {
       editing: false,
-      value: ''
+      value: '',
     };
   }
 
@@ -22,7 +22,7 @@ class Cell extends React.Component {
     let state = this.state;
 
     let classes = {
-      [props.className]: props.className
+      [props.className]: props.className,
     };
 
     if (props.modifyField && state.editing) {
@@ -55,7 +55,7 @@ class Cell extends React.Component {
     }
 
     return (
-      <td className={classnames(classes)}>
+      <td className={classnames(classes)} onClick={props.onClick}>
         {props.children}
       </td>
     );
@@ -103,17 +103,17 @@ class Cell extends React.Component {
     if (props.price) {
       this.setState({
         editing: true,
-        value: props.children.slice(1)
+        value: props.children.slice(1),
       });
     } else if (props.pricePerUnit) {
       this.setState({
         editing: true,
-        value: props.children.slice(1, props.children.indexOf('/') - 1)
+        value: props.children.slice(1, props.children.indexOf('/') - 1),
       });
     } else {
       this.setState({
         editing: true,
-        value: props.children || ''
+        value: props.children || '',
       });
     }
 
@@ -134,19 +134,21 @@ Cell.propTypes = {
   // If passed, make cell editable on click.
   // Callback invoked with new cell value.
   modifyField: PropTypes.func,
-  // True if cell represents a numerical value
+  // True if cell represents a numerical value.
   number: PropTypes.bool,
-  // True if cell represents a price value
+  // onClick function can only be applied to non-editable cells.
+  onClick: PropTypes.func,
+  // True if cell represents a price value.
   price: PropTypes.bool,
-  // True if cell represents a price per unit value
-  pricePerUnit: PropTypes.bool
+  // True if cell represents a price per unit value.
+  pricePerUnit: PropTypes.bool,
 };
 
 Cell.defaultProps = {
   datalist: [],
   int: false,
   price: false,
-  pricePerUnit: false
+  pricePerUnit: false,
 };
 
 export default Cell;

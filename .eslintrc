@@ -2,7 +2,6 @@
   "extends": "airbnb",
   "rules": {
     "arrow-body-style": "off",
-    "comma-dangle": ["error", "never"],
     "consistent-return": "off",
     "func-names": "off",
     "max-len": [1, 160, 4, { "ignoreUrls": true }],
