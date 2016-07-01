@@ -4,14 +4,16 @@ import _ from 'underscore';
 
 import m from '../services/materialService.js';
 import v from '../services/vendorService.js';
+import c from '../services/contractorService.js';
 import sign from '../services/sign.js';
 import h from '../helpers.js';
 
 import Table from './Table.js';
 import Column from './Column.js';
 import Cell from './Cell.js';
-import AddMaterialForm from './Form.AddMaterial.js';
 import SelectCell from './Cell.Select.js';
+import AddMaterialForm from './Form.AddMaterial.js';
+import TransferMaterialForm from './Form.TransferMaterial.js';
 
 class Materials extends React.Component {
   constructor() {
@@ -19,11 +21,14 @@ class Materials extends React.Component {
 
     this.state = {
       filteredMaterials: [],
-      isFormOpen: false,
+      isAddMaterialFormOpen: false,
+      isTransferMaterialFormOpen: false,
       materials: [],
       removeMode: false, // If true, display removal column in table
+      transferContractor: null,
+      transferMaterial: null,
       types: [],
-      vendors: []
+      vendors: [],
     };
   }
 
@@ -36,7 +41,7 @@ class Materials extends React.Component {
 
       this.setState({
         materials,
-        filteredMaterials: materials
+        filteredMaterials: materials,
       });
     });
 
@@ -61,7 +66,7 @@ class Materials extends React.Component {
 
     let removeClasses = {
       'remove-button': true,
-      active: state.removeMode
+      active: state.removeMode,
     };
 
     return (
@@ -79,7 +84,7 @@ class Materials extends React.Component {
             <span onClick={this._filterByLowStock.bind(this)}>Low Stock</span>
             <span onClick={this._filterByOutOfStock.bind(this)}>Out of Stock</span>
 
-            <button className="add-button" onClick={this._handleAddClick.bind(this)}>+</button>
+            <button className="add-button" onClick={this._handleAddMaterialClick.bind(this)}>+</button>
             <button className={classnames(removeClasses)} onClick={this._handleRemoveClick.bind(this)}>--</button>
           </div>
         </div>
@@ -135,7 +140,8 @@ class Materials extends React.Component {
           </Table>
         </div>
 
-        {this._renderForm()}
+        {this._renderAddMaterialForm()}
+        {this._renderTransferMaterialForm()}
       </div>
     );
   }
@@ -145,10 +151,15 @@ class Materials extends React.Component {
       return this._orderedContractorNames.map(name => {
         return (
           <Column key={name} header={`Qty with ${name}`} cell={material => {
-            let contractor = material.contractors.find(c => c.name === name);
+            let contractor = material.contractors.find(con => con.name === name);
 
             return (
-              <Cell integer>{contractor.ContractorMaterial.qty}</Cell>
+              <Cell className="editable"
+                integer
+                onClick={this._handleTransferMaterialClick.bind(this, material, contractor)}
+              >
+                {contractor.ContractorMaterial.qty}
+              </Cell>
             );
           }}
           />
@@ -168,12 +179,25 @@ class Materials extends React.Component {
     }
   }
 
-  _renderForm() {
-    if (this.state.isFormOpen) {
+  _renderAddMaterialForm() {
+    if (this.state.isAddMaterialFormOpen) {
       return (
         <AddMaterialForm
-          cancel={this._handleAddClick.bind(this)}
-          submit={this._handleFormSubmit.bind(this)}
+          cancel={this._handleAddMaterialClick.bind(this)}
+          submit={this._submitAddForm.bind(this)}
+        />
+      );
+    }
+  }
+
+  _renderTransferMaterialForm() {
+    if (this.state.isTransferMaterialFormOpen) {
+      return (
+        <TransferMaterialForm
+          cancel={this._closeTransferMaterialForm.bind(this)}
+          contractor={this.state.transferContractor}
+          material={this.state.transferMaterial}
+          submit={this._submitTransferForm.bind(this)}
         />
       );
     }
@@ -184,6 +208,14 @@ class Materials extends React.Component {
   //-----------------------------------
   _clearFilter() {
     this.setState({ filteredMaterials: this.state.materials });
+  }
+
+  _closeTransferMaterialForm(event) {
+    if (event) {
+      event.preventDefault();
+    }
+
+    this.setState({ isTransferMaterialFormOpen: false });
   }
 
   _filterByLowStock() {
@@ -208,30 +240,27 @@ class Materials extends React.Component {
     this.setState({ filteredMaterials });
   }
 
-  _handleAddClick(event) {
+  _getMaterials() {
+    return m.getAllMaterials().catch(error => {
+      console.log('[Component] Error retrieving materials: ', error);
+      sign.setError('Failed to retrieve materials. Try refreshing.');
+      this.setState({ materials: [] });
+    });
+  }
+
+  _handleAddMaterialClick(event) {
     if (event) {
       event.preventDefault();
     }
 
-    this.setState({ isFormOpen: !this.state.isFormOpen });
+    this.setState({ isAddMaterialFormOpen: !this.state.isAddMaterialFormOpen });
   }
 
-  _handleFormSubmit(item, description) {
-    m.addMaterial({
-      item,
-      description
-    }).then(() => {
-      this._getMaterials().then(materials => {
-        // Revert to "All" filter when new material is added.
-        this.setState({
-          materials,
-          filteredMaterials: materials
-        });
-
-        sign.setMessage('Showing all materials');
-      });
-    }).catch(() => {
-      sign.setError('Failed to add material. Try refreshing.');
+  _handleTransferMaterialClick(material, contractor) {
+    this.setState({
+      isTransferMaterialFormOpen: true,
+      transferContractor: contractor,
+      transferMaterial: material,
     });
   }
 
@@ -283,7 +312,7 @@ class Materials extends React.Component {
 
           this.setState({
             materials,
-            filteredMaterials
+            filteredMaterials,
           });
         });
       }).catch(() => {
@@ -292,11 +321,41 @@ class Materials extends React.Component {
     }
   }
 
-  _getMaterials() {
-    return m.getAllMaterials().catch(error => {
-      console.log('[Component] Error retrieving materials: ', error);
-      sign.setError('Failed to retrieve materials. Try refreshing.');
-      this.setState({ materials: [] });
+  _submitAddForm(item, description) {
+    m.addMaterial({
+      item,
+      description,
+    }).then(() => {
+      this._getMaterials().then(materials => {
+        // Revert to "All" filter when new material is added.
+        this.setState({
+          materials,
+          filteredMaterials: materials,
+        });
+
+        sign.setMessage('Showing all materials');
+      });
+    }).catch(() => {
+      sign.setError('Failed to add material. Try refreshing.');
+    });
+  }
+
+  _submitTransferForm(qty) {
+    let { transferContractor, transferMaterial } = this.state;
+
+    let materials = this.state.materials.slice(0);
+    let material = this.state.materials.find(mat => mat.id === transferMaterial.id);
+    let contractor = material.contractors.find(con => con.id === transferContractor.id);
+
+    material.qtyInStock -= qty;
+    contractor.ContractorMaterial.qty += qty;
+
+    this.setState({ materials });
+
+    c.transferMaterial(transferContractor.id, transferMaterial.id, qty).then(() => {
+      sign.setMessage(`Transferred materials to ${transferContractor.name}`);
+    }).catch(() => {
+      sign.setError(`Failed to transfer materials to ${transferContractor.name}. Try refreshing.`);
     });
   }
 }
